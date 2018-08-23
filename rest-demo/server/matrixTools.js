@@ -2,12 +2,11 @@ class MatrixTools {
   multiplyByParts(matrix, column) {
     const result = [];
 
-    for (let i = 0; i < matrix.length; i++) {
+    for (let i = 0; i < column.length; i++) {
       result[i] = 0;
-      for (let j = 0; j < matrix.length; j++) {
+      for (let j = 0; j < matrix[i].length; j++) {
         result[i] += column[i] * matrix[i][j];
       }
-      console.log(result[i]);
     }
 
     return result;

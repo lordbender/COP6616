@@ -1,0 +1,31 @@
+{
+	"variables": [],
+	"info": {
+		"name": "6616",
+		"_postman_id": "55eb3977-76c3-48cd-dbce-b69e6a7c0845",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "vector-multiply",
+			"request": {
+				"url": "http://localhost:3001/api/v1/vector-multiply",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"matrix\": [\n\t\t[1, 5, 6,7,8,9,0], \n\t\t[5, 1, 45,2,3,5, 8], \n\t\t[5, 1, 45,2,3,5, 8], \n\t\t[5, 1, 45,2,3,5, 8], \n\t\t[5, 1, 45,2,3,5, 8], \n\t\t[5, 1, 45,2,3,5, 8], \n\t\t[5, 1, 45,2,3,5, 8], \n\t\t[5, 1, 45,2,3,5, 8]\n\t],\n\t\"column\": [5,3,5,3,2,6,34],\n\t\"columnPosition\": 0\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

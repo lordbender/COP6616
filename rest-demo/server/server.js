@@ -6,9 +6,9 @@ const matrixTools = new MatrixTools();
 const mockServerOne = express();
 mockServerOne.use(bodyParser.json());
 mockServerOne.post("/api/v1/vector-multiply", (req, res) => {
-  const { body: { matrix = [[]], column = [] } = {} } = req;
+  const { body: { matrix = [[]], column = [], columnPosition = 0 } = {} } = req;
   const result = matrixTools.multiplyByParts(matrix, column);
-  res.json(result);
+  res.json({ columnPosition, result });
 });
 
 mockServerOne.listen(3001, () =>
