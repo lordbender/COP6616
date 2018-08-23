@@ -1,13 +1,14 @@
 class MatrixTools {
-  multiplyByParts(martix, column) {
+  multiplyByParts(matrix, column) {
     const result = [];
 
-    martix.forEach((row, i) => {
-      const agrigator = [];
-      column.forEach((val, j) => {
-        result[i] += row[i] * val;
-      });
-    });
+    for (let i = 0; i < matrix.length; i++) {
+      result[i] = 0;
+      for (let j = 0; j < matrix.length; j++) {
+        result[i] += column[i] * matrix[i][j];
+      }
+      console.log(result[i]);
+    }
 
     return result;
   }
