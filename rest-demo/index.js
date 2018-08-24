@@ -1,18 +1,32 @@
 const axios = require("axios");
 
-const leftMatrix = require("./data").leftMatrix;
-const rightMatrix = require("./data").rightMatrix;
+const size = Math.floor(Math.random() * 100) + 50;
+
+const leftMatrix = require("./data").getDynamicMatrix(size);
+const rightMatrix = require("./data").getDynamicMatrix(size);
 
 class Main {
-  multiplyAsync(m1, m2) {
-    const rows = m1.map((row, i) => ({
-      rowNumber: i,
-      row
-    }));
+  async multiplyAsync(m1, m2) {
+    const getColumn = (arr, n) => arr.map(x => x[n]);
+    const resultsPromises = [];
 
-    m2.map((row, i) => row.map((j, i) => rows.find(x => x.row === i)));
-    console.log(rows);
-    return rows;
+    for (let i = 0; i < m2[0].length; i++) {
+      const col = getColumn(m2, i);
+      const url = `http://localhost:300${
+        i % 2 === 0 ? 1 : 2
+      }/api/v1/vector-multiply`;
+
+      const model = {
+        matrix: m1,
+        column: col,
+        columnPosition: i
+      };
+
+      resultsPromises.push(axios.post(url, model));
+    }
+
+    const results = await Promise.all(resultsPromises);
+    return results.map(x => x.data);
   }
 
   multiply(m1, m2) {
@@ -36,11 +50,13 @@ const main = new Main();
 const startTimeTraditional = new Date();
 const resultTradtional = main.multiply(leftMatrix, rightMatrix);
 const runTimeTraditional = new Date() - startTimeTraditional;
-console.log("Result for Traditional Multiplicaiton", resultTradtional);
-console.log("Run time for Traditional Multiplicaiton", runTimeTraditional);
+// console.log("Result for Traditional Multiplicaiton", resultTradtional);
+console.log(`Run time for Traditional Multiplicaiton => ${runTimeTraditional}ms`);
 
 const startTimeDistributed = new Date();
-const resultDistributed = main.multiplyAsync(leftMatrix, rightMatrix);
-const runTimeDistributed = new Date() - startTimeDistributed;
-console.log("Result for Distributed Multiplicaiton", resultDistributed);
-console.log("Run time for Distributed Multiplicaiton", runTimeDistributed);
+main.multiplyAsync(leftMatrix, rightMatrix).then(d => {
+  const runTimeDistributed = new Date() - startTimeDistributed;
+
+  // console.log("Result for Distributed Multiplicaiton", d);
+  console.log(`Run time for Distributed Multiplicaiton => ${runTimeDistributed}ms`);
+});
