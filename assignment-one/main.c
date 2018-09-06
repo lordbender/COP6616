@@ -1,5 +1,12 @@
-#include <stdio.h>
-int main( int argc, const char* argv[] )
-{
-	printf( "\nHello World\n\n" );
-}
+   #include <stdio.h>
+   #include <mpi.h>
+
+   main(int argc, char **argv) 
+   {
+      int ierr;
+
+      ierr = MPI_Init(&argc, &argv);
+      printf("Hello world\n"); 
+         
+      ierr = MPI_Finalize();
+   }
