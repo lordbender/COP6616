@@ -1,12 +1,16 @@
-   #include <stdio.h>
-   #include <mpi.h>
+/* C Example */
+#include "common.h"
+ 
+int main (int argc, char* argv[])
+{
+  int rank, size;
+ 
+  MPI_Init (&argc, &argv);      /* starts MPI */
+  MPI_Comm_rank (MPI_COMM_WORLD, &rank);        /* get current process id */
+  MPI_Comm_size (MPI_COMM_WORLD, &size);        /* get number of processes */
+  printf( "Hello world from process %d of %d\n", rank, size );
+  MPI_Finalize();
+  return 0;
+}
 
-   main(int argc, char **argv) 
-   {
-      int ierr;
-
-      ierr = MPI_Init(&argc, &argv);
-      printf("Hello world\n"); 
-         
-      ierr = MPI_Finalize();
-   }
+// https://jetcracker.wordpress.com/2012/03/01/how-to-install-mpi-in-ubuntu/
