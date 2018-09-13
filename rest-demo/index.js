@@ -2,8 +2,8 @@ const axios = require("axios");
 
 const size = Math.floor(Math.random() * 100) + 50;
 
-const leftMatrix = require("./data").getDynamicMatrix(size);
-const rightMatrix = require("./data").getDynamicMatrix(size);
+const leftMatrix = require("./data").getDynamicMatrix(15);
+const rightMatrix = require("./data").getDynamicMatrix(15);
 
 class Main {
   async multiplyAsync(m1, m2) {
@@ -51,12 +51,29 @@ const startTimeTraditional = new Date();
 const resultTradtional = main.multiply(leftMatrix, rightMatrix);
 const runTimeTraditional = new Date() - startTimeTraditional;
 // console.log("Result for Traditional Multiplicaiton", resultTradtional);
-console.log(`Run time for Traditional Multiplicaiton => ${runTimeTraditional}ms`);
+console.log(
+  `Run time for Traditional Multiplicaiton => ${runTimeTraditional}ms`
+);
 
 const startTimeDistributed = new Date();
 main.multiplyAsync(leftMatrix, rightMatrix).then(d => {
   const runTimeDistributed = new Date() - startTimeDistributed;
 
+  const combinedResult = d
+    .sort((x, y) => x.columnPosition < y.columnPosition)
+    .map(x => x.result);
+
+  for (let i = 0; i < combinedResult.length; i++) {
+    let row = "";
+    for (let j = 0; j < combinedResult.length; j++) {
+      row += `${combinedResult[i][j]} `;
+    }
+    console.log(row);
+  }
+
+  // console.log(combinedResult);
   // console.log("Result for Distributed Multiplicaiton", d);
-  console.log(`Run time for Distributed Multiplicaiton => ${runTimeDistributed}ms`);
+  console.log(
+    `Run time for Distributed Multiplicaiton => ${runTimeDistributed}ms`
+  );
 });
