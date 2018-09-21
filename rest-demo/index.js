@@ -4,6 +4,8 @@ const size = Math.floor(Math.random() * 100) + 50;
 
 const leftMatrix = require("./data").getDynamicMatrix(15);
 const rightMatrix = require("./data").getDynamicMatrix(15);
+const v = [5,6,'f']
+
 
 class Main {
   async multiplyAsync(m1, m2) {
