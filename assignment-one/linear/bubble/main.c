@@ -1,16 +1,19 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "common.h"
 
 int main(int argc, char *argv[])
 {
+  int CONST_SIZE = 15;
 
-  int arr[] = {64, 34, 25, 12, 22, 11, 90};
-  int n = sizeof(arr) / sizeof(arr[0]);
-  bubbleSort(arr, n);
-  printf("Sorted array: \n");
-  printArray(arr, n);
-  printf("\n");
-  return 0;
+  int *p = genRandom(CONST_SIZE);
+
+  printf("Created array of size  %d \n", CONST_SIZE);
+
+  bubbleSort(p, CONST_SIZE);
+
+  printArray(p, CONST_SIZE);
+
   return 0;
 }
 

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 void swap(int *xp, int *yp)
 {
@@ -8,13 +9,20 @@ void swap(int *xp, int *yp)
 }
 
 // A function to implement bubble sort
-void bubbleSort(int arr[], int n)
+void bubbleSort(int numbers[], int count)
 {
-    int i, j;
-    for (i = 0; i < n - 1; i++)
+    int input, i, j, c;
 
-        // Last i elements are already in place
-        for (j = 0; j < n - i - 1; j++)
-            if (arr[j] > arr[j + 1])
-                swap(&arr[j], &arr[j + 1]);
+    for (i = 0; i < count - 1; i++)
+    {
+        for (j = 0; j < count - 1 - 1; j++)
+        {
+            if (numbers[j] > numbers[j + 1])
+            {
+                c = numbers[j];
+                numbers[j] = numbers[j + 1];
+                numbers[j + 1] = c;
+            }
+        }
+    }
 }
