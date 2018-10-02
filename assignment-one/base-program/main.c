@@ -25,6 +25,10 @@ int main(int argc, char *argv[])
     my_array[i] = num;
   }
 
+  // Sort the Array
+  int *r = bubbleSort(my_array, arg1);
+
+  // Print the Array
   printArray(my_array, arg1);
 
   return 0;
