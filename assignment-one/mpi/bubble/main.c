@@ -4,7 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define N 1000000
+#define N 10000
 
 void showElapsed(int id, char *m);
 void showVector(int *v, int n, int id);
