@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "common.h"
 
 int main(int argc, char *argv[])
 {
+  clock_t start = clock();
+  srand(time(0));
+
   if (argc <= 1)
   {
     printf("You did not feed me arguments, I will die now :( ...");
@@ -17,7 +21,8 @@ int main(int argc, char *argv[])
   int i;
   for (i = 0; i < 100; i++)
   {
-    my_array[i] = rand();
+    int num = rand();
+    my_array[i] = num;
   }
 
   printArray(my_array, arg1);
