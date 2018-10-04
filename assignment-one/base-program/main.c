@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 #include "common.h"
 
 int main(int argc, char *argv[])
 {
-  clock_t start = clock();
   srand(time(0));
 
   if (argc <= 1)
@@ -25,11 +25,9 @@ int main(int argc, char *argv[])
     my_array[i] = num;
   }
 
-  // Sort the Array
-  int *r = bubbleSort(my_array, arg1);
+  double cpu_time_used = run_linear(my_array, arg1, false);
 
-  // Print the Array
-  printArray(my_array, arg1);
+  printf("Bubble Sort Linear on %d integers, took %f\n\n", arg1, cpu_time_used);
 
   return 0;
 }
