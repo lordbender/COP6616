@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <stdbool.h>
+#include "common.h"
 
 void swap(int *xp, int *yp)
 {
@@ -9,7 +12,7 @@ void swap(int *xp, int *yp)
 }
 
 // A function to implement bubble sort
-void bubbleSort(int numbers[], int count)
+int *bubbleSort(int numbers[], int count)
 {
     int input, i, j, c;
 
@@ -25,4 +28,21 @@ void bubbleSort(int numbers[], int count)
             }
         }
     }
+
+    return numbers;
+}
+
+double run_linear_bubble(int array[], int size, bool print)
+{
+    clock_t start = clock();
+    int *r = bubbleSort(array, size);
+    clock_t end = clock();
+
+    // Print the Array - If you want!
+    if (print == true)
+    {
+        printArray(array, size);
+    }
+
+    return time_calc(start, end);
 }
