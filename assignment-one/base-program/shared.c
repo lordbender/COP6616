@@ -8,7 +8,19 @@ void printArray(int arr[], int size)
     int i;
     for (i = 0; i < size - 1; i++)
         printf("\t%d\n ", arr[i]);
-    printf("n");
+}
+
+void print_two_d_array(int r, int c, int arr[r][c])
+{
+    int i, j;
+    for (i = 0; i <= r - 1; i++)
+    {
+        {
+            for (j = 0; j <= c - 1; j++)
+                printf("\t%d", arr[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 double time_calc(clock_t start, clock_t end)
@@ -16,24 +28,43 @@ double time_calc(clock_t start, clock_t end)
     return ((double)(end - start)) / CLOCKS_PER_SEC;
 }
 
+int *create_two_d_matrix(int size, int *m_out, bool printOutput)
+{
+}
+
 int *create_one_d_matrix(int size, int *m_out, bool printOutput)
 {
-  if (printOutput == true)
-  {
-    printf("Creating an array of size  %d \n", size);
-  }
+    srand(time(0));
 
-  int i;
-  for (i = 0; i < size; i++)
-  {
-    int num = rand();
-    m_out[i] = num;
-  }
+    if (printOutput == true)
+    {
+        printf("Creating an array of size  %d \n", size);
+    }
 
-  if (printOutput == true)
-  {
-    printf("Created an array of size  %d \n", size);
-  }
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        int num = rand();
+        m_out[i] = num;
+    }
 
-  return m_out;
+    if (printOutput == true)
+    {
+        printf("Created an array of size  %d \n", size);
+    }
+
+    return m_out;
+}
+
+void create_two_d_array(int r, int c, int m_out[r][c])
+{
+    srand(time(0));
+
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++)
+        {
+            m_out[i][j] = rand();
+        }
+    }
 }
