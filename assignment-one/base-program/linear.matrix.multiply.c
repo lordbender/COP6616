@@ -28,7 +28,7 @@ double run_linear_matrix_multiply(int size, bool print)
     // Fill the Arrays
     create_two_d_array(size, size, left_a);
     create_two_d_array(size, size, right_a);
-
+    
     clock_t start = clock();
     multiply(size, left_a, right_a, result_a);
     clock_t end = clock();

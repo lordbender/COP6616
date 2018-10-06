@@ -22,3 +22,5 @@ double time_calc(clock_t start, clock_t end);
 void multiply(int size, int mat1[][size], int mat2[][size], int res[][size]);
 
 double run_linear_matrix_multiply(int size, bool print);
+
+double run_linear_search(int size, bool print);
