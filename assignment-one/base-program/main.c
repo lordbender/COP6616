@@ -15,21 +15,25 @@ int main(int argc, char *argv[])
   }
 
   // Grab the Requested Size from the Command Line Arguments.
-  int arg1 = atoi(argv[1]);
+  int size = atoi(argv[1]);
+
+  // Linear -> O(1) -> Linear Search Opperations
+  double cpu_time_used_o_of_one = run_linear_big_o_of_one(size, false);
+  printf("Linear -> O(1) -> Return 1st number on %d integers, took %f\n\n", size, cpu_time_used_o_of_one);
 
   // Linear -> O(n) -> Linear Search Opperations
-  double cpu_time_used_linear_search = run_linear_search(arg1, false);
-  printf("Linear -> O(n) -> Linear Search on %d integers, took %f\n\n", arg1, cpu_time_used_linear_search);
+  double cpu_time_used_linear_search = run_linear_search(size, false);
+  printf("Linear -> O(n) -> Linear Search on %d integers, took %f\n\n", size, cpu_time_used_linear_search);
 
   // Linear -> O(n^2) -> Bubble Sort Opperations
-  int bubble_m_out[arg1];
-  int *bubble_sort_a = create_one_d_matrix(arg1, bubble_m_out, false);
-  double cpu_time_used = run_linear_bubble(bubble_sort_a, arg1, false);
-  printf("Linear -> O(n^2) -> Bubble Sort on %d integers, took %f\n\n", arg1, cpu_time_used);
+  int bubble_m_out[size];
+  int *bubble_sort_a = create_one_d_matrix(size, bubble_m_out, false);
+  double cpu_time_used = run_linear_bubble(bubble_sort_a, size, false);
+  printf("Linear -> O(n^2) -> Bubble Sort on %d integers, took %f\n\n", size, cpu_time_used);
 
   // Linear -> O(n^3) -> Matrix Multipication
-  double cpu_time_used_multiply_array = run_linear_matrix_multiply(arg1, false);
-  printf("Linear -> O(n^3) -> Multiply Matrix on %d X %d integers, took %f\n\n", arg1, arg1, cpu_time_used_multiply_array);
+  double cpu_time_used_multiply_array = run_linear_matrix_multiply(size, false);
+  printf("Linear -> O(n^3) -> Multiply Matrix on %d X %d integers, took %f\n\n", size, size, cpu_time_used_multiply_array);
 
   return 0;
 }
