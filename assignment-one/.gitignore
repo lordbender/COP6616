@@ -1,4 +1,4 @@
 .vscode
 build
 result
-*.out
+*.out*
