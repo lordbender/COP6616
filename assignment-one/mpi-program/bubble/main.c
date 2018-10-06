@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <mpi.h>
 #include "common.h"
 
 int main(int argc, char *argv[])
