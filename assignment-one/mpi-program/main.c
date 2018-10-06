@@ -22,7 +22,10 @@ int main(int argc, char *argv[])
 
   // Grab the Requested Size from the Command Line Arguments.
   int size = atoi(argv[1]);
-  printf("Size => %d\n", size);
+  if (p == 0)
+  {
+    printf("Size => %d\n", size);
+  }
 
   // Linear -> O(1) -> Linear Search Opperations
 
