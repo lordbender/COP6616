@@ -32,7 +32,7 @@ int *bubbleSort(int numbers[], int count)
     return numbers;
 }
 
-double run_linear(int array[], int size, bool print)
+double run_linear_bubble(int array[], int size, bool print)
 {
     clock_t start = clock();
     int *r = bubbleSort(array, size);
