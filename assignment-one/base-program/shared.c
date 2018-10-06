@@ -63,9 +63,10 @@ void create_two_d_array(int r, int c, double m_out[r][c])
 {
     srand(time(0));
 
-    for (int i = 0; i < r; i++)
+    int i, j = 0;
+    for (i = 0; i < r; i++)
     {
-        for (int j = 0; j < c; j++)
+        for (j = 0; j < c; j++)
         {
             m_out[i][j] = randfrom(0, 1000000);
         }
