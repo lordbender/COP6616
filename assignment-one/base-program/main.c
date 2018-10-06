@@ -24,10 +24,8 @@ int main(int argc, char *argv[])
   printf("Linear -> O(n^2) -> Bubble Sort Linear on %d integers, took %f\n\n", arg1, cpu_time_used);
 
   // Linear -> O(n^3) -> Matrix Multipication
-  int left_a[arg1][arg1];
-  int right_a[arg1][arg1];
-  create_two_d_array(arg1, arg1, left_a);
-  create_two_d_array(arg1, arg1, right_a);
-  print_two_d_array(arg1, arg1, left_a);
+  double cpu_time_used_multiply_array = run_linear_matrix_multiply(arg1, false);
+  printf("Linear -> O(n^3) -> Multiply Matrix Linear on %d X %d integers, took %f\n\n", arg1, arg1, cpu_time_used_multiply_array);
+  
   return 0;
 }

@@ -18,3 +18,7 @@ int *bubbleSort(int numbers[], int count);
 double run_linear_bubble(int array[], int size, bool printArray);
 
 double time_calc(clock_t start, clock_t end);
+
+void multiply(int size, int mat1[][size], int mat2[][size], int res[][size]);
+
+double run_linear_matrix_multiply(int size, bool print);

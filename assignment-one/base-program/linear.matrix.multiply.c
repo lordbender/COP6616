@@ -3,35 +3,41 @@
 #include <time.h>
 #include <stdbool.h>
 #include "common.h"
-#define N 4 
-  
-// This function multiplies mat1[][] and mat2[][], 
-// and stores the result in res[][] 
-void multiply(int mat1[][N], int mat2[][N], int res[][N]) 
-{ 
-    int i, j, k; 
-    for (i = 0; i < N; i++) 
-    { 
-        for (j = 0; j < N; j++) 
-        { 
-            res[i][j] = 0; 
-            for (k = 0; k < N; k++) 
-                res[i][j] += mat1[i][k]*mat2[k][j]; 
-        } 
-    } 
-} 
 
-// double run_matrix_mult(int array_one[][N],int array_two[], int size, bool print)
-// {
-//     clock_t start = clock();
-//     // int *r = bubbleSort(array, size);
-//     clock_t end = clock();
+void multiply(int size, int mat1[][size], int mat2[][size], int res[][size])
+{
+    int i, j, k;
+    for (i = 0; i < size; i++)
+    {
+        for (j = 0; j < size; j++)
+        {
+            res[i][j] = 0;
+            for (k = 0; k < size; k++)
+                res[i][j] += mat1[i][k] * mat2[k][j];
+        }
+    }
+}
 
-//     // Print the Array - If you want!
-//     if (print == true)
-//     {
-//         printArray(array, size);
-//     }
+double run_linear_matrix_multiply(int size, bool print)
+{
+    // Define the Arrays
+    int left_a[size][size];
+    int right_a[size][size];
+    int result_a[size][size];
 
-//     return time_calc(start, end);
-// }
+    // Fill the Arrays
+    create_two_d_array(size, size, left_a);
+    create_two_d_array(size, size, right_a);
+
+    clock_t start = clock();
+    multiply(size, left_a, right_a, result_a);
+    clock_t end = clock();
+
+    // Print the Array - If you want!
+    if (print == true)
+    {
+        print_two_d_array(size, size, result_a);
+    }
+
+    return time_calc(start, end);
+}
