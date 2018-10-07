@@ -17,8 +17,9 @@ double time_calc(clock_t start, clock_t end)
     return ((double)(end - start)) / CLOCKS_PER_SEC;
 }
 
-float *create_one_d_matrix(int size, float *m_out, bool printOutput)
+float *create_one_d_matrix(int size, bool printOutput)
 {
+    float *helper = fetch_array(size);
     srand(time(0));
 
     if (printOutput == true)
@@ -31,7 +32,7 @@ float *create_one_d_matrix(int size, float *m_out, bool printOutput)
     {
         // To avoid overflows, use casted ints, instead of random floats.
         float num = (float)rand();
-        m_out[i] = num;
+        helper[i] = num;
     }
 
     if (printOutput == true)
@@ -39,5 +40,20 @@ float *create_one_d_matrix(int size, float *m_out, bool printOutput)
         printf("Created an array of size  %d \n", size);
     }
 
-    return m_out;
+    return helper;
+}
+
+float *fetch_array(int size)
+{
+    // Create the space in memory
+    float *helper = malloc(sizeof(float) * size);
+
+    // Pad that bad boy with 0s
+    int i = 0;
+    for (i = 0; i < size; i++)
+    {
+        helper[i] = 0;
+    }
+
+    return helper;
 }

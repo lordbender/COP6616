@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
     int number_of_processess, my_process_id;
 
-    float *test_array;
+    float *rand_nums;
 
     // MPI Stuff
     if (argc != 2)
@@ -28,7 +28,9 @@ int main(int argc, char *argv[])
     int size = atoi(argv[1]);
 
     // TODO: this needs some more thought, but good enough to move on.
-    int elements_per_proc = size < number_of_processess ? 1 : (int)((size / number_of_processess) - 1);
+    int elements_per_proc = size < number_of_processess ? 1 : (int)((size / number_of_processess) + 1);
+
+    printf("elements_per_proc = %d\n\n", elements_per_proc);
 
     //Define process 0 behavior
     if (my_process_id == 0)
@@ -36,16 +38,15 @@ int main(int argc, char *argv[])
         printf("Size => %d, created by %d\n", size, my_process_id);
         printf("number_of_processess ==  %d\n", number_of_processess);
 
-        float m_out[size];
-        test_array = create_one_d_matrix(size, m_out, false);
-        printArray(test_array, size);
+        rand_nums = create_one_d_matrix(size, false);
+        printArray(rand_nums, size);
     }
 
     // Create a buffer that will hold a subset of the random numbers
-    float *sub_rand_nums = malloc(sizeof(float) * elements_per_proc);
+    float *sub_rand_nums = fetch_array(elements_per_proc);
 
     // Scatter the random numbers to all processes
-    MPI_Scatter(test_array, elements_per_proc, MPI_FLOAT, sub_rand_nums,
+    MPI_Scatter(rand_nums, elements_per_proc, MPI_FLOAT, sub_rand_nums,
                 elements_per_proc, MPI_FLOAT, 0, MPI_COMM_WORLD);
 
     // Compute the average of your subset
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
     float *sub_avgs = NULL;
     if (my_process_id == 0)
     {
-        sub_avgs = malloc(sizeof(float) * size);
+        sub_avgs = fetch_array(size);
     }
 
     MPI_Gather(&sub_avg, 1, MPI_FLOAT, sub_avgs, 1, MPI_FLOAT, 0,
@@ -68,12 +69,19 @@ int main(int argc, char *argv[])
         printf("Array Average: %f\n\n", avg);
     }
 
+    // free(rand_nums);
+    // free(sub_rand_nums);
+    // free(sub_avgs);
     MPI_Finalize();
     return 0;
 }
 
 float compute_avg(float *sub_rand_nums, int elements_per_proc, int my_process_id)
 {
+    if (my_process_id == 1)
+    {
+        printArray(sub_rand_nums, elements_per_proc);
+    }
     int i = 0;
     float sum_of_local_set = 0.0;
     for (i = 0; i < elements_per_proc; i++)
