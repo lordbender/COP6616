@@ -9,8 +9,10 @@
 int main(int argc, char *argv[])
 {
     int number_of_processess, my_process_id;
-
-    float *rand_nums;
+    int target = 0;
+    float *rand_nums = NULL;
+    float *sub_rand_nums = NULL;
+    int hits = 0;
 
     // MPI Stuff
     if (argc != 2)
@@ -33,40 +35,49 @@ int main(int argc, char *argv[])
     //Define process 0 behavior
     if (my_process_id == 0)
     {
+        rand_nums = create_one_d_matrix(size, false);
+        target = get_random_target();
+
         printf("Random Numbers Created: %d\n", size);
         printf("Number of Processes:    %d\n", number_of_processess);
         printf("Elements Per Process:   %d\n\n", elements_per_proc);
-
-        rand_nums = create_one_d_matrix(size, false);
-        // printArray(rand_nums, size);
+        printf("Searching for:          %d\n\n", target);
     }
 
     // Create a buffer that will hold a subset of the random numbers
-    float *sub_rand_nums = fetch_array(elements_per_proc);
+    sub_rand_nums = fetch_array(elements_per_proc);
 
     // Scatter the random numbers to all processes
     MPI_Scatter(rand_nums, elements_per_proc, MPI_FLOAT, sub_rand_nums,
                 elements_per_proc, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    if (my_process_id != 0)
+    {
+        // search for hits in the subsets.
+        hits = search(sub_rand_nums, elements_per_proc, target);
 
-    // Compute the average of your subset
-    float sub_avg = compute_avg(sub_rand_nums, elements_per_proc, my_process_id, false);
+        printf("pid: %d had %d positives.\n\n", my_process_id, hits);
+    }
 
     // Create space for the partial averages on the root process.
-    float *sub_avgs = NULL;
+    int *sub_avgs = NULL;
     if (my_process_id == 0)
     {
-        sub_avgs = fetch_array(size);
+        sub_avgs = fetch_array_int(size);
     }
 
     // Gather up the averages from the sub processess.
-    MPI_Gather(&sub_avg, 1, MPI_FLOAT, sub_avgs, 1, MPI_FLOAT, 0,
-               MPI_COMM_WORLD);
+    MPI_Gather(&hits, 1, MPI_FLOAT, sub_avgs, 1, MPI_FLOAT, 0, MPI_COMM_WORLD);
 
     // Wrap up by averaging the averages. :)
     if (my_process_id == 0)
     {
-        float avg = compute_avg(sub_avgs, size, my_process_id, false);
-        printf("Entire Array Average: %f\n\n", avg);
+        int total_hits, i = 0;
+        for (i = 0; i < elements_per_proc; i++)
+        {
+            total_hits += sub_avgs[i];
+        }
+
+        printf("Target was located %d times.\n\n", total_hits);
     }
 
     // Close out MPI and free up resources.

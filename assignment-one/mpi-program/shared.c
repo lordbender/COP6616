@@ -43,6 +43,27 @@ float *create_one_d_matrix(int size, bool printOutput)
     return helper;
 }
 
+float get_random_target()
+{
+    srand(time(0));
+    return (float)rand();
+}
+
+int *fetch_array_int(int size)
+{
+    // Create the space in memory
+    int *helper = malloc(sizeof(int) * size);
+
+    // Pad that bad boy with 0s
+    int i = 0;
+    for (i = 0; i < size; i++)
+    {
+        helper[i] = 0;
+    }
+
+    return helper;
+}
+
 float *fetch_array(int size)
 {
     // Create the space in memory
@@ -72,4 +93,22 @@ float compute_avg(float *sub_rand_nums, int elements_per_proc, int my_process_id
     }
 
     return sum_of_local_set / elements_per_proc;
+}
+
+int search(float *sub_rand_nums, int elements_per_proc, float target)
+{
+    int hits, i = 0;
+    if (target == 0)
+        return 0;
+
+    for (i = 0; i < elements_per_proc; i++)
+    {
+        if (sub_rand_nums[i] == target)
+        {
+            printf("hit: %f == %f\n", sub_rand_nums[i], target);
+            hits++;
+        }
+    }
+
+    return hits;
 }
