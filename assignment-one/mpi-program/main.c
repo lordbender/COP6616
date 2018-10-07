@@ -3,10 +3,13 @@
 #include <time.h>
 #include <stdbool.h>
 #include <mpi.h>
+#include "common.h"
 
 int main(int argc, char *argv[])
 {
     int p, id;
+
+    int *test_array;
 
     // MPI Stuff
     if (argc != 2)
@@ -27,6 +30,10 @@ int main(int argc, char *argv[])
     if (id == 0)
     {
         printf("Size => %d, created by %d\n", size, id);
+
+        int m_out[size];
+        test_array = create_one_d_matrix(size, m_out, true);
+        printArray(test_array, size);
     }
 
     printf("Echo ID => %d\n", id);
