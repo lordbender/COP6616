@@ -20,6 +20,7 @@ double time_calc(clock_t start, clock_t end)
 float *create_one_d_matrix(int size, bool printOutput)
 {
     float *helper = fetch_array(size);
+
     srand(time(0));
 
     if (printOutput == true)
@@ -30,9 +31,11 @@ float *create_one_d_matrix(int size, bool printOutput)
     int i;
     for (i = 0; i < size; i++)
     {
-        // To avoid overflows, use casted ints, instead of random floats.
-        float num = (float)rand();
-        helper[i] = num;
+        int num = (rand() %
+                   (UPPER - LOWER + 1)) +
+                  LOWER;
+
+        helper[i] = (float)num;
     }
 
     if (printOutput == true)
@@ -46,7 +49,11 @@ float *create_one_d_matrix(int size, bool printOutput)
 float get_random_target()
 {
     srand(time(0));
-    return (float)rand();
+    int num = (rand() %
+               (UPPER - LOWER + 1)) +
+              LOWER;
+
+    return (float)num;
 }
 
 int *fetch_array_int(int size)

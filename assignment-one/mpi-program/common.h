@@ -5,6 +5,9 @@
 #include <stdbool.h>
 #include <mpi.h>
 
+#define UPPER 100
+#define LOWER -100
+
 // Shared Functions
 float *create_one_d_matrix(int size, bool printOutput);
 void printArray(float arr[], int size);
