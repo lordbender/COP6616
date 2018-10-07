@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     if (my_process_id == 0)
     {
         float avg = compute_avg(sub_avgs, size, my_process_id);
-        printf("Array Average: %f\n\n", avg);
+        printf("Entire Array Average: %f\n\n", avg);
     }
 
     // free(rand_nums);
