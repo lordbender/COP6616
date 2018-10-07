@@ -57,3 +57,19 @@ float *fetch_array(int size)
 
     return helper;
 }
+
+float compute_avg(float *sub_rand_nums, int elements_per_proc, int my_process_id, bool print)
+{
+    if (my_process_id == 1 && print == true)
+    {
+        printArray(sub_rand_nums, elements_per_proc);
+    }
+    int i = 0;
+    float sum_of_local_set = 0.0;
+    for (i = 0; i < elements_per_proc; i++)
+    {
+        sum_of_local_set += sub_rand_nums[i];
+    }
+
+    return sum_of_local_set / elements_per_proc;
+}
