@@ -5,11 +5,11 @@
 #include "common.h"
 #include <mpi.h>
 
-void printArray(int arr[], int size)
+void printArray(float arr[], int size)
 {
     int i;
     for (i = 0; i < size - 1; i++)
-        printf("\t%d\n ", arr[i]);
+        printf("\t%f\n ", arr[i]);
 }
 
 double time_calc(clock_t start, clock_t end)
@@ -17,7 +17,7 @@ double time_calc(clock_t start, clock_t end)
     return ((double)(end - start)) / CLOCKS_PER_SEC;
 }
 
-int *create_one_d_matrix(int size, int *m_out, bool printOutput)
+float *create_one_d_matrix(int size, float *m_out, bool printOutput)
 {
     srand(time(0));
 
@@ -29,7 +29,8 @@ int *create_one_d_matrix(int size, int *m_out, bool printOutput)
     int i;
     for (i = 0; i < size; i++)
     {
-        int num = rand();
+        // To avoid overflows, use casted ints, instead of random floats.
+        float num = (float)rand();
         m_out[i] = num;
     }
 

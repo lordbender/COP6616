@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <math.h>
 #include <mpi.h>
 #include "common.h"
 
@@ -9,7 +10,7 @@ int main(int argc, char *argv[])
 {
     int p, id;
 
-    int *test_array;
+    float *test_array;
 
     // MPI Stuff
     if (argc != 2)
@@ -26,15 +27,22 @@ int main(int argc, char *argv[])
     // Grab the Requested Size from the Command Line Arguments.
     int size = atoi(argv[1]);
 
+    // TODO: this needs some more thought, but good enough to move on.
+    int elements_per_proc = size < p ? 1 : (int)((size / p) - 1);
+    
     //Define process 0 behavior
     if (id == 0)
     {
         printf("Size => %d, created by %d\n", size, id);
+        printf("P ==  %d\n", p);
 
-        int m_out[size];
+        float m_out[size];
         test_array = create_one_d_matrix(size, m_out, true);
         printArray(test_array, size);
     }
+
+    // Create a buffer that will hold a subset of the random numbers
+    float *sub_rand_nums = malloc(sizeof(float) * elements_per_proc);
 
     printf("Echo ID => %d\n", id);
 
