@@ -6,27 +6,11 @@
 #include <mpi.h>
 #include "common.h"
 
-int main(int argc, char *argv[])
+void run_search(int my_process_id, int number_of_processess, int size)
 {
-    int number_of_processess, my_process_id;
     const long target = 9;
     long *rand_nums = NULL;
     long *sub_rand_nums = NULL;
-
-    // MPI Stuff
-    if (argc != 2)
-    {
-        fprintf(stderr, "Usage: mpirun -np <num_procs> %s <random_array_size>\n", argv[0]);
-        printf("You did not feed me arguments, I will die now :( ...\n");
-        exit(1);
-    }
-
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &number_of_processess);
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_process_id);
-
-    // Grab the Requested Size from the Command Line Arguments.
-    int size = atoi(argv[1]);
 
     // TODO: this needs some more thought, but good enough to move on.
     int elements_per_proc = size < number_of_processess ? 1 : (int)((size / number_of_processess) + 1);
@@ -78,8 +62,4 @@ int main(int argc, char *argv[])
 
         printf("Target was located %ld times.\n\n", total_hits);
     }
-
-    // Close out MPI and free up resources.
-    MPI_Finalize();
-    return 0;
 }
