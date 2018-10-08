@@ -68,12 +68,12 @@ int main(int argc, char *argv[])
     // Wrap up by averaging the averages. :)
     if (my_process_id == 0)
     {
-        long total_hits;
+        long total_hits = 0;
         int i = 0;
         for (i = 0; i < elements_per_proc; i++)
         {
             printf("sub_avgs[%d] == %ld\n", i, sub_avgs[i]);
-            total_hits += sub_avgs[i];
+            total_hits += (long)sub_avgs[i];
         }
 
         printf("Target was located %ld times.\n\n", total_hits);
