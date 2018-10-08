@@ -1,3 +1,3 @@
 rm *.out
 mpicc *.c
-mpirun -np=8 ./a.out 25
+mpirun -np=8 ./a.out 500000

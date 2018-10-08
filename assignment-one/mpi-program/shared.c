@@ -71,37 +71,6 @@ long *fetch_array(int size)
     return helper;
 }
 
-// long *fetch_array(int size)
-// {
-//     // Create the space in memory
-//     long *helper = malloc(sizeof(long) * size);
-
-//     // Pad that bad boy with 0s
-//     int i = 0;
-//     for (i = 0; i < size; i++)
-//     {
-//         helper[i] = 0;
-//     }
-
-//     return helper;
-// }
-
-// float compute_avg(float *sub_rand_nums, int elements_per_proc, int my_process_id, bool print)
-// {
-//     if (my_process_id == 1 && print == true)
-//     {
-//         printArray(sub_rand_nums, elements_per_proc);
-//     }
-//     int i = 0;
-//     float sum_of_local_set = 0.0;
-//     for (i = 0; i < elements_per_proc; i++)
-//     {
-//         sum_of_local_set += sub_rand_nums[i];
-//     }
-
-//     return sum_of_local_set / elements_per_proc;
-// }
-
 long search(long *sub_rand_nums, int elements_per_proc, long target)
 {
     long hits = 0;
@@ -112,10 +81,10 @@ long search(long *sub_rand_nums, int elements_per_proc, long target)
         // printf("%f == %f\n", sub_rand_nums[i], target);
         if (sub_rand_nums[i] == target)
         {
-            printf("hit: %ld == %ld\n", sub_rand_nums[i], target);
+            // printf("hit: %ld == %ld\n", sub_rand_nums[i], target);
             hits++;
         }
     }
-    printf("hits == %ld\n", hits);
+    // printf("hits == %ld\n", hits);
     return hits;
 }
