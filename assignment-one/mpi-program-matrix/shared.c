@@ -17,13 +17,6 @@ void print_two_d_array(int r, int c, long arr[r][c])
     }
 }
 
-double randfrom(double min, double max)
-{
-    double range = (max - min);
-    double div = RAND_MAX / range;
-    return min + (rand() / div);
-}
-
 void create_two_d_array(int r, int c, long m_out[r][c])
 {
     srand(time(0));

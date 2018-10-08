@@ -8,9 +8,8 @@
 
 int main(int argc, char *argv[])
 {
-    int number_of_processess, my_process_id;
-    const long target = 9;
-    long *sub_rand_nums = NULL;
+    int number_of_processess;
+    int my_process_id;
 
     // MPI Stuff
     if (argc != 2)
@@ -26,9 +25,10 @@ int main(int argc, char *argv[])
 
     // Grab the Requested Size from the Command Line Arguments.
     int size = atoi(argv[1]);
-    long rand_array_a[size][size] = NULL;
-    long rand_array_b[size][size] = NULL;
-    long result_array_c[size][size] = NULL;
+    long a[size][size];
+    long b[size][size];
+    long c[size][size];
+    long aa[size], cc[size];
 
     // TODO: this needs some more thought, but good enough to move on.
     int elements_per_proc = size < number_of_processess ? 1 : (int)((size / number_of_processess) + 1);
@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
     {
 
         // Fill the Arrays
-        create_two_d_array(size, size, rand_array_a);
-        create_two_d_array(size, size, rand_array_b);
+        create_two_d_array(size, size, a);
+        create_two_d_array(size, size, b);
         // target = get_random_target();
 
         printf("Random Numbers Created: %d\n", size);
@@ -47,18 +47,38 @@ int main(int argc, char *argv[])
         printf("Elements Per Process:   %d\n\n", elements_per_proc);
     }
 
-    // Scatter the random numbers to all processes
-    // MPI_Scatter(rand_nums, elements_per_proc, MPI_LONG, sub_rand_nums,
-    //             elements_per_proc, MPI_LONG, 0, MPI_COMM_WORLD);
+    int size_helper = size * size / number_of_processess;
 
-    // Gather up the averages from the sub processess.
-    // MPI_Gather(&hits, 1, MPI_LONG, sub_avgs, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+    //scatter rows of first matrix to different processes
+    MPI_Scatter(a, size_helper, MPI_LONG, aa, size_helper, MPI_LONG, 0, MPI_COMM_WORLD);
+
+    //broadcast second matrix to all processes
+    MPI_Bcast(b, size * size, MPI_LONG, 0, MPI_COMM_WORLD);
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    //perform vector multiplication by all processes
+    int i = 0;
+    int j = 0;
+    for (i = 0; i < size; i++)
+    {
+        int sum = 0;
+        for (j = 0; j < size; j++)
+        {
+            sum = sum + aa[j] * b[j][i];
+        }
+        cc[i] = sum;
+    }
+
+    MPI_Gather(cc, size_helper, MPI_LONG, c, size_helper, MPI_LONG, 0, MPI_COMM_WORLD);
+
+    MPI_Barrier(MPI_COMM_WORLD);
 
     // Wrap up by averaging the averages. :)
     if (my_process_id == 0)
     {
-        print_two_d_array(size, size, rand_array_a);
-        print_two_d_array(size, size, rand_array_b);
+        // print_two_d_array(size, size, c);
+        // print_two_d_array(size, size, rand_array_b);
 
         printf("Wrap up the Results.\n\n");
     }

@@ -7,7 +7,5 @@
 #define LOWER -10000
 
 // Shared Functions
-void create_two_d_array(int r, int c, double m_out[r][c]);
-void print_two_d_array(int r, int c, double arr[r][c]);
-
-
+void create_two_d_array(int r, int c, long m_out[r][c]);
+void print_two_d_array(int r, int c, long arr[r][c]);
