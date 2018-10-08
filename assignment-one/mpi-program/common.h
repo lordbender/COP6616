@@ -5,16 +5,15 @@
 #include <stdbool.h>
 #include <mpi.h>
 
-#define UPPER 100
-#define LOWER -100
+#define UPPER 10
+#define LOWER -10
 
 // Shared Functions
-float *create_one_d_matrix(int size, bool printOutput);
-void printArray(float arr[], int size);
-float *fetch_array(int size);
-int *fetch_array_int(int size);
+long *create_one_d_matrix(int size, bool printOutput);
+void printArray(long arr[], int size);
+long *fetch_array(int size);
 
 // Test  Operation
-float compute_avg(float *sub_rand_nums, int elements_per_proc, int id, bool print);
-int search(float *sub_rand_nums, int elements_per_proc, float target);
-float get_random_target();
+// long compute_avg(long *sub_rand_nums, int elements_per_proc, int id, bool print);
+long search(long *sub_rand_nums, int elements_per_proc, long target);
+long get_random_target();
