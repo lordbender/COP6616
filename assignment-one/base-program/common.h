@@ -7,7 +7,7 @@
 double time_calc(clock_t start, clock_t end);
 int *create_one_d_matrix(int size, int *m_out, bool printOutput);
 void create_two_d_array(int r, int c, long m_out[r][c]);
-void multiply(int size, long mat1[][size], long mat2[][size], long res[][size]);
+void multiply(int size, long **mat1, long **mat2, long **res);
 void printArray(int arr[], int size);
 void print_two_d_array(int r, int c, long arr[r][c]);
 
