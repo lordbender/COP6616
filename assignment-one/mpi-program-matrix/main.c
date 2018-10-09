@@ -1,117 +1,126 @@
+/**********************************************************************************************
+* Matrix Multiplication Program using MPI.
+*
+* Viraj Brian Wijesuriya - University of Colombo School of Computing, Sri Lanka.
+* 
+* Works with any type of two matrixes [A], [B] which could be multiplied to produce a matrix [c].
+*
+* Master process initializes the multiplication operands, distributes the muliplication 
+* operation to worker processes and reduces the worker results to construct the final output.
+*  
+************************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <stdbool.h>
-#include <math.h>
 #include <mpi.h>
-#include "common.h"
 
+#define MASTER_TO_SLAVE_TAG 1 //tag for messages sent from master to slaves
+#define SLAVE_TO_MASTER_TAG 4 //tag for messages sent from slaves to master
+
+void makeAB(int matrix_size, double mat_a[matrix_size][matrix_size], double mat_b[matrix_size][matrix_size]);
+
+int rank;            //process rank
+int size;            //number of processes
+int i, j, k;         //helper variables
+double start_time;   //hold start time
+double end_time;     // hold end time
+int low_bound;       //low bound of the number of rows of [A] allocated to a slave
+int upper_bound;     //upper bound of the number of rows of [A] allocated to a slave
+int portion;         //portion of the number of rows of [A] allocated to a slave
+MPI_Status status;   // store status of a MPI_Recv
+MPI_Request request; //capture request of a MPI_Isend
 int main(int argc, char *argv[])
 {
-    int i = 0;
-    int j = 0;
-    int count = 0;
-    int number_of_processess;
-    int my_process_id;
-    double t1 = 0.0, t2 = 0.0;
-
-    // MPI Stuff
-    if (argc != 2)
-    {
-        fprintf(stderr, "Usage: mpirun -np <num_procs> %s <random_array_size>\n", argv[0]);
-        printf("You did not feed me arguments, I will die now :( ...\n");
-        exit(1);
-    }
-
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &number_of_processess);
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_process_id);
+    MPI_Init(&argc, &argv);               //initialize MPI operations
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank); //get the rank
+    MPI_Comm_size(MPI_COMM_WORLD, &size); //get number of processes
 
     // Grab the Requested Size from the Command Line Arguments.
-    int size = atoi(argv[1]);
-    // Define the Arrays
-    long **a = (long **)malloc(size * sizeof(long *));
-    long **b = (long **)malloc(size * sizeof(long *));
-    long **c = (long **)malloc(size * sizeof(long *));
+    int matrix_size = atoi(argv[1]);
+    double mat_a[matrix_size][matrix_size];      //declare input [A]
+    double mat_b[matrix_size][matrix_size];      //declare input [B]
+    double mat_result[matrix_size][matrix_size]; //declare output [C]
 
-    long *aa = (long *)malloc(size * sizeof(long));
-    long *cc = (long *)malloc(size * sizeof(long));
-
-    for (i = 0; i < size; i++)
+    /* master initializes work*/
+    if (rank == 0)
     {
-        a[i] = (long *)malloc(size * sizeof(long));
-        b[i] = (long *)malloc(size * sizeof(long));
-        c[i] = (long *)malloc(size * sizeof(long));
-    }
-
-    // TODO: this needs some more thought, but good enough to move on.
-    int elements_per_proc = size < number_of_processess ? 1 : (int)((size / number_of_processess) + 1);
-
-    //Define process 0 behavior
-    if (my_process_id == 0)
-    {
-        for (i = 0; i < size; i++)
-        {
-            a[i] = (long *)malloc(size * sizeof(long));
-            b[i] = (long *)malloc(size * sizeof(long));
-            c[i] = (long *)malloc(size * sizeof(long));
-        }
-
-        // Fill the Arrays
-        for (i = 0; i < size; i++)
-        {
-            aa[i] = 0;
-            aa[i] = 0;
-            for (j = 0; j < size; j++)
+        makeAB(matrix_size, mat_a, mat_b);
+        start_time = MPI_Wtime();
+        for (i = 1; i < size; i++)
+        {                                         //for each slave other than the master
+            portion = (matrix_size / (size - 1)); // calculate portion without master
+            low_bound = (i - 1) * portion;
+            if (((i + 1) == size) && ((matrix_size % (size - 1)) != 0))
+            {                              //if rows of [A] cannot be equally divided among slaves
+                upper_bound = matrix_size; //last slave gets all the remaining rows
+            }
+            else
             {
-                a[i][j] = ++count + 50;
-                b[i][j] = ++count - 50;
-
-                // Just Zero out the result array for now!
-                c[i][j] = 0;
+                upper_bound = low_bound + portion; //rows of [A] are equally divisable among slaves
+            }
+            //send the low bound first without blocking, to the intended slave
+            MPI_Isend(&low_bound, 1, MPI_INT, i, MASTER_TO_SLAVE_TAG, MPI_COMM_WORLD, &request);
+            //next send the upper bound without blocking, to the intended slave
+            MPI_Isend(&upper_bound, 1, MPI_INT, i, MASTER_TO_SLAVE_TAG + 1, MPI_COMM_WORLD, &request);
+            //finally send the allocated row portion of [A] without blocking, to the intended slave
+            MPI_Isend(&mat_a[low_bound][0], (upper_bound - low_bound) * matrix_size, MPI_DOUBLE, i, MASTER_TO_SLAVE_TAG + 2, MPI_COMM_WORLD, &request);
+        }
+    }
+    //broadcast [B] to all the slaves
+    MPI_Bcast(&mat_b, matrix_size * matrix_size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    /* work done by slaves*/
+    if (rank > 0)
+    {
+        //receive low bound from the master
+        MPI_Recv(&low_bound, 1, MPI_INT, 0, MASTER_TO_SLAVE_TAG, MPI_COMM_WORLD, &status);
+        //next receive upper bound from the master
+        MPI_Recv(&upper_bound, 1, MPI_INT, 0, MASTER_TO_SLAVE_TAG + 1, MPI_COMM_WORLD, &status);
+        //finally receive row portion of [A] to be processed from the master
+        MPI_Recv(&mat_a[low_bound][0], (upper_bound - low_bound) * matrix_size, MPI_DOUBLE, 0, MASTER_TO_SLAVE_TAG + 2, MPI_COMM_WORLD, &status);
+        for (i = low_bound; i < upper_bound; i++)
+        { //iterate through a given set of rows of [A]
+            for (j = 0; j < matrix_size; j++)
+            { //iterate through columns of [B]
+                for (k = 0; k < matrix_size; k++)
+                { //iterate through rows of [B]
+                    mat_result[i][j] += (mat_a[i][k] * mat_b[k][j]);
+                }
             }
         }
-
-        printf("Random Numbers Created: %d\n", size);
-        printf("Number of Processes:    %d\n", number_of_processess);
-        printf("Elements Per Process:   %d\n\n", elements_per_proc);
+        //send back the low bound first without blocking, to the master
+        MPI_Isend(&low_bound, 1, MPI_INT, 0, SLAVE_TO_MASTER_TAG, MPI_COMM_WORLD, &request);
+        //send the upper bound next without blocking, to the master
+        MPI_Isend(&upper_bound, 1, MPI_INT, 0, SLAVE_TO_MASTER_TAG + 1, MPI_COMM_WORLD, &request);
+        //finally send the processed portion of data without blocking, to the master
+        MPI_Isend(&mat_result[low_bound][0], (upper_bound - low_bound) * matrix_size, MPI_DOUBLE, 0, SLAVE_TO_MASTER_TAG + 2, MPI_COMM_WORLD, &request);
     }
-
-    int size_helper = size * size / number_of_processess;
-
-    t1 = MPI_Wtime();
-    //scatter rows of first matrix to different processes
-    MPI_Scatter(a, size_helper, MPI_LONG, aa, size_helper, MPI_LONG, 0, MPI_COMM_WORLD);
-
-    //broadcast second matrix to all processes
-    MPI_Bcast(b, size * size, MPI_LONG, 0, MPI_COMM_WORLD);
-
-    MPI_Barrier(MPI_COMM_WORLD);
-    
-    //perform vector multiplication by all processes
-    for (i = 0; i < size; i++)
+    /* master gathers processed work*/
+    if (rank == 0)
     {
-        int sum = 0;
-        for (j = 0; j < size; j++)
-        {
-            sum = sum + aa[j] * b[j][i];
+        for (i = 1; i < size; i++)
+        { // untill all slaves have handed back the processed data
+            //receive low bound from a slave
+            MPI_Recv(&low_bound, 1, MPI_INT, i, SLAVE_TO_MASTER_TAG, MPI_COMM_WORLD, &status);
+            //receive upper bound from a slave
+            MPI_Recv(&upper_bound, 1, MPI_INT, i, SLAVE_TO_MASTER_TAG + 1, MPI_COMM_WORLD, &status);
+            //receive processed data from a slave
+            MPI_Recv(&mat_result[low_bound][0], (upper_bound - low_bound) * matrix_size, MPI_DOUBLE, i, SLAVE_TO_MASTER_TAG + 2, MPI_COMM_WORLD, &status);
         }
-        cc[i] = sum;
+        end_time = MPI_Wtime();
+        printf("\nRunning Time = %f\n\n", end_time - start_time);
+        // printArray();
     }
-    MPI_Gather(cc, size_helper, MPI_LONG, c, size_helper, MPI_LONG, 0, MPI_COMM_WORLD);
-
-    t2 = MPI_Wtime();
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    // Wrap up by averaging the averages. :)
-    if (my_process_id == 0)
-    {
-        // print_two_d_array(size, size, c);
-        double time_to_run = ((double)(t2 - t1)) / CLOCKS_PER_SEC;
-        printf("Elapsed time is %f\n", time_to_run);
-    }
-
-    // Close out MPI and free up resources.
-    MPI_Finalize();
+    MPI_Finalize(); //finalize MPI operations
     return 0;
+}
+
+void makeAB(int matrix_size, double mat_a[matrix_size][matrix_size], double mat_b[matrix_size][matrix_size])
+{
+    for (i = 0; i < matrix_size; i++)
+    {
+        for (j = 0; j < matrix_size; j++)
+        {
+            mat_a[i][j] = i + j;
+            mat_b[i][j] = i * j - i;
+        }
+    }
 }
