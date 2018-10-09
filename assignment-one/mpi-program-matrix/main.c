@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 {
     int number_of_processess;
     int my_process_id;
+    double t1, t2;
 
     // MPI Stuff
     if (argc != 2)
@@ -36,7 +37,6 @@ int main(int argc, char *argv[])
     //Define process 0 behavior
     if (my_process_id == 0)
     {
-
         // Fill the Arrays
         create_two_d_array(size, size, a);
         create_two_d_array(size, size, b);
@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 
     int size_helper = size * size / number_of_processess;
 
+    t1 = MPI_Wtime();
     //scatter rows of first matrix to different processes
     MPI_Scatter(a, size_helper, MPI_LONG, aa, size_helper, MPI_LONG, 0, MPI_COMM_WORLD);
 
@@ -56,7 +57,6 @@ int main(int argc, char *argv[])
     MPI_Bcast(b, size * size, MPI_LONG, 0, MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
-
     //perform vector multiplication by all processes
     int i = 0;
     int j = 0;
@@ -69,18 +69,17 @@ int main(int argc, char *argv[])
         }
         cc[i] = sum;
     }
-
     MPI_Gather(cc, size_helper, MPI_LONG, c, size_helper, MPI_LONG, 0, MPI_COMM_WORLD);
 
+    t2 = MPI_Wtime();
     MPI_Barrier(MPI_COMM_WORLD);
 
     // Wrap up by averaging the averages. :)
     if (my_process_id == 0)
     {
         // print_two_d_array(size, size, c);
-        // print_two_d_array(size, size, rand_array_b);
-
-        printf("Wrap up the Results.\n\n");
+        double time_to_run = ((double)(t2 - t1)) / CLOCKS_PER_SEC;
+        printf("Elapsed time is %f\n", time_to_run);
     }
 
     // Close out MPI and free up resources.

@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     const long target = 9;
     long *rand_nums = NULL;
     long *sub_rand_nums = NULL;
+    double t1, t2;
 
     // MPI Stuff
     if (argc != 2)
@@ -46,6 +47,8 @@ int main(int argc, char *argv[])
     // Create a buffer that will hold a subset of the random numbers
     sub_rand_nums = fetch_array(elements_per_proc);
 
+    t1 = MPI_Wtime();
+
     // Scatter the random numbers to all processes
     MPI_Scatter(rand_nums, elements_per_proc, MPI_LONG, sub_rand_nums,
                 elements_per_proc, MPI_LONG, 0, MPI_COMM_WORLD);
@@ -64,6 +67,7 @@ int main(int argc, char *argv[])
 
     // Gather up the averages from the sub processess.
     MPI_Gather(&hits, 1, MPI_LONG, sub_avgs, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+    t2 = MPI_Wtime();
 
     // Wrap up by averaging the averages. :)
     if (my_process_id == 0)
@@ -76,6 +80,8 @@ int main(int argc, char *argv[])
             total_hits += (long)sub_avgs[i];
         }
 
+        double time_to_run = ((double)(t2 - t1)) / CLOCKS_PER_SEC;
+        printf("Elapsed time is %f\n", time_to_run);
         printf("Target was located %ld times.\n\n", total_hits);
     }
 
