@@ -26,10 +26,20 @@ int main(int argc, char *argv[])
 
     // Grab the Requested Size from the Command Line Arguments.
     int size = atoi(argv[1]);
-    long a[size][size];
-    long b[size][size];
-    long c[size][size];
-    long aa[size], cc[size];
+    // Define the Arrays
+    long **left_a = (long **)malloc(size * sizeof(long *));
+    long **right_a = (long **)malloc(size * sizeof(long *));
+    long **result_a = (long **)malloc(size * sizeof(long *));
+
+    long *aa = (long *)malloc(size * sizeof(long));
+    long *cc = (long *)malloc(size * sizeof(long));
+
+    for (i = 0; i < size; i++)
+    {
+        left_a[i] = (long *)malloc(size * sizeof(long));
+        right_a[i] = (long *)malloc(size * sizeof(long));
+        result_a[i] = (long *)malloc(size * sizeof(long));
+    }
 
     // TODO: this needs some more thought, but good enough to move on.
     int elements_per_proc = size < number_of_processess ? 1 : (int)((size / number_of_processess) + 1);
@@ -37,10 +47,27 @@ int main(int argc, char *argv[])
     //Define process 0 behavior
     if (my_process_id == 0)
     {
+        for (i = 0; i < size; i++)
+        {
+            left_a[i] = (long *)malloc(size * sizeof(long));
+            right_a[i] = (long *)malloc(size * sizeof(long));
+            result_a[i] = (long *)malloc(size * sizeof(long));
+        }
+
         // Fill the Arrays
-        create_two_d_array(size, size, a);
-        create_two_d_array(size, size, b);
-        // target = get_random_target();
+        for (i = 0; i < size; i++)
+        {
+            aa[i] = 0;
+            aa[i] = 0;
+            for (j = 0; j < size; j++)
+            {
+                left_a[i][j] = ++count + 50;
+                right_a[i][j] = ++count - 50;
+
+                // Just Zero out the result array for now!
+                result_a[i][j] = 0;
+            }
+        }
 
         printf("Random Numbers Created: %d\n", size);
         printf("Number of Processes:    %d\n", number_of_processess);
