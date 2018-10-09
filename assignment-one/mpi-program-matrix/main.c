@@ -8,9 +8,12 @@
 
 int main(int argc, char *argv[])
 {
+    int i = 0;
+    int j = 0;
+    int count = 0;
     int number_of_processess;
     int my_process_id;
-    double t1, t2;
+    double t1 = 0.0, t2 = 0.0;
 
     // MPI Stuff
     if (argc != 2)
@@ -27,18 +30,18 @@ int main(int argc, char *argv[])
     // Grab the Requested Size from the Command Line Arguments.
     int size = atoi(argv[1]);
     // Define the Arrays
-    long **left_a = (long **)malloc(size * sizeof(long *));
-    long **right_a = (long **)malloc(size * sizeof(long *));
-    long **result_a = (long **)malloc(size * sizeof(long *));
+    long **a = (long **)malloc(size * sizeof(long *));
+    long **b = (long **)malloc(size * sizeof(long *));
+    long **c = (long **)malloc(size * sizeof(long *));
 
     long *aa = (long *)malloc(size * sizeof(long));
     long *cc = (long *)malloc(size * sizeof(long));
 
     for (i = 0; i < size; i++)
     {
-        left_a[i] = (long *)malloc(size * sizeof(long));
-        right_a[i] = (long *)malloc(size * sizeof(long));
-        result_a[i] = (long *)malloc(size * sizeof(long));
+        a[i] = (long *)malloc(size * sizeof(long));
+        b[i] = (long *)malloc(size * sizeof(long));
+        c[i] = (long *)malloc(size * sizeof(long));
     }
 
     // TODO: this needs some more thought, but good enough to move on.
@@ -49,9 +52,9 @@ int main(int argc, char *argv[])
     {
         for (i = 0; i < size; i++)
         {
-            left_a[i] = (long *)malloc(size * sizeof(long));
-            right_a[i] = (long *)malloc(size * sizeof(long));
-            result_a[i] = (long *)malloc(size * sizeof(long));
+            a[i] = (long *)malloc(size * sizeof(long));
+            b[i] = (long *)malloc(size * sizeof(long));
+            c[i] = (long *)malloc(size * sizeof(long));
         }
 
         // Fill the Arrays
@@ -61,11 +64,11 @@ int main(int argc, char *argv[])
             aa[i] = 0;
             for (j = 0; j < size; j++)
             {
-                left_a[i][j] = ++count + 50;
-                right_a[i][j] = ++count - 50;
+                a[i][j] = ++count + 50;
+                b[i][j] = ++count - 50;
 
                 // Just Zero out the result array for now!
-                result_a[i][j] = 0;
+                c[i][j] = 0;
             }
         }
 
@@ -84,9 +87,8 @@ int main(int argc, char *argv[])
     MPI_Bcast(b, size * size, MPI_LONG, 0, MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
+    
     //perform vector multiplication by all processes
-    int i = 0;
-    int j = 0;
     for (i = 0; i < size; i++)
     {
         int sum = 0;
