@@ -1,2 +1,2 @@
 mpicc *.c
-mpirun -np=50 ./a.out 100
+mpirun -np=32 ./a.out 500000

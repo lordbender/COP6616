@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     //Define process 0 behavior
     if (my_process_id == 0)
     {
-        rand_nums = create_one_d_matrix(size, false);
+        rand_nums = create_one_d_matrix(size);
 
         printf("Random Numbers Created: %d\n", size);
         printf("Number of Processes:    %d\n", number_of_processess);
@@ -52,13 +52,10 @@ int main(int argc, char *argv[])
     MPI_Scatter(rand_nums, elements_per_proc, MPI_LONG, sub_rand_nums,
                 elements_per_proc, MPI_LONG, 0, MPI_COMM_WORLD);
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    // MPI_Barrier(MPI_COMM_WORLD);
 
     // Perform sort on the smaller bits
     long *sorted_subset = bubbleSort(sub_rand_nums, elements_per_proc);
-
-    if (my_process_id == 2)
-        print_array(sub_rand_nums, elements_per_proc);
 
     // Create space for the partial averages on the root process.
     long **sub_avgs = NULL;
