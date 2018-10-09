@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
   double cpu_time_used_bubble_sort = run_linear_bubble(bubble_sort_a, size, false);
   printf("Linear -> O(n^2) -> Bubble Sort on %d integers, took %f\n\n", size, cpu_time_used_bubble_sort);
 
-  // Linear -> O(n^3) -> Matrix Multipication
-  double cpu_time_used_multiply_array = run_linear_matrix_multiply(size, false);
-  printf("Linear -> O(n^3) -> Multiply Matrix on %d X %d integers, took %f\n\n", size, size, cpu_time_used_multiply_array);
+  // Linear -> O(n^3) -> Matrix Multipication Hard coded to 700, this is a good bound for testing.
+  double cpu_time_used_multiply_array = run_linear_matrix_multiply(700, false);
+  printf("Linear -> O(n^3) -> Multiply Matrix on %d X %d integers, took %f\n\n", 700, 700, cpu_time_used_multiply_array);
 
   // Create Report Here!
   printf("\n\n\nReport of Linear performance for %d as the specified size:\n\n", size);

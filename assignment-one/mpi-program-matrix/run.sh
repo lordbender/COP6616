@@ -1,2 +1,3 @@
 mpicc *.c
-mpirun -np=16 ./a.out 500
+echo mpirun -np=$1 ./a.out $2
+mpirun -np=$1 ./a.out $2

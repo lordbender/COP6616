@@ -1,2 +1,5 @@
 gcc *.c
-./a.out 1200
+
+echo Linear Data Size $1
+echo ./a.out $1
+./a.out $1
