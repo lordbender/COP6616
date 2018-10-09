@@ -8,10 +8,12 @@
 
 int main(int argc, char *argv[])
 {
-    int number_of_processess, my_process_id;
-    const long target = 9;
+    int number_of_processess;
+    int my_process_id;
+
     long *rand_nums = NULL;
     long *sub_rand_nums = NULL;
+
     double t1, t2;
 
     // MPI Stuff
@@ -40,50 +42,72 @@ int main(int argc, char *argv[])
         printf("Random Numbers Created: %d\n", size);
         printf("Number of Processes:    %d\n", number_of_processess);
         printf("Elements Per Process:   %d\n\n", elements_per_proc);
-        printf("Searching for:          %ld\n\n", target);
     }
 
-    // Create a buffer that will hold a subset of the random numbers
+    int size_helper = size * size / number_of_processess;
     sub_rand_nums = fetch_array(elements_per_proc);
 
     t1 = MPI_Wtime();
 
-    // Scatter the random numbers to all processes
     MPI_Scatter(rand_nums, elements_per_proc, MPI_LONG, sub_rand_nums,
                 elements_per_proc, MPI_LONG, 0, MPI_COMM_WORLD);
 
-    // search for hits in the subsets.
-    long hits = search(sub_rand_nums, elements_per_proc, target);
+    MPI_Barrier(MPI_COMM_WORLD);
 
-    // printf("pid: %d had %ld positives.\n\n", my_process_id, hits);
+    // Perform sort on the smaller bits
+    long *sorted_subset = bubbleSort(sub_rand_nums, elements_per_proc);
+
+    if (my_process_id == 2)
+        print_array(sub_rand_nums, elements_per_proc);
 
     // Create space for the partial averages on the root process.
-    long *sub_avgs = NULL;
+    long **sub_avgs = NULL;
     if (my_process_id == 0)
     {
-        sub_avgs = fetch_array(size);
+        sub_avgs = (long **)malloc(size * sizeof(long *));
     }
 
-    MPI_Gather(&hits, 1, MPI_LONG, sub_avgs, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+    MPI_Gather(&sorted_subset, 1, MPI_LONG, sub_avgs, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+
     t2 = MPI_Wtime();
 
     // Wrap up by averaging the averages. :)
     if (my_process_id == 0)
     {
-        long total_hits = 0;
-        int i = 0;
-        for (i = 0; i < elements_per_proc; i++)
-        {
-            // printf("sub_avgs[%d] == %ld\n", i, sub_avgs[i]);
-            total_hits += (long)sub_avgs[i];
-        }
-
         double time_to_run = ((double)(t2 - t1)) / CLOCKS_PER_SEC;
         printf("Elapsed time is %f\n", time_to_run);
-        printf("Target was located %ld times.\n\n", total_hits);
     }
 
     // Close out MPI and free up resources.
     MPI_Finalize();
     return 0;
+}
+
+void swap(long *xp, long *yp)
+{
+    long temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+long *bubbleSort(long numbers[], int count)
+{
+    int i = 0;
+    int j = 0;
+    int c = 0;
+
+    for (i = 0; i < count - 1; i++)
+    {
+        for (j = 0; j < count - 1 - 1; j++)
+        {
+            if (numbers[j] > numbers[j + 1])
+            {
+                c = numbers[j];
+                numbers[j] = numbers[j + 1];
+                numbers[j + 1] = c;
+            }
+        }
+    }
+
+    return numbers;
 }
