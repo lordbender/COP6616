@@ -5,19 +5,20 @@
 
 void printArray(int arr[], int size)
 {
-    int i;
+    int i = 0;
     for (i = 0; i < size - 1; i++)
         printf("\t%d\n ", arr[i]);
 }
 
-void print_two_d_array(int r, int c, double arr[r][c])
+void print_two_d_array(int r, int c, long arr[r][c])
 {
-    int i, j;
+    int i = 0;
+    int j = 0;
     for (i = 0; i <= r - 1; i++)
     {
         {
             for (j = 0; j <= c - 1; j++)
-                printf("\t%f", arr[i][j]);
+                printf("\t%ld", arr[i][j]);
         }
         printf("\n");
     }
@@ -52,23 +53,24 @@ int *create_one_d_matrix(int size, int *m_out, bool printOutput)
     return m_out;
 }
 
-double randfrom(double min, double max)
+long randfrom(long min, long max)
 {
-    double range = (max - min);
+    double range = ((double)max - (double)min);
     double div = RAND_MAX / range;
-    return min + (rand() / div);
+    return (long)(min + (rand() / div));
 }
 
-void create_two_d_array(int r, int c, double m_out[r][c])
+void create_two_d_array(int r, int c, long m_out[r][c])
 {
     srand(time(0));
 
-    int i, j = 0;
+    int i = 0;
+    int j = 0;
     for (i = 0; i < r; i++)
     {
         for (j = 0; j < c; j++)
         {
-            m_out[i][j] = randfrom(0, 1000000);
+            m_out[i][j] = randfrom(-10000, 10000);
         }
     }
 }

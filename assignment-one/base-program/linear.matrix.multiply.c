@@ -4,9 +4,9 @@
 #include <stdbool.h>
 #include "common.h"
 
-void multiply(int size, double mat1[][size], double mat2[][size], double res[][size])
+void multiply(int size, long mat1[][size], long mat2[][size], long res[][size])
 {
-    int i, j, k;
+    int i = 0, j = 0, k = 0;
     for (i = 0; i < size; i++)
     {
         for (j = 0; j < size; j++)
@@ -21,9 +21,9 @@ void multiply(int size, double mat1[][size], double mat2[][size], double res[][s
 double run_linear_matrix_multiply(int size, bool print)
 {
     // Define the Arrays
-    double left_a[size][size];
-    double right_a[size][size];
-    double result_a[size][size];
+    long left_a[size][size];
+    long right_a[size][size];
+    long result_a[size][size];
 
     // Fill the Arrays
     create_two_d_array(size, size, left_a);
