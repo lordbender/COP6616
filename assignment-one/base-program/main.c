@@ -37,10 +37,10 @@ int main(int argc, char *argv[])
 
   // Create Report Here!
   printf("\n\n\nReport of Linear performance for %d as the specified size:\n\n", size);
-  printf("\t\tO(1)   ran in: %f!\n", cpu_time_used_o_of_one);
-  printf("\t\tO(n)   ran in: %f!\n", cpu_time_used_linear_search);
-  printf("\t\tO(n^2) ran in: %f!\n", cpu_time_used_bubble_sort);
-  printf("\t\tO(n^3) ran in: %f!\n", cpu_time_used_multiply_array);
+  printf("\t\tO(1)   ran in: %f seconds!\n", cpu_time_used_o_of_one);
+  printf("\t\tO(n)   ran in: %f seconds!\n", cpu_time_used_linear_search);
+  printf("\t\tO(n^2) ran in: %f seconds!\n", cpu_time_used_bubble_sort);
+  printf("\t\tO(n^3) ran in: %f seconds!\n", cpu_time_used_multiply_array);
 
   return 0;
 }
