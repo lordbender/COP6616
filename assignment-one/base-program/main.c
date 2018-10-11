@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
   output_data[2] = bubble_report;
 
   struct report matrix_report;
-  matrix_report.size = size;
+  matrix_report.size = 700;
   matrix_report.runtime = cpu_time_used_multiply_array;
   matrix_report.process_name = "Matrix Multiplication";
   matrix_report.big_o = "O(n^3)";
