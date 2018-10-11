@@ -55,8 +55,6 @@ int main(int argc, char *argv[])
     // search for hits in the subsets.
     long hits = search(sub_rand_nums, elements_per_proc, target);
 
-    // printf("pid: %d had %ld positives.\n\n", my_process_id, hits);
-
     // Create space for the partial averages on the root process.
     long *sub_avgs = NULL;
     if (my_process_id == 0)

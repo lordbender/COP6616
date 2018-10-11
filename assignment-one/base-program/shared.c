@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include "common.h"
 
 void printArray(int arr[], int size)
 {
@@ -72,5 +73,18 @@ void create_two_d_array(int r, int c, long m_out[r][c])
         {
             m_out[i][j] = randfrom(-10000, 10000);
         }
+    }
+}
+
+void create_report(int size, struct report *r)
+{
+    FILE *pFile;
+    int i = 0;
+
+    printf("\n\n\nReport of Linear performance for %d as the specified size:\n\n", size);
+    for (i = 0; i < size; i++)
+    {
+        struct report lr = r[i];
+        printf("\t\t%s, of magnitude %s, ran in: %f seconds against %d size!\n", lr.process_name, lr.big_o, lr.runtime, lr.size);
     }
 }

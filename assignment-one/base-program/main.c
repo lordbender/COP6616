@@ -42,5 +42,18 @@ int main(int argc, char *argv[])
   printf("\t\tO(n^2) ran in: %f seconds!\n", cpu_time_used_bubble_sort);
   printf("\t\tO(n^3) ran in: %f seconds!\n", cpu_time_used_multiply_array);
 
+  // Create the space the for the reports to get written to the output file! Bam!
+  struct report *output_data = malloc(4 * sizeof(struct report));
+
+
+  //Create the reports
+  struct report linear_report;
+  linear_report.size = size;
+  linear_report.runtime = cpu_time_used_linear_search;
+  linear_report.process_name = "Linear Search";
+  linear_report.big_o = "O(n)";
+  output_data[0] = linear_report;
+
+  create_report(4, output_data);
   return 0;
 }
