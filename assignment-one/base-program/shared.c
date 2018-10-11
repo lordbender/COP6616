@@ -81,7 +81,7 @@ void create_report(int size, struct report *r)
     FILE *pFile;
     int i = 0;
 
-    printf("\n\n\nReport of Linear performance for %d as the specified size:\n\n", size);
+    printf("\n\n\nReport of Linear performance for %d as the specified size:\n\n", r[0].size);
     for (i = 0; i < size; i++)
     {
         struct report lr = r[i];
