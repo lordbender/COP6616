@@ -76,3 +76,29 @@ Algorithm: Matrix Multiplication
 
 
 ----------------------------------------------------
+Algorithm: Return First Number
+	Big O          : O(1)
+	Execution Time : 0.000000
+	Dataset Size   : 150000
+
+
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 150000
+
+
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 83.796875
+	Dataset Size   : 150000
+
+
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.640625
+	Dataset Size   : 700
+
+
+
+----------------------------------------------------
