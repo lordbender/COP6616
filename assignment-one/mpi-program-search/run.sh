@@ -1,3 +1,4 @@
 rm *.out
 mpicc *.c
-mpirun -np=8 ./a.out 50000000
+mpirun -np 64 a.out 50000000
+
