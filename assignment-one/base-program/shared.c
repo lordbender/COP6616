@@ -81,10 +81,13 @@ void create_report(int size, struct report *r)
     FILE *pFile;
     int i = 0;
 
-    printf("\n\n\nReport of Linear performance for %d as the specified size:\n\n", r[0].size);
+    printf("\nReport of Linear performance for %d as the specified size:\n\n", r[0].size);
     for (i = 0; i < size; i++)
     {
         struct report lr = r[i];
-        printf("\t\t%s, of magnitude %s, ran in: %f seconds against %d size!\n", lr.process_name, lr.big_o, lr.runtime, lr.size);
+        printf("Algorithm: %s\n", lr.process_name);
+        printf("\tBig O          : %s\n", lr.big_o);
+        printf("\tExecution Time : %f\n", lr.runtime);
+        printf("\tDataset Size   : %d\n\n\n", lr.size);
     }
 }
