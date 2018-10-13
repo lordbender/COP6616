@@ -3,6 +3,13 @@
 #include <time.h>
 #include <stdbool.h>
 
+struct report {
+   double runtime;
+   char* process_name;
+   char* big_o;
+   int size;
+};
+
 // Shared Functions
 double time_calc(clock_t start, clock_t end);
 int *create_one_d_matrix(int size, int *m_out, bool printOutput);
@@ -20,3 +27,4 @@ double run_linear_bubble(int array[], int size, bool printArray);
 // Supporting Stuffs
 int *bubbleSort(int numbers[], int count);
 long randfrom(long min, long max);
+void create_report(int size, struct report *r);

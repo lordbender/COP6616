@@ -49,9 +49,7 @@ long *create_one_d_matrix(int size, bool printOutput)
 long get_random_target()
 {
     srand(time(0));
-    long num = (rand() %
-                (UPPER - LOWER + 1)) +
-               LOWER;
+    long num = (rand() % (UPPER - LOWER + 1)) + LOWER;
 
     return (long)num;
 }

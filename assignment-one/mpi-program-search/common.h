@@ -5,8 +5,8 @@
 #include <stdbool.h>
 #include <mpi.h>
 
-#define UPPER 10000
-#define LOWER -10000
+#define UPPER 50000000
+#define LOWER -50000000
 
 // Programs
 void run_search(int my_process_id, int number_of_processess, int size);
