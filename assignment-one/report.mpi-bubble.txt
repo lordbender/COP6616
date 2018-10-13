@@ -38,3 +38,11 @@ Algorithm: MPI Bubble Sort
 
 
 ----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 3.067508
+	Dataset Size   : 150000
+	Process Count  : 64
+
+
+----------------------------------------------------
