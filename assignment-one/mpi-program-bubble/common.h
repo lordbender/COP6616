@@ -3,11 +3,12 @@
 #include <time.h>
 #include <stdbool.h>
 
-#define UPPER 10000
-#define LOWER -10000
+struct report {
+   double runtime;
+   char* process_name;
+   char* big_o;
+   int size;
+   int number_of_processess;
+};
 
-// Shared Functions
-long *create_one_d_matrix(int size);
-long *fetch_array(int size);
-void swap(long *xp, long *yp);
-long *bubbleSort(long numbers[], int count);
+void create_report(int size, struct report *r);
