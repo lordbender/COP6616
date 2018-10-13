@@ -106,15 +106,14 @@ int main(int argc, char *argv[])
         // Create the space the for the reports to get written to the output file! Bam!
         struct report *output_data = malloc(1 * sizeof(struct report));
 
-        //Create the reports
-
-        struct report mpi_liner_search_report;
-        mpi_liner_search_report.size = matrix_size;
-        mpi_liner_search_report.number_of_processess = size;
-        mpi_liner_search_report.runtime = runtime;
-        mpi_liner_search_report.process_name = "MPI Matrix Multiplication";
-        mpi_liner_search_report.big_o = "O(n^3)";
-        output_data[0] = mpi_liner_search_report;
+        // Create the report
+        struct report mpi_matrix_multiplication_report;
+        mpi_matrix_multiplication_report.size = matrix_size;
+        mpi_matrix_multiplication_report.number_of_processess = size;
+        mpi_matrix_multiplication_report.runtime = runtime;
+        mpi_matrix_multiplication_report.process_name = "MPI Matrix Multiplication";
+        mpi_matrix_multiplication_report.big_o = "O(n^3)";
+        output_data[0] = mpi_matrix_multiplication_report;
         create_report(1, output_data);
     }
     MPI_Finalize(); //finalize MPI operations

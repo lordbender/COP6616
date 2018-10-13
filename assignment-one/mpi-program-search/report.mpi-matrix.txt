@@ -1,0 +1,33 @@
+Algorithm: MPI Linear Search
+	Big O          : O(n)
+	Execution Time : 9.974264
+	Dataset Size   : 5000000
+	Process Count  : 64
+
+
+	Target Located : 64 times
+
+
+----------------------------------------------------
+Algorithm: MPI Linear Search
+	Big O          : O(n)
+	Execution Time : 14.536968
+	Dataset Size   : 50000000
+	Process Count  : 64
+
+
+	Target Located : 64 times
+
+
+----------------------------------------------------
+Algorithm: MPI Linear Search
+	Big O          : O(n)
+	Execution Time : 22.132761
+	Dataset Size   : 90000000
+	Process Count  : 64
+
+
+	Target Located : 64 times
+
+
+----------------------------------------------------

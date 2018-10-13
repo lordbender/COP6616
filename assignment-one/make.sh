@@ -16,6 +16,13 @@ chmod 777 run.sh
 ./run.sh $PROCS $SIZE
 popd
 
+echo Running MPI Search
+pushd mpi-program-search
+chmod 777 run.sh
+./run.sh
+cp report.mpi-search.txt ../report.mpi-search.txt
+popd
+
 echo Running MPI Matrix
 pushd mpi-program-matrix
 chmod 777 run.sh
