@@ -1,0 +1,11 @@
+Algorithm: MPI Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 26.465752
+	Dataset Size   : 550
+
+
+	Process Count  : 64
+
+
+
+----------------------------------------------------
