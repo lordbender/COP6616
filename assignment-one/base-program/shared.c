@@ -80,7 +80,7 @@ void create_report(int size, struct report *r)
 {
     FILE *report_file;
     int i = 0;
-    report_file = fopen("report.txt", "a");
+    report_file = fopen("report.linear.txt", "a");
 
     printf("\nReport of Linear performance for %d as the specified size:\n\n", r[0].size);
     for (i = 0; i < size; i++)
@@ -99,7 +99,7 @@ void create_report(int size, struct report *r)
     }
 
     fprintf(report_file, "\n----------------------------------------------------\n");
-    printf("\n\nAlso see report generated in report.txt, append strategy.\n\n");
+    printf("\n\nAlso see report generated in report.linear.txt, append strategy.\n\n");
 
     fclose(report_file);
 }

@@ -1,17 +1,12 @@
-/**********************************************************************************************
-* Matrix Multiplication Program using MPI.
-*
-* Viraj Brian Wijesuriya - University of Colombo School of Computing, Sri Lanka.
-* 
-* Works with any type of two matrixes [A], [B] which could be multiplied to produce a matrix [c].
-*
-* Master process initializes the multiplication operands, distributes the muliplication 
-* operation to worker processes and reduces the worker results to construct the final output.
-*  
+/*********************************************************************************************
+* Based HEAVILY on the work of Viraj Brian Wijesuriya - University of Colombo School of Computing, Sri Lanka.
+* Citation and Credit: https://www.daniweb.com/programming/software-development/code/334470/matrix-multiplication-using-mpi-parallel-programming-approach
 ************************************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+#include "common.h"
 
 #define MASTER_TO_SLAVE_TAG 1 //tag for messages sent from master to slaves
 #define SLAVE_TO_MASTER_TAG 4 //tag for messages sent from slaves to master
@@ -106,10 +101,24 @@ int main(int argc, char *argv[])
             MPI_Recv(&mat_result[low_bound][0], (upper_bound - low_bound) * matrix_size, MPI_DOUBLE, i, SLAVE_TO_MASTER_TAG + 2, MPI_COMM_WORLD, &status);
         }
         end_time = MPI_Wtime();
-        printf("\nRunning Time = %f\n\n", end_time - start_time);
-        // printArray();
+        double runtime = end_time - start_time;
+
+        // Create the space the for the reports to get written to the output file! Bam!
+        struct report *output_data = malloc(1 * sizeof(struct report));
+
+        //Create the reports
+
+        struct report mpi_liner_search_report;
+        mpi_liner_search_report.size = matrix_size;
+        mpi_liner_search_report.number_of_processess = size;
+        mpi_liner_search_report.runtime = runtime;
+        mpi_liner_search_report.process_name = "MPI Matrix Multiplication";
+        mpi_liner_search_report.big_o = "O(n^3)";
+        output_data[0] = mpi_liner_search_report;
+        create_report(1, output_data);
     }
     MPI_Finalize(); //finalize MPI operations
+
     return 0;
 }
 
@@ -123,4 +132,8 @@ void makeAB(int matrix_size, double mat_a[matrix_size][matrix_size], double mat_
             mat_b[i][j] = i * j - i;
         }
     }
+}
+
+void printReport()
+{
 }
