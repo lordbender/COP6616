@@ -89,6 +89,9 @@ void sort(int *v, int n)
 
 void main(int argc, char **argv)
 {
+    double start_time; //hold start time
+    double end_time;   // hold end time
+
     int *data;
     int *chunk;
     int *other;
@@ -103,8 +106,8 @@ void main(int argc, char **argv)
     MPI_Comm_size(MPI_COMM_WORLD, &p);
 
     // Grab the Requested Size from the Command Line Arguments.
-    int N = atoi(argv[1]);
-    int m, n = N;
+    int size = atoi(argv[1]);
+    int m, n = size;
 
     if (id == 0)
     {
@@ -121,7 +124,7 @@ void main(int argc, char **argv)
             s = s + 1;
         }
 
-        // startT = clock();
+        start_time = MPI_Wtime();
 
         MPI_Bcast(&s, 1, MPI_INT, 0, MPI_COMM_WORLD);
         chunk = (int *)malloc(s * sizeof(int));
@@ -163,9 +166,21 @@ void main(int argc, char **argv)
     }
     if (id == 0)
     {
+        end_time = MPI_Wtime();
+        double runtime = end_time - start_time;
 
-        // stopT = clock();
-        printf("Time ");
+        // Create the space the for the reports to get written to the output file! Bam!
+        struct report *output_data = malloc(1 * sizeof(struct report));
+
+        // Create the report
+        struct report mpi_bubble_sort_report;
+        mpi_bubble_sort_report.size = size;
+        mpi_bubble_sort_report.number_of_processess = p;
+        mpi_bubble_sort_report.runtime = runtime;
+        mpi_bubble_sort_report.process_name = "MPI Bubble Sort";
+        mpi_bubble_sort_report.big_o = "O(n^2)";
+        output_data[0] = mpi_bubble_sort_report;
+        create_report(1, output_data);
     }
     MPI_Finalize();
 }
