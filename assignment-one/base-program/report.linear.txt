@@ -510,3 +510,101 @@ Algorithm: Matrix Multiplication
 
 
 ----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.265625
+	Dataset Size   : 1500
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.218750
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.093750
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.156250
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.968750
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.437500
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Return First Number
+	Big O          : O(1)
+	Execution Time : 0.000000
+	Dataset Size   : 15000
+
+
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 15000
+
+
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.921875
+	Dataset Size   : 15000
+
+
+Algorithm: (null)
+	Big O          : (null)
+	Execution Time : 0.000000
+	Dataset Size   : 0
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.593750
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.546875
+	Dataset Size   : 25000
+
+
+
+----------------------------------------------------
