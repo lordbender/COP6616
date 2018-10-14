@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
   // printf("Linear -> O(1) -> Return 1st number on %d integers, took %f\n\n", size, cpu_time_used_o_of_one);
 
   // Linear -> O(n) -> Linear Search Opperations
-  double cpu_time_used_linear_search = run_linear_search(size, false);
+  double cpu_time_used_linear_search = run_linear_search(size);
   // printf("Linear -> O(n) -> Linear Search on %d integers, took %f\n\n", size, cpu_time_used_linear_search);
 
   // Linear -> O(n^2) -> Bubble Sort Opperations

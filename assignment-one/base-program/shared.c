@@ -30,35 +30,38 @@ double time_calc(clock_t start, clock_t end)
     return ((double)(end - start)) / CLOCKS_PER_SEC;
 }
 
-int *create_one_d_matrix(int size, int *m_out, bool printOutput)
+long *create_one_d_matrix(int size)
 {
-    srand(time(0));
+    long *helper = fetch_array(size);
 
-    if (printOutput == true)
-    {
-        printf("Creating an array of size  %d \n", size);
-    }
+    srand(time(0));
 
     int i;
     for (i = 0; i < size; i++)
     {
-        int num = rand();
-        m_out[i] = num;
+        long num = (rand() %
+                    (UPPER - LOWER + 1)) +
+                   LOWER;
+
+        helper[i] = num;
     }
 
-    if (printOutput == true)
-    {
-        printf("Created an array of size  %d \n", size);
-    }
-
-    return m_out;
+    return helper;
 }
 
-long randfrom(long min, long max)
+long *fetch_array(int size)
 {
-    double range = ((double)max - (double)min);
-    double div = RAND_MAX / range;
-    return (long)(min + (rand() / div));
+    // Create the space in memory
+    long *helper = malloc(sizeof(long) * size);
+
+    // Pad that bad boy with 0s
+    int i = 0;
+    for (i = 0; i < size; i++)
+    {
+        helper[i] = 0;
+    }
+
+    return helper;
 }
 
 void create_two_d_array(int r, int c, long m_out[r][c])
@@ -71,7 +74,11 @@ void create_two_d_array(int r, int c, long m_out[r][c])
     {
         for (j = 0; j < c; j++)
         {
-            m_out[i][j] = randfrom(-10000, 10000);
+            long num = (rand() %
+                        (UPPER - LOWER + 1)) +
+                       LOWER;
+
+            m_out[i][j] = num;
         }
     }
 }

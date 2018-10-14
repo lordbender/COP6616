@@ -18,7 +18,7 @@ void multiply(int size, long **mat1, long **mat2, long **res)
     }
 }
 
-double run_linear_matrix_multiply(int size, bool print)
+double run_linear_matrix_multiply(int size)
 {
     int i = 0;
     int j = 0;
@@ -50,12 +50,6 @@ double run_linear_matrix_multiply(int size, bool print)
     clock_t start = clock();
     multiply(size, left_a, right_a, result_a);
     clock_t end = clock();
-
-    // Print the Array - If you want!
-    // if (print == true)
-    // {
-    //     print_two_d_array(size, size, result_a);
-    // }
 
     return time_calc(start, end);
 }

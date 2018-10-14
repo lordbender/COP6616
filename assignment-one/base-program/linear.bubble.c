@@ -32,17 +32,11 @@ int *bubbleSort(int numbers[], int count)
     return numbers;
 }
 
-double run_linear_bubble(int array[], int size, bool print)
+double run_linear_bubble(int array[], int size)
 {
     clock_t start = clock();
     int *r = bubbleSort(array, size);
     clock_t end = clock();
-
-    // Print the Array - If you want!
-    if (print == true)
-    {
-        printArray(array, size);
-    }
 
     return time_calc(start, end);
 }
