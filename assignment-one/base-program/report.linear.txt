@@ -486,3 +486,11 @@ Algorithm: Bubble Sort
 
 
 ----------------------------------------------------
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 86.770000
+	Dataset Size   : 100000
+
+
+
+----------------------------------------------------
