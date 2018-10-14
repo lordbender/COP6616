@@ -89,5 +89,39 @@ Swap:  4194300k total,        0k used,  4194300k free,   977968k cached
 36454 n0087198  20   0  134m 2976 2140 S  4.6  0.0 302:44.07 master
 
 
-## Uranus
+## Uranus Environment Report
 
+### Note
+	Uranus is idle at the time of my runs
+
+### Memory Total and Available 
+[n00599835@uranus ~]$ cat /proc/meminfo
+MemTotal:        8057848 kB
+MemFree:         6190188 kB
+
+### uptime 
+[n00599835@uranus ~]$ uptime
+ 14:02:58 up 50 days, 23:40,  1 user,  load average: 0.01, 0.01, 0.00
+
+### Load Average: 0.04, 0.02, 0.01
+top - 14:01:29 up 50 days, 23:38,  1 user,  load average: 0.04, 0.02, 0.01
+Tasks: 251 total,   1 running, 250 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.0%us,  0.1%sy,  0.0%ni, 99.9%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:   8057848k total,  1867800k used,  6190048k free,   339136k buffers
+Swap:  1023996k total,   187376k used,   836620k free,  1147816k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+ 6504 n0059983  20   0 15172 1356  928 R  0.3  0.0   0:00.01 top
+    1 root      20   0 19356  736  508 S  0.0  0.0   0:00.85 init
+    2 root      20   0     0    0    0 S  0.0  0.0   0:00.00 kthreadd
+    3 root      RT   0     0    0    0 S  0.0  0.0   0:01.48 migration/0
+    4 root      20   0     0    0    0 S  0.0  0.0   0:06.45 ksoftirqd/0
+    5 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 stopper/0
+    6 root      RT   0     0    0    0 S  0.0  0.0   0:01.90 watchdog/0
+    7 root      RT   0     0    0    0 S  0.0  0.0   0:11.50 migration/1
+    8 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 stopper/1
+    9 root      20   0     0    0    0 S  0.0  0.0   0:03.22 ksoftirqd/1
+   10 root      RT   0     0    0    0 S  0.0  0.0   0:01.33 watchdog/1
+   11 root      RT   0     0    0    0 S  0.0  0.0   0:01.15 migration/2
+   12 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 stopper/2
+   13 root      20   0     0    0    0 S  0.0  0.0   0:07.30 ksoftirqd/2
