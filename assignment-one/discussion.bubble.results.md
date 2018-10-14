@@ -84,6 +84,14 @@
 			Process Count  : 1
 
 **Uranus Single Threads**
+[n00599835@uranus base-program]$ ./a.out 100000 2
+
+Report of Linear performance for 100000 as the specified size:
+
+Algorithm: Bubble Sort
+        Big O          : O(n^2)
+        Execution Time : 61.430000
+        Dataset Size   : 100000
 
 **Uranus N Threads**
 	[n00599835@uranus mpi-program-bubble]$ mpirun -np 64 a.out 100000

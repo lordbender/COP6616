@@ -1,9 +1,13 @@
 
 # Assignment Discussion Requirements
-	- You should include a discussion of the improved efficiency
-	- Comment on the relative speed up of your implementation. 
-	- Run your application on uranus and atlas, 
-		- Be sure you monitor the machine load when collecting your data. 
+- You should include a discussion of the improved efficiency
+- Comment on the relative speed up of your implementation. 
+- Run your application on uranus and atlas, 
+ - Be sure you monitor the machine load when collecting your data. 
+
+# Issues
+        There were issues with distributed hosts. Uranus has MPI 1.6 as a permanent value in the path as seen from cisatlas. 
+        This issue caused errors that prevented distribution.
 
 # Linear Program Overview
 
@@ -34,11 +38,6 @@ Algorithm: Matrix Multiplication
         Execution Time : 5.310000
         Dataset Size   : 700
 
-# MPI Program Overview
-
-## Linear Search
-
-### Speed-Up / Efficiency Reports CISAtlas and Uranus
 
 #### Linear Search O(n)
 [See Linear Search Results](./discussion.first.number.results.md)
@@ -83,5 +82,4 @@ Algorithm: Matrix Multiplication
 **Everything Below this line is solely related to the runtime conditions at runtime**
 ---------------------------------------------------------------------------------------------------------------
 
-#### Linear Search O(n^3)
-[See Linear Search Results](./discussion.machine.load.md)
+[Server Load Information](./discussion.machine.load.md)
