@@ -28,3 +28,8 @@ You should include a discussion of the improved efficiency and comment on the re
 Run your application on uranus and atlas, be sure you monitor the machine load when collecting your data.
 
 shar you project and upload the shar file to osprey then turn it in with turnin using reepar1 as the turnin code.
+
+
+Report:
+[Here you can see the Outcomes](./discussion.md)
+

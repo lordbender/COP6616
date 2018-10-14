@@ -1,3 +1,5 @@
+[Back to Main Report](./discussion.md)
+
 # Linear Search Outcomes
 **Linear Search tests based on 100,000,000 Items**
 

@@ -1,3 +1,5 @@
+[Back to Main Report](./discussion.md)
+
 # Bubble Sort Outcomes
 **Bubble Sort tests based on 100,000 Items**
 
