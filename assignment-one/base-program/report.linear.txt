@@ -640,3 +640,11 @@ Algorithm: Matrix Multiplication
 
 
 ----------------------------------------------------
+Algorithm: Return First Number
+	Big O          : O(1)
+	Execution Time : 0.000000
+	Dataset Size   : 100000000
+
+
+
+----------------------------------------------------
