@@ -27,11 +27,11 @@ int main(int argc, char *argv[])
 
   // Linear -> O(n^2) -> Bubble Sort Opperations
 
-  double cpu_time_used_bubble_sort = run_linear_bubble(size);
+  // double cpu_time_used_bubble_sort = run_linear_bubble(size);
   // printf("Linear -> O(n^2) -> Bubble Sort on %d integers, took %f\n\n", size, cpu_time_used_bubble_sort);
 
   // Linear -> O(n^3) -> Matrix Multipication Hard coded to 700, this is a good bound for testing.
-  // double cpu_time_used_multiply_array = run_linear_matrix_multiply(700, false);
+  double cpu_time_used_multiply_array = run_linear_matrix_multiply(700);
   // printf("Linear -> O(n^3) -> Multiply Matrix on %d X %d integers, took %f\n\n", 700, 700, cpu_time_used_multiply_array);
 
   // Create the space the for the reports to get written to the output file! Bam!
@@ -53,19 +53,19 @@ int main(int argc, char *argv[])
   // linear_report.big_o = "O(n)";
   // output_data[0] = linear_report;
 
-  struct report bubble_report;
-  bubble_report.size = size;
-  bubble_report.runtime = cpu_time_used_bubble_sort;
-  bubble_report.process_name = "Bubble Sort";
-  bubble_report.big_o = "O(n^2)";
-  output_data[0] = bubble_report;
+  // struct report bubble_report;
+  // bubble_report.size = size;
+  // bubble_report.runtime = cpu_time_used_bubble_sort;
+  // bubble_report.process_name = "Bubble Sort";
+  // bubble_report.big_o = "O(n^2)";
+  // output_data[0] = bubble_report;
 
-  // struct report matrix_report;
-  // matrix_report.size = 700;
-  // matrix_report.runtime = cpu_time_used_multiply_array;
-  // matrix_report.process_name = "Matrix Multiplication";
-  // matrix_report.big_o = "O(n^3)";
-  // output_data[3] = matrix_report;
+  struct report matrix_report;
+  matrix_report.size = size;
+  matrix_report.runtime = cpu_time_used_multiply_array;
+  matrix_report.process_name = "Matrix Multiplication";
+  matrix_report.big_o = "O(n^3)";
+  output_data[0] = matrix_report;
 
   create_report(1, output_data);
   return 0;

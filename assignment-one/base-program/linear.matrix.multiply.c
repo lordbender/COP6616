@@ -25,10 +25,13 @@ double run_linear_matrix_multiply(int size)
     int i = 0;
     int j = 0;
     int count = 0;
-    // Define the Arrays
+
+    // Define the Rows
     long **left_a = (long **)malloc(size * sizeof(long *));
     long **right_a = (long **)malloc(size * sizeof(long *));
     long **result_a = (long **)malloc(size * sizeof(long *));
+
+    // Define the Columns
     for (i = 0; i < size; i++)
     {
         left_a[i] = (long *)malloc(size * sizeof(long));

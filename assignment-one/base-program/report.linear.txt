@@ -494,3 +494,19 @@ Algorithm: Bubble Sort
 
 
 ----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.328125
+	Dataset Size   : 1000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.812500
+	Dataset Size   : 1500
+
+
+
+----------------------------------------------------

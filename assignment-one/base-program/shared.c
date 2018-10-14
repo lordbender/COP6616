@@ -4,27 +4,6 @@
 #include <stdbool.h>
 #include "common.h"
 
-void printArray(int arr[], int size)
-{
-    int i = 0;
-    for (i = 0; i < size - 1; i++)
-        printf("\t%d\n ", arr[i]);
-}
-
-void print_two_d_array(int r, int c, long arr[r][c])
-{
-    int i = 0;
-    int j = 0;
-    for (i = 0; i <= r - 1; i++)
-    {
-        {
-            for (j = 0; j <= c - 1; j++)
-                printf("\t%ld", arr[i][j]);
-        }
-        printf("\n");
-    }
-}
-
 double time_calc(clock_t start, clock_t end)
 {
     return ((double)(end - start)) / CLOCKS_PER_SEC;
