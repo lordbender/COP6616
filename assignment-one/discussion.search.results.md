@@ -13,8 +13,6 @@
 			Execution Time : 0.540000
 			Dataset Size   : 100000000
 
-
-
 **MPI 64 Cores**
 	[n00599835@cisatlas mpi-program-search]$ mpirun -np 64 a.out 100000000
 	Random Numbers Created: 100000000
