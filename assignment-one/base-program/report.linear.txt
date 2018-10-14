@@ -608,3 +608,35 @@ Algorithm: Matrix Multiplication
 
 
 ----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 17.250000
+	Dataset Size   : 1000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 30.000000
+	Dataset Size   : 1200
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 58.800000
+	Dataset Size   : 1400
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 5.340000
+	Dataset Size   : 700
+
+
+
+----------------------------------------------------
