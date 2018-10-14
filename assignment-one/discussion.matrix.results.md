@@ -37,7 +37,7 @@
 
     I suspected that we would get speedup much greater than N, but, again, I was a bit off in my thinking. Still, it appears to be worth the effort to run n^3 operation sets in parallel. 
 
-#### Bubble Sort - All Test Runs
+#### Matrix Multiplication - All Test Runs
 
 ##### Linear Benchmarks
 

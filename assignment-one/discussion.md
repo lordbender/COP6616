@@ -38,7 +38,11 @@ Algorithm: Matrix Multiplication
 
 ## Linear Search
 
-### Speed-Up CISAtlas
+### Speed-Up / Efficiency Reports CISAtlas and Uranus
+
+#### Linear Search O(n)
+[See Linear Search Results](./discussion.first.number.results.md)
+
 #### Linear Search O(n)
 [See Linear Search Results](./discussion.search.results.md)
 
