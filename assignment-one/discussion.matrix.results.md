@@ -4,7 +4,7 @@
 
 **Matrix Multiplication tests based on 700 Items**
 
-**Good Ol' C**
+**Good Ol' C Best Run was on Atlas Used**
 	[n00599835@cisatlas base-program]$ ./a.out 700 3
 
 	Report of Linear performance for 700 as the specified size:
@@ -13,7 +13,6 @@
 			Big O          : O(n^3)
 			Execution Time : 5.340000
 			Dataset Size   : 700
-
 
 **MPI 16 Processes (In this case, 16 procs was optimal, see all runs section below)**
 	[n00599835@cisatlas base-program]$  mpirun -np 16 ../mpi-program-matrix/a.out 700
@@ -25,7 +24,6 @@
 			Execution Time : 0.398663
 			Dataset Size   : 700
 			Process Count  : 16
-
 
 #### O(n) Speed-Up and Efficiency Test Run 100,000,000 - Metrics based on Barlas 1.4
 
@@ -41,7 +39,9 @@
 
 #### Matrix Multiplication - All Test Runs
 
-##### Linear Benchmarks
+##### Linear Benchmarks 
+
+**CISAtlas**
 
 	[n00599835@cisatlas base-program]$ ./a.out 1000 3
 
@@ -78,8 +78,46 @@
 
 	Also see report generated in report.linear.txt, append strategy.
 
+**Uranus**
+
+*Something on Uranus was off on the MPI runs for n^3*
+
+	[n00599835@uranus base-program]$ ./a.out 1400 3
+
+	Report of Linear performance for 1400 as the specified size:
+
+	Algorithm: Matrix Multiplication
+			Big O          : O(n^3)
+			Execution Time : 52.100000
+			Dataset Size   : 1400
+
+
+	Also see report generated in report.linear.txt, append strategy.
+
+	[n00599835@uranus base-program]$ ./a.out 1000 3
+
+	Report of Linear performance for 1000 as the specified size:
+
+	Algorithm: Matrix Multiplication
+			Big O          : O(n^3)
+			Execution Time : 17.830000
+			Dataset Size   : 1000
+
+
+	Also see report generated in report.linear.txt, append strategy.
+
+	[n00599835@uranus base-program]$ ./a.out 700 3
+
+	Report of Linear performance for 700 as the specified size:
+
+	Algorithm: Matrix Multiplication
+			Big O          : O(n^3)
+			Execution Time : 4.610000
+			Dataset Size   : 700
+
 ##### MPI Benchmarks
 
+**CISAtlas**
 	[n00599835@cisatlas base-program]$  mpirun -np 64 ../mpi-program-matrix/a.out 700
 
 	Report of MPI performance for 700 as the specified size:
@@ -114,3 +152,40 @@
 			Dataset Size   : 700
 			Process Count  : 16
 
+
+**Uranus**
+	[n00599835@uranus mpi-program-matrix]$ mpirun -np 64 a.out 700
+
+	Report of MPI performance for 700 as the specified size:
+
+	Algorithm: MPI Matrix Multiplication
+			Big O          : O(n^3)
+			Execution Time : 40.338286
+			Dataset Size   : 700
+			Process Count  : 64
+
+	Also see report generated in report.mpi-matrix.txt, append strategy.
+
+	[n00599835@uranus mpi-program-matrix]$ mpirun -np 16 a.out 700
+
+	Report of MPI performance for 700 as the specified size:
+
+	Algorithm: MPI Matrix Multiplication
+			Big O          : O(n^3)
+			Execution Time : 29.587364
+			Dataset Size   : 700
+			Process Count  : 16
+
+	Also see report generated in report.mpi-matrix.txt, append strategy.
+
+	[n00599835@uranus mpi-program-matrix]$ mpirun -np 32 a.out 700
+
+	Report of MPI performance for 700 as the specified size:
+
+	Algorithm: MPI Matrix Multiplication
+			Big O          : O(n^3)
+			Execution Time : 45.788279
+			Dataset Size   : 700
+			Process Count  : 32
+
+	Also see report generated in report.mpi-matrix.txt, append strategy.

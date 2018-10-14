@@ -41,6 +41,8 @@
 	I suspected that we would get speedup <= N (roughly at best linear speedup), but, again, I was a bit off in my thinking.
 
 #### Bubble Sort - All Test Runs
+
+**CIS Atlas Shingle Thread**
 	[n00599835@cisatlas base-program]$ ./a.out 100000
 
 	Report of Linear performance for 100000 as the specified size:
@@ -50,11 +52,7 @@
 			Execution Time : 86.770000
 			Dataset Size   : 100000
 
-
-
-
-	Also see report generated in report.linear.txt, append strategy.
-
+**CIS Atlas N Threads**
 	[n00599835@cisatlas base-program]$ mpirun -np 64 ../mpi-program-bubble/a.out 100000
 
 	Report of MPI performance for 100000 as the specified size:
@@ -64,11 +62,6 @@
 			Execution Time : 0.136462
 			Dataset Size   : 100000
 			Process Count  : 64
-
-
-
-
-	Also see report generated in report.mpi-bubble.txt, append strategy.
 
 	[n00599835@cisatlas base-program]$ mpirun -np 32 ../mpi-program-bubble/a.out 100000
 
@@ -80,11 +73,6 @@
 			Dataset Size   : 100000
 			Process Count  : 32
 
-
-
-
-	Also see report generated in report.mpi-bubble.txt, append strategy.
-
 	[n00599835@cisatlas base-program]$ mpirun -np 1 ../mpi-program-bubble/a.out 100000
 
 	Report of MPI performance for 100000 as the specified size:
@@ -95,7 +83,26 @@
 			Dataset Size   : 100000
 			Process Count  : 1
 
+**Uranus Single Threads**
+
+**Uranus N Threads**
+	[n00599835@uranus mpi-program-bubble]$ mpirun -np 64 a.out 100000
+
+	Report of MPI performance for 100000 as the specified size:
+
+	Algorithm: MPI Bubble Sort
+			Big O          : O(n^2)
+			Execution Time : 0.457431
+			Dataset Size   : 100000
+			Process Count  : 64
 
 
+	[n00599835@uranus mpi-program-bubble]$ mpirun -np 64 a.out 1000000
 
-	Also see report generated in report.mpi-bubble.txt, append strategy.
+	Report of MPI performance for 1000000 as the specified size:
+
+	Algorithm: MPI Bubble Sort
+			Big O          : O(n^2)
+			Execution Time : 24.584870
+			Dataset Size   : 1000000
+			Process Count  : 64

@@ -46,6 +46,8 @@
 	I suspected that we would get speedup = N (linear speedup), but I was way off in my thinking.
 
 #### Linear Search - All Test Runs
+
+**CIS Atlas Single Thread**
 	[n00599835@cisatlas base-program]$ ./a.out 100000000
 
 	Report of Linear performance for 100000000 as the specified size:
@@ -57,7 +59,7 @@
 
 
 
-
+**CIS Atlas N Threads**
 	Also see report generated in report.linear.txt, append strategy.
 
 	[n00599835@cisatlas base-program]$ mpirun -np 32 ../mpi-program-search/a.out 100000000
@@ -160,6 +162,132 @@
 			Dataset Size   : 100000000
 			Process Count  : 20
 			Target Located : 20 times
+
+**Uranus Single Thread**
+
+	[n00599835@uranus base-program]$ ./a.out 100000000 1
+
+	Report of Linear performance for 100000000 as the specified size:
+
+	Algorithm: Linear Search
+			Big O          : O(n)
+			Execution Time : 0.380000
+			Dataset Size   : 100000000
+
+	Also see report generated in report.linear.txt, append strategy.
+
+	[n00599835@uranus base-program]$ ./a.out 110000000 1
+
+	Report of Linear performance for 110000000 as the specified size:
+
+	Algorithm: Linear Search
+			Big O          : O(n)
+			Execution Time : 0.410000
+			Dataset Size   : 110000000
+
+	Also see report generated in report.linear.txt, append strategy.
+
+	[n00599835@uranus base-program]$ ./a.out 1000000 1
+
+	Report of Linear performance for 1000000 as the specified size:
+
+	Algorithm: Linear Search
+			Big O          : O(n)
+			Execution Time : 0.000000
+			Dataset Size   : 1000000
+
+	Also see report generated in report.linear.txt, append strategy.
+
+	[n00599835@uranus base-program]$ ./a.out 100000 1
+
+	Report of Linear performance for 100000 as the specified size:
+
+	Algorithm: Linear Search
+			Big O          : O(n)
+			Execution Time : 0.000000
+			Dataset Size   : 100000
+
+**Uranus N Threads**
+
+	[n00599835@uranus mpi-program-search]$ mpirun -np 64 a.out 100000000
+	Random Numbers Created: 100000000
+	Number of Processes:    64
+	Elements Per Process:   1562501
+
+	Searching for:          9
+
+
+	Report of MPI performance for 100000000 as the specified size:
+
+	Algorithm: MPI Linear Search
+			Big O          : O(n)
+			Execution Time : 4.127373
+			Dataset Size   : 100000000
+			Process Count  : 64
+			Target Located : 64 times
+
+
+
+	Also see report generated in report.mpi-search.txt, append strategy.
+
+	[n00599835@uranus mpi-program-search]$ mpirun -np 32 a.out 100000000
+	Random Numbers Created: 100000000
+	Number of Processes:    32
+	Elements Per Process:   3125001
+
+	Searching for:          9
+
+
+	Report of MPI performance for 100000000 as the specified size:
+
+	Algorithm: MPI Linear Search
+			Big O          : O(n)
+			Execution Time : 2.748969
+			Dataset Size   : 100000000
+			Process Count  : 32
+			Target Located : 32 times
+
+
+
+	Also see report generated in report.mpi-search.txt, append strategy.
+
+	[n00599835@uranus mpi-program-search]$ mpirun -np 16 a.out 100000000
+	Random Numbers Created: 100000000
+	Number of Processes:    16
+	Elements Per Process:   6250001
+
+	Searching for:          9
+
+
+	Report of MPI performance for 100000000 as the specified size:
+
+	Algorithm: MPI Linear Search
+			Big O          : O(n)
+			Execution Time : 2.038216
+			Dataset Size   : 100000000
+			Process Count  : 16
+			Target Located : 16 times
+
+
+
+	Also see report generated in report.mpi-search.txt, append strategy.
+
+	[n00599835@uranus mpi-program-search]$ mpirun -np 8 a.out 100000000
+	Random Numbers Created: 100000000
+	Number of Processes:    8
+	Elements Per Process:   12500001
+
+	Searching for:          9
+
+
+	Report of MPI performance for 100000000 as the specified size:
+
+	Algorithm: MPI Linear Search
+			Big O          : O(n)
+			Execution Time : 1.469213
+			Dataset Size   : 100000000
+			Process Count  : 8
+			Target Located : 8 times
 
 
 
