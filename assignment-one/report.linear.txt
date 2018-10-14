@@ -362,3 +362,315 @@ Algorithm: Matrix Multiplication
 
 
 ----------------------------------------------------
+Algorithm: Return First Number
+	Big O          : O(1)
+	Execution Time : 0.000000
+	Dataset Size   : 10000
+
+
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 10000
+
+
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.860000
+	Dataset Size   : 10000
+
+
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 5.330000
+	Dataset Size   : 700
+
+
+
+----------------------------------------------------
+Algorithm: Return First Number
+	Big O          : O(1)
+	Execution Time : 0.000000
+	Dataset Size   : 10000
+
+
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 10000
+
+
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.860000
+	Dataset Size   : 10000
+
+
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 5.330000
+	Dataset Size   : 700
+
+
+
+----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 1000000
+
+
+
+----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 1000000
+
+
+
+----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.010000
+	Dataset Size   : 2000000
+
+
+
+----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.010000
+	Dataset Size   : 1000000
+
+
+
+----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.218750
+	Dataset Size   : 100000000
+
+
+
+----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.540000
+	Dataset Size   : 100000000
+
+
+
+----------------------------------------------------
+Algorithm: (null)
+	Big O          : (null)
+	Execution Time : 0.000000
+	Dataset Size   : 0
+
+
+
+----------------------------------------------------
+Algorithm: (null)
+	Big O          : (null)
+	Execution Time : 0.000000
+	Dataset Size   : 0
+
+
+
+----------------------------------------------------
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 46.250000
+	Dataset Size   : 100000
+
+
+
+----------------------------------------------------
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 86.770000
+	Dataset Size   : 100000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.328125
+	Dataset Size   : 1000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.812500
+	Dataset Size   : 1500
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.265625
+	Dataset Size   : 1500
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.218750
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.093750
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.156250
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.968750
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.437500
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Return First Number
+	Big O          : O(1)
+	Execution Time : 0.000000
+	Dataset Size   : 15000
+
+
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 15000
+
+
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.921875
+	Dataset Size   : 15000
+
+
+Algorithm: (null)
+	Big O          : (null)
+	Execution Time : 0.000000
+	Dataset Size   : 0
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.593750
+	Dataset Size   : 15000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.546875
+	Dataset Size   : 25000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 17.250000
+	Dataset Size   : 1000
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 30.000000
+	Dataset Size   : 1200
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 58.800000
+	Dataset Size   : 1400
+
+
+
+----------------------------------------------------
+Algorithm: Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 5.340000
+	Dataset Size   : 700
+
+
+
+----------------------------------------------------
+Algorithm: Return First Number
+	Big O          : O(1)
+	Execution Time : 0.000000
+	Dataset Size   : 100000000
+
+
+
+----------------------------------------------------
+Algorithm: Return First Number
+	Big O          : O(1)
+	Execution Time : 0.000000
+	Dataset Size   : 1000
+
+
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.000000
+	Dataset Size   : 1000
+
+
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.000000
+	Dataset Size   : 1000
+
+
+Algorithm: (null)
+	Big O          : (null)
+	Execution Time : 0.000000
+	Dataset Size   : 0
+
+
+
+----------------------------------------------------
