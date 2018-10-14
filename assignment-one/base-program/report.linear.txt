@@ -454,3 +454,11 @@ Algorithm: Linear Search
 
 
 ----------------------------------------------------
+Algorithm: Linear Search
+	Big O          : O(n)
+	Execution Time : 0.540000
+	Dataset Size   : 100000000
+
+
+
+----------------------------------------------------
