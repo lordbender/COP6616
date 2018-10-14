@@ -45,6 +45,9 @@ Algorithm: Matrix Multiplication
 #### Linear Search O(n^2)
 [See Linear Search Results](./discussion.bubble.results.md)
 
+#### Linear Search O(n^3)
+[See Linear Search Results](./discussion.matrix.results.md)
+
 # Description of Experiments
 
 # Analysis of Speed-Up
