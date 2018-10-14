@@ -462,3 +462,27 @@ Algorithm: Linear Search
 
 
 ----------------------------------------------------
+Algorithm: (null)
+	Big O          : (null)
+	Execution Time : 0.000000
+	Dataset Size   : 0
+
+
+
+----------------------------------------------------
+Algorithm: (null)
+	Big O          : (null)
+	Execution Time : 0.000000
+	Dataset Size   : 0
+
+
+
+----------------------------------------------------
+Algorithm: Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 46.250000
+	Dataset Size   : 100000
+
+
+
+----------------------------------------------------

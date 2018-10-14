@@ -64,25 +64,6 @@ long *fetch_array(int size)
     return helper;
 }
 
-void create_two_d_array(int r, int c, long m_out[r][c])
-{
-    srand(time(0));
-
-    int i = 0;
-    int j = 0;
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            long num = (rand() %
-                        (UPPER - LOWER + 1)) +
-                       LOWER;
-
-            m_out[i][j] = num;
-        }
-    }
-}
-
 void create_report(int size, struct report *r)
 {
     FILE *report_file;

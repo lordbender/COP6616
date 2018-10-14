@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include "common.h"
 
+void multiply(int size, long **mat1, long **mat2, long **res);
+
 void multiply(int size, long **mat1, long **mat2, long **res)
 {
     int i = 0, j = 0, k = 0;

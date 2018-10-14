@@ -4,7 +4,10 @@
 #include <stdbool.h>
 #include "common.h"
 
-void swap(int *xp, int *yp)
+long *bubbleSort(long *numbers, int count);
+void swap(long *xp, long *yp);
+
+void swap(long *xp, long *yp)
 {
     int temp = *xp;
     *xp = *yp;
@@ -12,9 +15,9 @@ void swap(int *xp, int *yp)
 }
 
 // A function to implement bubble sort
-int *bubbleSort(int numbers[], int count)
+long *bubbleSort(long *numbers, int count)
 {
-    int input, i, j, c;
+    int i, j, c;
 
     for (i = 0; i < count - 1; i++)
     {
@@ -32,10 +35,12 @@ int *bubbleSort(int numbers[], int count)
     return numbers;
 }
 
-double run_linear_bubble(int array[], int size)
+double run_linear_bubble(int size)
 {
+    long *bubble_sort_a = create_one_d_matrix(size);
+
     clock_t start = clock();
-    int *r = bubbleSort(array, size);
+    long *r = bubbleSort(bubble_sort_a, size);
     clock_t end = clock();
 
     return time_calc(start, end);
