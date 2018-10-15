@@ -1,10 +1,6 @@
 public class Main {
     public static void main(String[] args) {
 
-        // for (String a : args) {
-        // System.out.print(a);
-        // }
-
         if (args.length < 2) {
 
             System.out.println("I require two arguments!");
