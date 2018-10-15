@@ -11,7 +11,8 @@ public class Server implements Operations {
     }
 
     public double returnFirst(int size) {
-        return 0.0;
+        ReturnFirst first = new ReturnFirst();
+        return first.getFirst(size);
     }
 
     public double search(int size) {
@@ -20,12 +21,12 @@ public class Server implements Operations {
     }
 
     public double bubble(int size) {
-        return 0.0;
+        BubbleSort bubble = new BubbleSort();
+        return bubble.sort(size);
     }
 
     public double multiply(int size) {
         ParallelMatrixMultiplication matMult = new ParallelMatrixMultiplication();
-
         return matMult.multiply();
     }
 
