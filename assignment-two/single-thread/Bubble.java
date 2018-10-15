@@ -3,10 +3,6 @@ import java.util.Arrays;
 public class Bubble {
 
     public long[] sort(int size) {
-        return sort(size, false);
-    }
-
-    public long[] sort(int size, Boolean print) {
         long[] arr = Common.create(size);
         long startTime = System.nanoTime();
 
@@ -19,13 +15,13 @@ public class Bubble {
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
                 }
-
         long endTime = System.nanoTime();
-        Report.create((double) (endTime - startTime));
-        if (print == true)
-            for (int i = 0; i < size; i++) {
-                System.out.println(arr[i]);
-            }
+
+        ReportModel model = new ReportModel();
+        model.setAlgorythmName("Bubble Sort");
+        model.setComplexity("O(n^2)");
+        model.setDuration((double) (endTime - startTime));
+        Report.create(model);
 
         return arr;
     }

@@ -1,7 +1,9 @@
 
 public class Report {
-    public static void create(double runtime) {
-        double duration = Common.round(runtime, 2);
-        System.out.println("Linear Bubble Sort Execution Time: " + duration);
+    public static void create(ReportModel model) {
+        System.out.println("\tLinear: " + model.getAlgorythmName());
+        System.out.println("\t\tComplexity      : " + model.getComplexity());
+        System.out.println("\t\tExecution Time  : " + model.getDuration());
+        System.out.print("\n-----------------------------------------\n");
     }
 }

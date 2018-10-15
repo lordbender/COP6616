@@ -12,10 +12,14 @@ public class Main {
         int size = Integer.parseInt(args[0]);
         int operation = Integer.parseInt(args[1]);
 
+        if (operation == 4 || operation == 1) {
+            Search search = new Search();
+            search.findTarget(size, 5000);
+        }
+
         if (operation == 4 || operation == 2) {
             Bubble bubble = new Bubble();
             bubble.sort(size);
         }
-
     }
 }
