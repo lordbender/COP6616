@@ -23,7 +23,8 @@ public class ReportModel {
      * @param duration the duration to set
      */
     public void setDuration(double duration) {
-        this.duration = Common.round(duration, 2);
+        double helper = ((duration / 1000000) / 1000);
+        this.duration = Common.round(helper, 2);
     }
 
     /**
