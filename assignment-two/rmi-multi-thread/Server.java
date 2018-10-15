@@ -6,23 +6,25 @@ import java.rmi.server.UnicastRemoteObject;
 
 // Citation:
 // https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/hello/hello-world.html
-public class Server implements Hello {
+public class Server implements Operations {
         
     public Server() {}
 
-    public String sayHello() {
-        return "Hello, world!";
+    public double multiply() {
+        ParallelMatrixMultiplication matMult = new ParallelMatrixMultiplication();
+
+        return matMult.multiply();
     }
         
     public static void main(String args[]) {
         
         try {
             Server obj = new Server();
-            Hello stub = (Hello) UnicastRemoteObject.exportObject(obj, 0);
+            Operations stub = (Operations) UnicastRemoteObject.exportObject(obj, 0);
 
             // Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.getRegistry();
-            registry.bind("Hello", stub);
+            registry.bind("Operations", stub);
 
             System.err.println("Server ready");
         } catch (Exception e) {
