@@ -2,7 +2,10 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-        
+ 
+
+// Citation:
+// https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/hello/hello-world.html
 public class Server implements Hello {
         
     public Server() {}
