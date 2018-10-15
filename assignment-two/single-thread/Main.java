@@ -21,5 +21,10 @@ public class Main {
             Bubble bubble = new Bubble();
             bubble.sort(size);
         }
+
+        if (operation == 4 || operation == 3) {
+            MatrixMultiplication matrix = new MatrixMultiplication();
+            matrix.multiply(size);
+        }
     }
 }

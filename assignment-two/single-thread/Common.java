@@ -24,4 +24,14 @@ public class Common {
 
         return arr;
     }
+
+    public static long[][] createTwoDimensional(int size) {
+        long[][] arr = new long[size][size];
+
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                arr[i][j] = i + j;
+
+        return arr;
+    }
 }
