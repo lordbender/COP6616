@@ -15,7 +15,8 @@ public class Server implements Operations {
     }
 
     public double search(int size) {
-        return 0.0;
+        ParallelSearch search = new ParallelSearch();
+        return search.search(size);
     }
 
     public double bubble(int size) {
