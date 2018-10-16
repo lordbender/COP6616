@@ -2,10 +2,11 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import services.*;
 
 // Citation:
 // https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/hello/hello-world.html
-public class Server implements Operations {
+public class Server implements IOperations {
 
     public Server() {
     }
@@ -34,11 +35,11 @@ public class Server implements Operations {
 
         try {
             Server obj = new Server();
-            Operations stub = (Operations) UnicastRemoteObject.exportObject(obj, 0);
+            IOperations stub = (IOperations) UnicastRemoteObject.exportObject(obj, 0);
 
             // Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.getRegistry();
-            registry.bind("Operations", stub);
+            registry.bind("IOperations", stub);
 
             System.err.println("Server ready");
         } catch (Exception e) {

@@ -1,8 +1,10 @@
+package services;
 
 // References:
 // https://abitofcs.blogspot.com/2015/12/parallel-matrix-multiplication-in-java.html
 
 import java.util.concurrent.*;
+import core.*;
 
 public class BubbleSort {
 

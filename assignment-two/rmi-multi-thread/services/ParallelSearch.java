@@ -1,9 +1,10 @@
-
+package services;
 // References:
 // https://www.geeksforgeeks.org/callable-future-java/
 
 import java.util.concurrent.*;
 import java.util.Arrays;
+import core.*;
 
 public class ParallelSearch {
 

@@ -14,7 +14,7 @@ public class Client {
 
         try {
             Registry registry = LocateRegistry.getRegistry(host);
-            Operations stub = (Operations) registry.lookup("Operations");
+            IOperations stub = (IOperations) registry.lookup("IOperations");
 
             if (operation == 4 || operation == 0) {
                 double response = stub.returnFirst(size);

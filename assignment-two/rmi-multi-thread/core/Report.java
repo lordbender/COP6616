@@ -1,3 +1,4 @@
+package core;
 
 public class Report {
     public static void create(ReportModel model) {

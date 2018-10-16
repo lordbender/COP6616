@@ -1,8 +1,11 @@
+package services;
+
 
 // References:
 // https://abitofcs.blogspot.com/2015/12/parallel-matrix-multiplication-in-java.html
 
 import java.util.concurrent.*;
+import core.*;
 
 public class ParallelMatrixMultiplication {
 
@@ -14,7 +17,7 @@ public class ParallelMatrixMultiplication {
 
     private final ExecutorService exec = Executors.newFixedThreadPool(POOL_SIZE);
 
-    ParallelMatrixMultiplication(double[][] a, double[][] b) {
+    public ParallelMatrixMultiplication(double[][] a, double[][] b) {
         // assumption : a and b are both double[MATRIX_SIZE][MATRIX_SIZE]
         this.a = a;
         this.b = b;
@@ -22,7 +25,7 @@ public class ParallelMatrixMultiplication {
     }
 
     // Debugging Code
-    ParallelMatrixMultiplication() {
+    public ParallelMatrixMultiplication() {
         a = new double[MATRIX_SIZE][MATRIX_SIZE];
         b = new double[MATRIX_SIZE][MATRIX_SIZE];
         c = new double[MATRIX_SIZE][MATRIX_SIZE];
