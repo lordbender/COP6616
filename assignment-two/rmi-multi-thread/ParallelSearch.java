@@ -15,7 +15,7 @@ public class ParallelSearch {
         long[] arr = Common.create(size);
 
         long startTime = System.nanoTime();
-        Future f = exec.submit(new SearchTask(arr));
+        Future f = exec.submit(new SearchTask(arr, 10000));
         try {
             f.get();
             exec.shutdown();
@@ -31,19 +31,68 @@ public class ParallelSearch {
     class SearchTask implements Runnable {
         private int size = 0;
         private long arr[];
+        private long target;
 
-        SearchTask(long[] a) {
+        SearchTask(long[] a, long target) {
             this.arr = a;
             this.size = a.length;
+            this.target = target;
         }
 
         public void run() {
-            FutureTask[] fs = new FutureTask[this.size];
 
-            for (int i = 0; i < this.size; i++) {
-                System.out.println("a[" + i + "] =>" + this.arr[i]);
+            if (size <= MINIMUM_THRESHOLD) {
+                int hits = 0;
+                for (int i = 0; i < this.a.length; ++i) {
+                    if (this.arr[i] == this.target)
+                        hits++;
+                }
+            } else {
+                SearchTask[] tasks = new SearchTask[POOL_SIZE];
+                int chunkSize = Math.ceil(this.size / POOL_SIZE);
+
+                for (int tp = 0; tp < POOL_SIZE; tp++) {
+                    int[] newArray = Arrays.copyOfRange(this.arr, tp * chunkSize, tp * chunkSize + chunkSize);
+                    tasks[tp] = new SearchTask(newArray, this.target);
+                }
+
+                FutureTask[] fs = new FutureTask[POOL_SIZE];
+                for (int i = 0; i < fs.length; ++i) {
+                    fs[i] = new FutureTask(new Sequentializer(tasks[i]));
+                }
+                for (int i = 0; i < fs.length; ++i) {
+                    fs[i].run();
+                }
+                try {
+                    for (int i = 0; i < fs.length; ++i) {
+                        fs[i].get();
+                    }
+                } catch (Exception e) {
+
+                }
             }
         }
+    }
+
+    class Sequentializer implements Runnable {
+        private long arr[];
+        private long target;
+
+        Sequentializer(long arr[], long target) {
+            this.arr = arr;
+            this.target = target;
+        }
+
+        public void run() {
+            int hits = 0;
+            for (int i = 0; i < this.a.length; ++i) {
+                if (this.arr[i] == this.target)
+                    hits++;
+            }
+
+            // Doesn't matter if we return the hits, we are just looking for execution time!
+        }
+
     }
 
 }
