@@ -1,8 +1,9 @@
 
 // References:
-// https://abitofcs.blogspot.com/2015/12/parallel-matrix-multiplication-in-java.html
+// https://www.geeksforgeeks.org/callable-future-java/
 
 import java.util.concurrent.*;
+import java.util.Arrays;
 
 public class ParallelSearch {
 
@@ -15,11 +16,14 @@ public class ParallelSearch {
         long[] arr = Common.create(size);
 
         long startTime = System.nanoTime();
-        Future f = exec.submit(new SearchTask(arr, 10000));
+        SearchTask searchTask = new SearchTask(arr, 10000);
+        Future f = exec.submit(searchTask);
         try {
             f.get();
             exec.shutdown();
             long endTime = System.nanoTime();
+
+            System.out.println("Total Hits on Target =>" + searchTask.hits);
 
             return (((double) (endTime - startTime) / 1000000) / 1000);
 
@@ -29,70 +33,76 @@ public class ParallelSearch {
     }
 
     class SearchTask implements Runnable {
-        private int size = 0;
-        private long arr[];
-        private long target;
+        int size;
+        long arr[];
+        long target;
+        int hits = 0;
 
         SearchTask(long[] a, long target) {
             this.arr = a;
-            this.size = a.length;
+            this.size = arr.length;
             this.target = target;
         }
 
         public void run() {
 
             if (size <= MINIMUM_THRESHOLD) {
-                int hits = 0;
-                for (int i = 0; i < this.a.length; ++i) {
+
+                for (int i = 0; i < this.arr.length; ++i) {
                     if (this.arr[i] == this.target)
-                        hits++;
+                        this.hits++;
                 }
             } else {
-                SearchTask[] tasks = new SearchTask[POOL_SIZE];
-                int chunkSize = Math.ceil(this.size / POOL_SIZE);
+                int chunkSize = (int) Math.ceil(this.size / POOL_SIZE);
 
-                for (int tp = 0; tp < POOL_SIZE; tp++) {
-                    int[] newArray = Arrays.copyOfRange(this.arr, tp * chunkSize, tp * chunkSize + chunkSize);
-                    tasks[tp] = new SearchTask(newArray, this.target);
+                // Just for simpicitys sake, create one future for each core...
+                FutureTask[] futureTasks = new FutureTask[POOL_SIZE];
+                for (int i = 0; i < POOL_SIZE; i++) {
+                    long[] subArr = Arrays.copyOfRange(this.arr, i * chunkSize, i * chunkSize + chunkSize);
+                    CallableSearch callable = new CallableSearch(subArr, this.target);
+
+                    // Create the FutureTask with Callable
+                    futureTasks[i] = new FutureTask(callable);
+
+                    // As it implements Runnable, create Thread
+                    // with FutureTask
+                    Thread t = new Thread(futureTasks[i]);
+                    t.start();
                 }
 
-                FutureTask[] fs = new FutureTask[POOL_SIZE];
-                for (int i = 0; i < fs.length; ++i) {
-                    fs[i] = new FutureTask(new Sequentializer(tasks[i]));
-                }
-                for (int i = 0; i < fs.length; ++i) {
-                    fs[i].run();
-                }
-                try {
-                    for (int i = 0; i < fs.length; ++i) {
-                        fs[i].get();
+                for (int i = 0; i < POOL_SIZE; i++) {
+                    // As it implements Future, we can call get()
+                    try {
+                        int result = (int) futureTasks[i].get();
+                        System.out.println("Hits from sub process: " + result);
+                        this.hits += result;
+                    } catch (Exception e) {
                     }
-                } catch (Exception e) {
 
                 }
             }
         }
+
     }
 
-    class Sequentializer implements Runnable {
-        private long arr[];
-        private long target;
+    class CallableSearch implements Callable {
 
-        Sequentializer(long arr[], long target) {
+        long[] arr;
+        long target;
+
+        CallableSearch(long[] arr, long target) {
             this.arr = arr;
             this.target = target;
         }
 
-        public void run() {
+        public Object call() throws Exception {
             int hits = 0;
-            for (int i = 0; i < this.a.length; ++i) {
+            for (int i = 0; i < this.arr.length; ++i) {
                 if (this.arr[i] == this.target)
                     hits++;
             }
 
-            // Doesn't matter if we return the hits, we are just looking for execution time!
+            return hits;
         }
-
     }
-
 }
