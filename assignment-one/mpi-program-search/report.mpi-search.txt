@@ -130,3 +130,14 @@ Algorithm: MPI Linear Search
 
 
 ----------------------------------------------------
+Algorithm: MPI Linear Search
+	Big O          : O(n)
+	Execution Time : 0.343037
+	Dataset Size   : 5000000
+	Process Count  : 64
+
+
+	Target Located : 64 times
+
+
+----------------------------------------------------
