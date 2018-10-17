@@ -25,19 +25,18 @@
 
 # Analysis
 
-## O(1)         Return First Number
+## O(1) Return First Number
 
 ### MPI With vs Without hosts file
 
-## O(n)         Linear Search
+## O(n) Linear Search
 
 ### MPI With vs Without hosts file
 
-## O(n^2)       Bubble Sort
+## O(n^2) Bubble Sort
 
 ### MPI With vs Without hosts file
 
-## O(n^3)       Matrix Multiplication
+## O(n^3) Matrix Multiplication
 
 ### MPI With vs Without hosts file
-
