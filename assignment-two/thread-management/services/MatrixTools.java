@@ -1,9 +1,15 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 public class MatrixTools {
@@ -28,17 +34,6 @@ public class MatrixTools {
         long endTime = System.nanoTime();
 
         System.out.println("Timed Run: " + (endTime - startTime));
-    }
-
-    public void test() {
-        long[][] arr = getTestArray(5);
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++)
-                System.out.print(arr[i][j] + "\t");
-
-            System.out.print("\n");
-
-        }
     }
 
     private long[][] getTestArray(int size) {
@@ -72,50 +67,81 @@ public class MatrixTools {
         int size = a.length;
         long c[][] = new long[size][size];
 
-        int poosSize = Runtime.getRuntime().availableProcessors();
-        int threshhold = 64;
+        // Pool size will be double the number of cores by default
+        int poolSize = Runtime.getRuntime().availableProcessors() * 2;
+        FutureTask[] completeablFutureTasks = new FutureTask[size];
+        ExecutorService executor = Executors.newFixedThreadPool(poolSize);
 
-        if (size <= threshhold)
-            return this.multiply(a, b);
+        Collection<CallableExample> helper = new ArrayList<CallableExample>();
+        List<Future<?>> futures = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            long[] row = new long[size];
+            for (int j = 0; j < size; j++) {
+                row[j] = a[i][j];
+            }
 
-        FutureTask[] randomNumberTasks = new FutureTask[5];
-
-        for (int i = 0; i < 5; i++) {
-            Callable callable = new CallableExample();
-
-            // Create the FutureTask with Callable
-            randomNumberTasks[i] = new FutureTask(callable);
-
-            // As it implements Runnable, create Thread
-            // with FutureTask
-            Thread t = new Thread(randomNumberTasks[i]);
-            t.start();
+            // Get all the futures together!
+            futures.add(executor.submit(new CallableExample(new MultModel(row, b, i))));
         }
 
-        for (int i = 0; i < 5; i++) {
+        List<MatrixResultModel> results = new ArrayList<MatrixResultModel>();
+
+        for (Future<?> future : futures) {
             try {
-                System.out.println(randomNumberTasks[i].get());
-            } catch (Exception e) {
-                System.err.println(e.toString());
+                results.add((MatrixResultModel) future.get());
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
+        }
+        for(MatrixResultModel m : results){
+            System.out.println(m.rowIndex);
         }
 
         return c;
     }
 
+    class MultModel {
+        private long[] row;
+        private long[][] b;
+        private int rowIndex;
+
+        MultModel(long[] row, long[][] b, int rowIndex) {
+            this.row = row;
+            this.b = b;
+            this.rowIndex = rowIndex;
+        }
+    }
+
+    class MatrixResultModel {
+        private long[] result;
+        private int rowIndex;
+
+        MatrixResultModel(long[] result, int rowIndex) {
+            this.result = result;
+            this.rowIndex = rowIndex;
+        }
+    }
+
     class CallableExample implements Callable {
+        private MultModel model;
+
+        CallableExample(MultModel model) {
+            this.model = model;
+        }
 
         public Object call() throws Exception {
-            // Create random number generator
-            Random generator = new Random();
+            int size = this.model.row.length;
+            long[] result = new long[size];
 
-            Integer randomNumber = generator.nextInt(5);
+            for (int i = 0; i < size; i++) {
+                long helper = 0;
+                for (int j = 0; j < size; j++) {
+                    helper += this.model.row[j] * this.model.b[i][j];
+                }
+                result[i] = helper;
+            }
 
-            // To simulate a heavy computation,
-            // we delay the thread for some random time
-            Thread.sleep(randomNumber * 1000);
-
-            return randomNumber;
+            return new MatrixResultModel(result, this.model.rowIndex);
         }
     }
 }
