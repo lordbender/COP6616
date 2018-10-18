@@ -1,5 +1,8 @@
 # Easy Path (mpicc and mpirun must be in the path)
 
+# Where is the discussion?
+See all markdown file that start with discussion.
+
 # See Hosts:
 rocks list hosts
 
