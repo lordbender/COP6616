@@ -116,3 +116,43 @@ Algorithm: MPI Matrix Multiplication
 
 
 ----------------------------------------------------
+Algorithm: MPI Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 16.675923
+	Dataset Size   : 550
+	Process Count  : 32
+
+
+----------------------------------------------------
+Algorithm: MPI Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 18.951020
+	Dataset Size   : 550
+	Process Count  : 32
+
+
+----------------------------------------------------
+Algorithm: MPI Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 3.358870
+	Dataset Size   : 550
+	Process Count  : 100
+
+
+----------------------------------------------------
+Algorithm: MPI Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.229849
+	Dataset Size   : 550
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Matrix Multiplication
+	Big O          : O(n^3)
+	Execution Time : 2.147575
+	Dataset Size   : 550
+	Process Count  : 32
+
+
+----------------------------------------------------

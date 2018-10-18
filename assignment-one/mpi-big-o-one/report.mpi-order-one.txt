@@ -75,3 +75,36 @@ Algorithm: MPI Return First Number
 
 
 ----------------------------------------------------
+Algorithm: MPI Return First Number
+	Big O          : O(1)
+	Execution Time : 2.229637
+	Dataset Size   : 50000000
+	Process Count  : 64
+
+
+	Target Located : 64 times
+
+
+----------------------------------------------------
+Algorithm: MPI Return First Number
+	Big O          : O(1)
+	Execution Time : 3.425819
+	Dataset Size   : 50000000
+	Process Count  : 64
+
+
+	Target Located : 64 times
+
+
+----------------------------------------------------
+Algorithm: MPI Return First Number
+	Big O          : O(1)
+	Execution Time : 3.437572
+	Dataset Size   : 50000000
+	Process Count  : 100
+
+
+	Target Located : 100 times
+
+
+----------------------------------------------------

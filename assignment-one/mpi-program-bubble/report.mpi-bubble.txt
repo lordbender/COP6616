@@ -94,3 +94,99 @@ Algorithm: MPI Bubble Sort
 
 
 ----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.707984
+	Dataset Size   : 150000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 0.752216
+	Dataset Size   : 150000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 1.523004
+	Dataset Size   : 250000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 2.925260
+	Dataset Size   : 350000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 5.598946
+	Dataset Size   : 500000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 11.141767
+	Dataset Size   : 700000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 14.145765
+	Dataset Size   : 800000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 21.661800
+	Dataset Size   : 1000000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 2.244834
+	Dataset Size   : 1000000
+	Process Count  : 64
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 5.311577
+	Dataset Size   : 1000000
+	Process Count  : 32
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 1.292437
+	Dataset Size   : 1000000
+	Process Count  : 100
+
+
+----------------------------------------------------
+Algorithm: MPI Bubble Sort
+	Big O          : O(n^2)
+	Execution Time : 14.749020
+	Dataset Size   : 1000000
+	Process Count  : 100
+
+
+----------------------------------------------------
