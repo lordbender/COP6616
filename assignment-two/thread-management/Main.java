@@ -18,14 +18,19 @@ public class Main {
         if (operation == 4 || operation == 1) {
             System.out.println("WIP 1");
         }
-        
+
         if (operation == 4 || operation == 2) {
             System.out.println("WIP 2");
         }
-        
+
         if (operation == 4 || operation == 3) {
             MatrixTools matrixTools = new MatrixTools();
-            matrixTools.test();
+
+            if (size < 11) {
+                matrixTools.runTimedExperiment(size);
+            } else {
+                matrixTools.runTimedExperimentThreaded(size);
+            }
         }
     }
 }
