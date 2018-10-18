@@ -6,3 +6,5 @@ node_modules
 *.class
 *.Class
 bigone
+obj
+bin
