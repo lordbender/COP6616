@@ -25,7 +25,10 @@ public class Main {
         
         if (operation == 4 || operation == 3) {
             MatrixTools matrixTools = new MatrixTools();
-            matrixTools.test();
+            if(size < 100)
+            matrixTools.runTimedExperiment(size);
+            else
+            matrixTools.runTimedExperimentThreaded(size);
         }
     }
 }

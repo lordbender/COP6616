@@ -2,6 +2,9 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 public class MatrixTools {
 
@@ -13,7 +16,18 @@ public class MatrixTools {
         long[][] c = this.multiply(a, b);
         long endTime = System.nanoTime();
 
-        System.out.println("Timed Run: " + endTime - start);
+        System.out.println("Timed Run: " + (endTime - startTime));
+    }
+
+    public void runTimedExperimentThreaded(int size) {
+        long[][] a = getTestArray(size);
+        long[][] b = getTestArray(size);
+
+        long startTime = System.nanoTime();
+        long[][] c = this.multiplyThreaded(a, b);
+        long endTime = System.nanoTime();
+
+        System.out.println("Timed Run: " + (endTime - startTime));
     }
 
     public void test() {
@@ -40,7 +54,8 @@ public class MatrixTools {
     }
 
     private long[][] multiply(long[][] a, long[][] b) {
-        long c[][] = new long[a.length][a.length];
+        int size = a.length;
+        long c[][] = new long[size][size];
 
         // Citation:
         // https://www.sanfoundry.com/java-program-perform-matrix-multiplication/
@@ -53,4 +68,54 @@ public class MatrixTools {
         return c;
     }
 
+    private long[][] multiplyThreaded(long[][] a, long[][] b) {
+        int size = a.length;
+        long c[][] = new long[size][size];
+
+        int poosSize = Runtime.getRuntime().availableProcessors();
+        int threshhold = 64;
+
+        if (size <= threshhold)
+            return this.multiply(a, b);
+
+        FutureTask[] randomNumberTasks = new FutureTask[5];
+
+        for (int i = 0; i < 5; i++) {
+            Callable callable = new CallableExample();
+
+            // Create the FutureTask with Callable
+            randomNumberTasks[i] = new FutureTask(callable);
+
+            // As it implements Runnable, create Thread
+            // with FutureTask
+            Thread t = new Thread(randomNumberTasks[i]);
+            t.start();
+        }
+
+        for (int i = 0; i < 5; i++) {
+            try {
+                System.out.println(randomNumberTasks[i].get());
+            } catch (Exception e) {
+                System.err.println(e.toString());
+            }
+        }
+
+        return c;
+    }
+
+    class CallableExample implements Callable {
+
+        public Object call() throws Exception {
+            // Create random number generator
+            Random generator = new Random();
+
+            Integer randomNumber = generator.nextInt(5);
+
+            // To simulate a heavy computation,
+            // we delay the thread for some random time
+            Thread.sleep(randomNumber * 1000);
+
+            return randomNumber;
+        }
+    }
 }
