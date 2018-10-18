@@ -73,8 +73,8 @@ public class MatrixTools {
         int size = a.length;
         long c[][] = new long[size][size];
 
-        // Pool size will be double the number of cores by default
-        int poolSize = Runtime.getRuntime().availableProcessors() * 2;
+        // Pool size will be four times the number of cores by default
+        int poolSize = Runtime.getRuntime().availableProcessors() * 4;
         ExecutorService executor = Executors.newFixedThreadPool(poolSize);
 
         List<Future<?>> futures = new ArrayList<>();
