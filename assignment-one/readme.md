@@ -1,5 +1,9 @@
 # Easy Path (mpicc and mpirun must be in the path)
 
+# See Hosts:
+rocks list hosts
+
+
 chmod 777 make.sh
 ./make.sh
 
