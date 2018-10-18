@@ -1,0 +1,19 @@
+[n00599835@osprey COP6616]$ stat bigone
+  File: `bigone'
+  Size: 237278          Blocks: 464        IO Block: 8192   regular file
+Device: 15h/21d Inode: 2622567     Links: 1
+Access: (0644/-rw-r--r--)  Uid: (17856/n00599835)   Gid: (   99/  nobody)
+Access: 2018-10-17 20:35:18.543109224 -0400
+Modify: 2018-10-17 20:35:18.812121615 -0400
+Change: 2018-10-17 20:35:18.812121615 -0400
+[n00599835@osprey COP6616]$ turnin --help
+USAGE:
+        turnin filename assign_code (turn in assignment)
+        turnin -c assign_code (check that it got turned in)
+        turnin -l assign_code (see if it would be late now)
+        turnin -d assign_code (find the due date)
+        turnin -a assign_code (print information about assignment)
+[n00599835@osprey COP6616]$ turnin bigone reepar1
+Turning in file bigone for assignment reepar1 for user n00599835.
+[n00599835@osprey COP6616]$ turnin -c reepar1
+n00599835: assignment reepar1 (237278 bytes) turned in on Wed Oct 17 20:36:18 2018
