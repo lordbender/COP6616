@@ -22,7 +22,8 @@ public class MatrixTools {
         long[][] c = this.multiply(a, b);
         long endTime = System.nanoTime();
 
-        System.out.println("Timed Run: " + ((double) (endTime - startTime) / 1000000.0));
+        double runtime = ((double) (endTime - startTime) / 1000000.0 / 1000.0);
+        System.out.println("Timed Run: " + runtime + " Seconds");
     }
 
     public void runTimedExperimentThreaded(int size) {
@@ -39,7 +40,9 @@ public class MatrixTools {
 
         // System.out.print("\n");
         // }
-        System.out.println("Timed Run: " + ((endTime - startTime) / 1000000) / 1000);
+
+        double runtime = ((double) (endTime - startTime) / 1000000.0) / 1000.0;
+        System.out.println("Timed Run: " + runtime + " Seconds");
     }
 
     private long[][] getTestArray(int size) {
