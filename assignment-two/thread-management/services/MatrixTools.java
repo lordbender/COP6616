@@ -22,7 +22,7 @@ public class MatrixTools {
         long[][] c = this.multiply(a, b);
         long endTime = System.nanoTime();
 
-        System.out.println("Timed Run: " + (endTime - startTime));
+        System.out.println("Timed Run: " + ((double) (endTime - startTime) / 1000000.0));
     }
 
     public void runTimedExperimentThreaded(int size) {
@@ -33,7 +33,13 @@ public class MatrixTools {
         long[][] c = this.multiplyThreaded(a, b);
         long endTime = System.nanoTime();
 
-        System.out.println("Timed Run: " + (endTime - startTime));
+        // for (int i = 0; i < size; i++) {
+        // for (int j = 0; j < size; j++)
+        // System.out.print(c[i][j] + "\t");
+
+        // System.out.print("\n");
+        // }
+        System.out.println("Timed Run: " + ((endTime - startTime) / 1000000) / 1000);
     }
 
     private long[][] getTestArray(int size) {
@@ -69,10 +75,8 @@ public class MatrixTools {
 
         // Pool size will be double the number of cores by default
         int poolSize = Runtime.getRuntime().availableProcessors() * 2;
-        FutureTask[] completeablFutureTasks = new FutureTask[size];
         ExecutorService executor = Executors.newFixedThreadPool(poolSize);
 
-        Collection<CallableExample> helper = new ArrayList<CallableExample>();
         List<Future<?>> futures = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             long[] row = new long[size];
@@ -84,18 +88,18 @@ public class MatrixTools {
             futures.add(executor.submit(new CallableExample(new MultModel(row, b, i))));
         }
 
-        List<MatrixResultModel> results = new ArrayList<MatrixResultModel>();
-
         for (Future<?> future : futures) {
             try {
-                results.add((MatrixResultModel) future.get());
+                MatrixResultModel result = (MatrixResultModel) future.get();
+                for (int i = 0; i < size; i++)
+                    c[i][result.rowIndex] = result.result[i];
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-        for(MatrixResultModel m : results){
-            System.out.println(m.rowIndex);
-        }
+
+        executor.shutdown();
 
         return c;
     }

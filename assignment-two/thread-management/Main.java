@@ -26,7 +26,7 @@ public class Main {
         if (operation == 4 || operation == 3) {
             MatrixTools matrixTools = new MatrixTools();
 
-            if (size < 100) {
+            if (size < 11) {
                 matrixTools.runTimedExperiment(size);
             } else {
                 matrixTools.runTimedExperimentThreaded(size);
