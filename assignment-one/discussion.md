@@ -7,7 +7,10 @@
 
 # Issues
         There were issues with distributed hosts. Uranus has MPI 1.6 as a permanent value in the path as seen from cisatlas. 
-        This issue caused errors that prevented distribution.
+        This issue caused errors that prevented distribution. However the Rocks clusters worked fine. I would have liked to spread the 
+        processing across two actual servers.
+
+[See Rocks Discussion](./discussion.rocks.md)
 
 # Linear Program Overview
 
