@@ -1,26 +1,57 @@
-https://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html
 
-public class Socket {
+// A Java program for a Server 
+import java.net.*;
+import java.io.*;
 
-    public void main() {
-        try (
+public class Server {
+    // initialize socket and input stream
+    private Socket socket = null;
+    private ServerSocket server = null;
+    private DataInputStream in = null;
 
-    PrintWriter out =        new PrintWriter(clientSocket.getOutputStream(), true);
-    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-) {
-    String inputLine, outputLine;
-            
-    // Initiate conversation with client
-    KnockKnockProtocol kkp = new KnockKnockProtocol();
-    outputLine = kkp.processInput(null);
-    out.println(outputLine);
+    // constructor with port
+    public Server(int port) {
+        // starts server and waits for a connection
+        try {
+            server = new ServerSocket(port);
+            System.out.println("Server started");
 
-    while ((inputLine = in.readLine()) != null) {
-        outputLine = kkp.processInput(inputLine);
-        out.println(outputLine);
-        if (outputLine.equals("Bye."))
-            break;
+            System.out.println("Waiting for a client ...");
+
+            socket = server.accept();
+            System.out.println("Client accepted");
+
+            // takes input from the client socket
+            in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+            String line = "";
+
+            // reads message from client until "Over" is sent
+            while (!line.equals("Over")) {
+                try {
+                    line = in.readUTF();
+                    System.out.println(line);
+
+                } catch (IOException i) {
+                    System.out.println(i);
+                }
+            }
+            System.out.println("Closing connection");
+
+            // close connection
+            socket.close();
+            in.close();
+        } catch (IOException i) {
+            System.out.println(i);
+        }
     }
+
+    public static void main(String args[]) {
+        Server server = new Server(5000);
     }
 }
-}
+
+    
+    
+
+    
