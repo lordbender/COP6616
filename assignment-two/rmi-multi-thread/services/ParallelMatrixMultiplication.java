@@ -45,7 +45,6 @@ public class ParallelMatrixMultiplication {
                 }
             }
         }
-        System.out.println("DONE");
     }
 
     public double multiply() {

@@ -43,7 +43,7 @@ public class BubbleSort {
             FutureTask[] fs = new FutureTask[this.size];
 
             for (int i = 0; i < this.size; i++) {
-                System.out.println("a[" + i + "] =>" + this.arr[i]);
+                // System.out.println("a[" + i + "] =>" + this.arr[i]);
             }
         }
     }

@@ -39,7 +39,7 @@ public class ReturnFirst {
         }
 
         public void run() {
-            System.out.println(this.arr[0]);
+            // System.out.println(this.arr[0]);
         }
     }
 
