@@ -75,7 +75,6 @@ public class ParallelSearch {
                     // As it implements Future, we can call get()
                     try {
                         int result = (int) futureTasks[i].get();
-                        System.out.println("Hits from sub process: " + result);
                         this.hits += result;
                     } catch (Exception e) {
                     }

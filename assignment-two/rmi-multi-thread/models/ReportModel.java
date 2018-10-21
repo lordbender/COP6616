@@ -1,5 +1,7 @@
 package models;
 
+import core.Common;
+
 public class ReportModel {
 
     private String complexity;
@@ -25,7 +27,7 @@ public class ReportModel {
      */
     public void setDuration(double duration) {
         double helper = ((duration / 1000000) / 1000);
-        this.duration = Common.round(helper, 2);
+        this.duration = Common.round(helper, 6);
     }
 
     /**

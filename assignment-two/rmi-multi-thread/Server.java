@@ -28,7 +28,7 @@ public class Server implements IOperations {
 
     public double multiply(int size) {
         ParallelMatrixMultiplication matMult = new ParallelMatrixMultiplication();
-        return matMult.multiply();
+        return matMult.runTimedExperiment(size);
     }
 
     public static void main(String args[]) {

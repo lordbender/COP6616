@@ -1,5 +1,7 @@
 package services;
 
+import java.util.Arrays;
+
 // References:
 // https://abitofcs.blogspot.com/2015/12/parallel-matrix-multiplication-in-java.html
 
@@ -40,11 +42,56 @@ public class BubbleSort {
         }
 
         public void run() {
-            FutureTask[] fs = new FutureTask[this.size];
+            FutureTask[] futureTasks = new FutureTask[POOL_SIZE];
+            int chunkSize = (int) Math.ceil(this.size / POOL_SIZE);
+            for (int i = 0; i < POOL_SIZE; i++) {
+                long[] subArr = Arrays.copyOfRange(this.arr, i * chunkSize, i * chunkSize + chunkSize);
+                CallableSort callable = new CallableSort(subArr);
 
-            for (int i = 0; i < this.size; i++) {
-                // System.out.println("a[" + i + "] =>" + this.arr[i]);
+                // Create the FutureTask with Callable
+                futureTasks[i] = new FutureTask(callable);
+
+                // As it implements Runnable, create Thread
+                // with FutureTask
+                Thread t = new Thread(futureTasks[i]);
+                t.start();
             }
+
+            for (int i = 0; i < POOL_SIZE; i++) {
+                // As it implements Future, we can call get()
+                try {
+                    long[] result = (long[]) futureTasks[i].get();
+
+                    // Merge the sorted arrays...
+
+                } catch (Exception e) {
+                }
+
+            }
+        }
+    }
+
+    class CallableSort implements Callable {
+        long[] arr;
+
+        CallableSort(long[] arr) {
+            this.arr = arr;
+        }
+
+        public Object call() throws Exception {
+            long[] a = this.arr;
+
+            // Citation: https://www.geeksforgeeks.org/bubble-sort/
+            int n = a.length;
+            for (int i = 0; i < n - 1; i++)
+                for (int j = 0; j < n - i - 1; j++)
+                    if (a[j] > a[j + 1]) {
+                        long temp = a[j];
+                        a[j] = a[j + 1];
+                        a[j + 1] = temp;
+                    }
+
+            return a;
         }
     }
 

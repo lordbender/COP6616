@@ -1,149 +1,156 @@
 package services;
 
-
-// References:
-// https://abitofcs.blogspot.com/2015/12/parallel-matrix-multiplication-in-java.html
-
-import java.util.concurrent.*;
-import core.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 public class ParallelMatrixMultiplication {
 
-    private double[][] a;
-    private double[][] b;
-    private double[][] c;
-    private static final int MATRIX_SIZE = 1024, POOL_SIZE = Runtime.getRuntime().availableProcessors(),
-            MINIMUM_THRESHOLD = 64;
+    public double runTimedExperiment(int size) {
+        long[][] a = getTestArray(size);
+        long[][] b = getTestArray(size);
 
-    private final ExecutorService exec = Executors.newFixedThreadPool(POOL_SIZE);
-
-    public ParallelMatrixMultiplication(double[][] a, double[][] b) {
-        // assumption : a and b are both double[MATRIX_SIZE][MATRIX_SIZE]
-        this.a = a;
-        this.b = b;
-        this.c = new double[MATRIX_SIZE][MATRIX_SIZE];
-    }
-
-    // Debugging Code
-    public ParallelMatrixMultiplication() {
-        a = new double[MATRIX_SIZE][MATRIX_SIZE];
-        b = new double[MATRIX_SIZE][MATRIX_SIZE];
-        c = new double[MATRIX_SIZE][MATRIX_SIZE];
-        for (int i = 0; i < a.length; ++i) {
-            for (int j = 0; j < a.length; ++j) {
-                a[i][j] = 1.0;
-                b[i][j] = 1.0;
-            }
-        }
-    }
-
-    public void check() {
-        for (int i = 0; i < c.length; ++i) {
-            for (int j = 0; j < c.length; ++j) {
-                if (Math.abs(c[i][j] - a.length) > 1e-10) {
-                    System.out.format("%.3f\n", c[i][j]);
-                }
-            }
-        }
-    }
-
-    public double multiply() {
-        // multiplyRecursive(0, 0, 0, 0, 0, 0, a.length);
         long startTime = System.nanoTime();
-        Future f = exec.submit(new MultiplyTask(a, b, c, 0, 0, 0, 0, 0, 0, a.length));
-        try {
-            f.get();
-            exec.shutdown();
-            long endTime = System.nanoTime();
+        long[][] c = this.multiply(a, b);
+        long endTime = System.nanoTime();
 
-            return (((double) (endTime - startTime) / 1000000) / 1000);
+        double runtime = ((double) (endTime - startTime) / 1000000.0 / 1000.0);
+        System.out.println("Timed Run: " + runtime + " Seconds");
 
-        } catch (Exception e) {
-            return -1.0;
-        }
+        return runtime;
     }
 
-    public double[][] getResult() {
+    public void runTimedExperimentThreaded(int size) {
+        long[][] a = getTestArray(size);
+        long[][] b = getTestArray(size);
+
+        long startTime = System.nanoTime();
+        long[][] c = this.multiplyThreaded(a, b);
+        long endTime = System.nanoTime();
+
+        // for (int i = 0; i < size; i++) {
+        // for (int j = 0; j < size; j++)
+        // System.out.print(c[i][j] + "\t");
+
+        // System.out.print("\n");
+        // }
+
+        double runtime = ((double) (endTime - startTime) / 1000000.0) / 1000.0;
+        System.out.println("Timed Run: " + runtime + " Seconds");
+    }
+
+    private long[][] getTestArray(int size) {
+        Random r = new Random();
+
+        long outter[][] = new long[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++)
+                outter[i][j] = r.nextLong();
+        }
+
+        return outter;
+    }
+
+    private long[][] multiply(long[][] a, long[][] b) {
+        int size = a.length;
+        long c[][] = new long[size][size];
+
+        // Citation:
+        // https://www.sanfoundry.com/java-program-perform-matrix-multiplication/
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                for (int k = 0; k < size; k++) {
+                    c[i][j] = c[i][j] + a[i][k] * b[k][j];
+                }
+
         return c;
     }
 
-    class MultiplyTask implements Runnable {
-        private double[][] a;
-        private double[][] b;
-        private double[][] c;
-        private int a_i, a_j, b_i, b_j, c_i, c_j, size;
+    private long[][] multiplyThreaded(long[][] a, long[][] b) {
+        int size = a.length;
+        long c[][] = new long[size][size];
 
-        MultiplyTask(double[][] a, double[][] b, double[][] c, int a_i, int a_j, int b_i, int b_j, int c_i, int c_j,
-                int size) {
-            this.a = a;
-            this.b = b;
-            this.c = c;
-            this.a_i = a_i;
-            this.a_j = a_j;
-            this.b_i = b_i;
-            this.b_j = b_j;
-            this.c_i = c_i;
-            this.c_j = c_j;
-            this.size = size;
+        // Pool size will be four times the number of cores by default
+        int poolSize = Runtime.getRuntime().availableProcessors() * 4;
+        ExecutorService executor = Executors.newFixedThreadPool(poolSize);
+
+        List<Future<?>> futures = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            long[] row = new long[size];
+            for (int j = 0; j < size; j++) {
+                row[j] = a[i][j];
+            }
+
+            // Get all the futures together!
+            futures.add(executor.submit(new CallableExample(new MultModel(row, b, i))));
         }
 
-        public void run() {
-            // System.out.format("[%d,%d]x[%d,%d](%d)\n",a_i,a_j,b_i,b_j,size);
-            int h = size / 2;
-            if (size <= MINIMUM_THRESHOLD) {
-                for (int i = 0; i < size; ++i) {
-                    for (int j = 0; j < size; ++j) {
-                        for (int k = 0; k < size; ++k) {
-                            c[c_i + i][c_j + j] += a[a_i + i][a_j + k] * b[b_i + k][b_j + j];
-                        }
-                    }
-                }
-            } else {
-                MultiplyTask[] tasks = { new MultiplyTask(a, b, c, a_i, a_j, b_i, b_j, c_i, c_j, h),
-                        new MultiplyTask(a, b, c, a_i, a_j + h, b_i + h, b_j, c_i, c_j, h),
+        for (Future<?> future : futures) {
+            try {
+                MatrixResultModel result = (MatrixResultModel) future.get();
+                for (int i = 0; i < size; i++)
+                    c[i][result.rowIndex] = result.result[i];
 
-                        new MultiplyTask(a, b, c, a_i, a_j, b_i, b_j + h, c_i, c_j + h, h),
-                        new MultiplyTask(a, b, c, a_i, a_j + h, b_i + h, b_j + h, c_i, c_j + h, h),
-
-                        new MultiplyTask(a, b, c, a_i + h, a_j, b_i, b_j, c_i + h, c_j, h),
-                        new MultiplyTask(a, b, c, a_i + h, a_j + h, b_i + h, b_j, c_i + h, c_j, h),
-
-                        new MultiplyTask(a, b, c, a_i + h, a_j, b_i, b_j + h, c_i + h, c_j + h, h),
-                        new MultiplyTask(a, b, c, a_i + h, a_j + h, b_i + h, b_j + h, c_i + h, c_j + h, h) };
-
-                FutureTask[] fs = new FutureTask[tasks.length / 2];
-
-                for (int i = 0; i < tasks.length; i += 2) {
-                    fs[i / 2] = new FutureTask(new Sequentializer(tasks[i], tasks[i + 1]), null);
-                    exec.execute(fs[i / 2]);
-                }
-                for (int i = 0; i < fs.length; ++i) {
-                    fs[i].run();
-                }
-                try {
-                    for (int i = 0; i < fs.length; ++i) {
-                        fs[i].get();
-                    }
-                } catch (Exception e) {
-
-                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
+
+        executor.shutdown();
+
+        return c;
     }
 
-    class Sequentializer implements Runnable {
-        private MultiplyTask first, second;
+    class MultModel {
+        private long[] row;
+        private long[][] b;
+        private int rowIndex;
 
-        Sequentializer(MultiplyTask first, MultiplyTask second) {
-            this.first = first;
-            this.second = second;
+        MultModel(long[] row, long[][] b, int rowIndex) {
+            this.row = row;
+            this.b = b;
+            this.rowIndex = rowIndex;
         }
-
-        public void run() {
-            first.run();
-            second.run();
-        }
-
     }
 
+    class MatrixResultModel {
+        private long[] result;
+        private int rowIndex;
+
+        MatrixResultModel(long[] result, int rowIndex) {
+            this.result = result;
+            this.rowIndex = rowIndex;
+        }
+    }
+
+    class CallableExample implements Callable {
+        private MultModel model;
+
+        CallableExample(MultModel model) {
+            this.model = model;
+        }
+
+        public Object call() throws Exception {
+            int size = this.model.row.length;
+            long[] result = new long[size];
+
+            for (int i = 0; i < size; i++) {
+                long helper = 0;
+                for (int j = 0; j < size; j++) {
+                    helper += this.model.row[j] * this.model.b[i][j];
+                }
+                result[i] = helper;
+            }
+
+            return new MatrixResultModel(result, this.model.rowIndex);
+        }
+    }
 }
