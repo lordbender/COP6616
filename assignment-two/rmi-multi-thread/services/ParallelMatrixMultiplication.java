@@ -36,13 +36,6 @@ public class ParallelMatrixMultiplication {
         long[][] c = this.multiplyThreaded(a, b);
         long endTime = System.nanoTime();
 
-        // for (int i = 0; i < size; i++) {
-        // for (int j = 0; j < size; j++)
-        // System.out.print(c[i][j] + "\t");
-
-        // System.out.print("\n");
-        // }
-
         double runtime = ((double) (endTime - startTime) / 1000000.0) / 1000.0;
         System.out.println("Timed Run: " + runtime + " Seconds");
     }
