@@ -1,0 +1,56 @@
+
+
+	RMI: Return First Number
+		Complexity      : O(1)
+		Execution Time  : 0.002098
+
+-----------------------------------------
+
+
+
+	RMI: Linear Search
+		Complexity      : O(n)
+		Execution Time  : 0.008602
+
+-----------------------------------------
+
+
+
+	RMI: Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 0.01617
+
+-----------------------------------------
+
+
+
+	RMI: Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 70.680143
+
+-----------------------------------------
+
+
+
+	RMI: Return First Number
+		Complexity      : O(1)
+		Execution Time  : 4.48E-4
+
+-----------------------------------------
+
+
+
+	RMI: Linear Search
+		Complexity      : O(n)
+		Execution Time  : 0.0050620000000000005
+
+-----------------------------------------
+
+
+
+	RMI: Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 0.007833999999999999
+
+-----------------------------------------
+
