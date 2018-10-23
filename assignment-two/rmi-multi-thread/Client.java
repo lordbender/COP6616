@@ -19,6 +19,13 @@ public class Client {
 
     public static void main(String[] args) {
 
+        if (args == null || args.length < 2) {
+            System.out.println("Requires two arguments.");
+            System.out.println("Example: java Client 1000 [0-4]");
+            System.out.println("\t0) Return First.\n\t1) linear Search\n\t2) Bubble Sort\n\t3) Matrix Multiplication\n\t4) Run All");
+            return;
+        }
+
         String host = null; // Needs to be host IP
         int size = Integer.parseInt(args[0]);
         int operation = Integer.parseInt(args[1]);

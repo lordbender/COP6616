@@ -8,5 +8,5 @@ rmiregistry &
 java -cp . Server
 
 # Run the Client(s) on Machine B
-java -cp . Client
+java -cp . Client (n) (operation [0-3])
 
