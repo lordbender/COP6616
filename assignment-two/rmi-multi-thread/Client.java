@@ -9,11 +9,13 @@ public class Client {
     private Client() {
     }
 
-    private static void createReport(double duration, String algorythm, String complexity) {
+    private static void createReport(double duration, String algorythm, String complexity, int size) {
         ReportModel report = new ReportModel();
         report.setDuration(duration);
         report.setAlgorythmName(algorythm);
         report.setComplexity(complexity);
+        report.setSize(size);
+        report.setCores(Runtime.getRuntime().availableProcessors());
         Report.create(report);
     }
 
@@ -22,7 +24,8 @@ public class Client {
         if (args == null || args.length < 2) {
             System.out.println("Requires two arguments.");
             System.out.println("Example: java Client 1000 [0-4]");
-            System.out.println("\t0) Return First.\n\t1) linear Search\n\t2) Bubble Sort\n\t3) Matrix Multiplication\n\t4) Run All");
+            System.out.println(
+                    "\t0) Return First.\n\t1) linear Search\n\t2) Bubble Sort\n\t3) Matrix Multiplication\n\t4) Run All");
             return;
         }
 
@@ -35,7 +38,7 @@ public class Client {
             IOperations stub = (IOperations) registry.lookup("IOperations");
 
             if (operation == 4 || operation == 0) {
-                createReport(stub.returnFirst(size), "Return First Number", "O(1)");
+                createReport(stub.returnFirst(size), "Return First Number", "O(1)", size);
             }
 
             if (operation == 4 || operation == 1) {

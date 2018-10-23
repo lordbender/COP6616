@@ -4,6 +4,8 @@ import core.Common;
 
 public class ReportModel {
 
+    private int cores;
+    private int size;
     private String complexity;
     private String algorythmName;
     private double duration;
@@ -13,6 +15,34 @@ public class ReportModel {
      */
     public String getComplexity() {
         return complexity;
+    }
+
+    /**
+     * @return the cores
+     */
+    public int getCores() {
+        return cores;
+    }
+
+    /**
+     * @param cores the cores to set
+     */
+    public void setCores(int cores) {
+        this.cores = cores;
+    }
+
+    /**
+     * @return the size
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSize(int size) {
+        this.size = size;
     }
 
     /**
