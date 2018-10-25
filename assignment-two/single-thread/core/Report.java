@@ -14,7 +14,7 @@ public class Report {
         System.out.println("\t\tSize            : " + model.getSize());
         System.out.print("\n-----------------------------------------\n\n");
 
-        try (FileWriter fw = new FileWriter("rmi-report.txt", true);
+        try (FileWriter fw = new FileWriter("seq-report.txt", true);
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bw)) {
             out.println("\n\n\tnSequential   : " + model.getAlgorythmName());
