@@ -42,15 +42,15 @@ public class Client {
             }
 
             if (operation == 4 || operation == 1) {
-                createReport(stub.search(size), "Linear Search", "O(n)");
+                createReport(stub.search(size), "Linear Search", "O(n)", size);
             }
 
             if (operation == 4 || operation == 2) {
-                createReport(stub.bubble(size), "Bubble Sort", "O(n^2)");
+                createReport(stub.bubble(size), "Bubble Sort", "O(n^2)", size);
             }
 
             if (operation == 4 || operation == 3) {
-                createReport(stub.multiply(size), "Matrix Multiplication", "O(n^3)");
+                createReport(stub.multiply(size), "Matrix Multiplication", "O(n^3)", size);
             }
 
         } catch (Exception e) {
