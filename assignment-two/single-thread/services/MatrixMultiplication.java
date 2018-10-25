@@ -1,3 +1,6 @@
+package services;
+
+import core.*;
 import java.util.Arrays;
 
 public class MatrixMultiplication {
@@ -22,7 +25,8 @@ public class MatrixMultiplication {
         ReportModel model = new ReportModel();
         model.setAlgorythmName("Matrix Multiplication");
         model.setComplexity("O(n^3)");
-        model.setDuration((double) (endTime - startTime));
+        model.setDuration((((double) (endTime - startTime) / 1000000) / 1000));
+        model.setSize(size);
         Report.create(model);
     }
 }
