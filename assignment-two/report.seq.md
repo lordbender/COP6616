@@ -7,11 +7,11 @@
 > Return first was performed on 1,000,000,000 and many other sizes, and always ran in the
 > same time.
 
->nSequential   : Return First		<br/>
->	Complexity      : O(1)   		<br/>
->	Execution Time  : 6.18E-7		<br/>
->	Cores           : 64			<br/>
->	Size            : 1000000000	<br/>
+>nSequential   : Return First
+>	Complexity      : O(1)
+>	Execution Time  : 6.18E-7
+>	Cores           : 64
+>	Size            : 1000000000
 
 ## Linear Search
 > Linear Search sequential testing was done on 1,000,000 and 1,000,000,000 numbers.
@@ -20,7 +20,7 @@
 >	Complexity      : O(n)
 >	Execution Time  : 0.006066294
 >	Cores           : 64
->	Size            : 1000000
+>	Size            : 1000000     
 
 >nSequential   : Linear Search
 >	Complexity      : O(n)
@@ -29,7 +29,7 @@
 >	Size            : 1000000000
 
 ## Bubble Sort
-> Bubble sort sequential testing was done on 100,000 and 1,000,000 numbers.
+> Bubble sort sequential testing was done on 100,000 and 500,000 numbers.
 
 >nSequential   : Bubble Sort
 >	Complexity      : O(n^2)

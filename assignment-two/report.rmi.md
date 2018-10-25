@@ -1,21 +1,19 @@
-#Interesting that this did not take exactly 27 times longer#
+# Linear Test Cases
+> RMI tests were performed on dedicated hardware, and osprey, cisatlas and uranus. 
+> For reporting purposes, I am reporting the results from CISAtlas as that is where I 
+> got the best outcomes. Moreover, the para
 
-*1000 ^ 3 = 1,000,000,000*
-*3000 ^ 3 = 27,000,000,000*
+## Return First
+> Return first was performed on 1,000,000,000 and many other sizes, and always ran in the
+> same time.
 
-#5.1436622850000004 * 27 = 138.878881695#
+## Linear Search
+> Linear Search sequential testing was done on 1,000,000 and 1,000,000,000 numbers.
 
-	RMI: Matrix Multiplication
-		Complexity      : O(n^3)
-		Execution Time  : 5.1436622850000004
-		Cores           : 8
-		Size           : 1000
+## Bubble Sort
+> Bubble sort sequential testing was done on 100,000 and 500,000 numbers.
 
------------------------------------------
-	RMI: Matrix Multiplication
-		Complexity      : O(n^3)
-		Execution Time  : 311.402412541
-		Cores           : 8
-		Size           : 3000
+## Matrix Multiplication
+> Matrix Multiplication testing was performed for RMI and Sequential 
+> on a set of N x N matrices, where N == 1000, and N == 2000.
 
------------------------------------------
