@@ -58,3 +58,83 @@
 
 -----------------------------------------
 
+
+
+	RMI: Return First Number
+		Complexity      : O(1)
+		Execution Time  : 0.001344689
+		Cores           : 64
+		Size           : 2000
+
+-----------------------------------------
+
+
+
+	RMI: Linear Search
+		Complexity      : O(n)
+		Execution Time  : 0.018869392999999998
+		Cores           : 64
+		Size           : 2000
+
+-----------------------------------------
+
+
+
+	RMI: Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 0.034930038000000004
+		Cores           : 64
+		Size           : 2000
+
+-----------------------------------------
+
+
+
+	RMI: Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 83.070486454
+		Cores           : 64
+		Size           : 2000
+
+-----------------------------------------
+
+
+
+	RMI: Return First Number
+		Complexity      : O(1)
+		Execution Time  : 5.941809999999999E-4
+		Cores           : 64
+		Size           : 2500
+
+-----------------------------------------
+
+
+
+	RMI: Linear Search
+		Complexity      : O(n)
+		Execution Time  : 0.026823673
+		Cores           : 64
+		Size           : 2500
+
+-----------------------------------------
+
+
+
+	RMI: Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 0.028179829
+		Cores           : 64
+		Size           : 2500
+
+-----------------------------------------
+
+
+
+	RMI: Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 159.573135861
+		Cores           : 64
+		Size           : 2500
+
+-----------------------------------------
+
