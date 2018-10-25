@@ -11,10 +11,10 @@
 > on a set of N x N matrices, where N == 1000, and N == 2000.
 
 nSequential   : Matrix Multiplication
-	Complexity      : O(n^3)
-	Execution Time  : 4.897806538
-	Cores           : 64
-  Size            : 1000
+Complexity      : O(n^3)
+Execution Time  : 4.897806538
+Cores           : 64
+Size            : 1000
 
 >nSequential   : Matrix Multiplication
 >	Complexity      : O(n^3)
