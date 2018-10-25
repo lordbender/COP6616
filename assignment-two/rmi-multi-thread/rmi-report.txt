@@ -138,3 +138,43 @@
 
 -----------------------------------------
 
+
+
+	RMI: Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 1.39313153
+		Cores           : 64
+		Size           : 999500
+
+-----------------------------------------
+
+
+
+	RMI: Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 1.231191358
+		Cores           : 64
+		Size           : 999999
+
+-----------------------------------------
+
+
+
+	RMI: Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 4.424099615
+		Cores           : 64
+		Size           : 1999999
+
+-----------------------------------------
+
+
+
+	RMI: Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 15.247506332
+		Cores           : 64
+		Size           : 3999999
+
+-----------------------------------------
+
