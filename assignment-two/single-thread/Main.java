@@ -1,3 +1,5 @@
+import services.*;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -11,6 +13,11 @@ public class Main {
 
         int size = Integer.parseInt(args[0]);
         int operation = Integer.parseInt(args[1]);
+
+        if (operation == 4 || operation == 0) {
+            ReturnFirst returnFirst = new ReturnFirst();
+            returnFirst.doIt(size);
+        }
 
         if (operation == 4 || operation == 1) {
             Search search = new Search();

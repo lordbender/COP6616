@@ -1,0 +1,170 @@
+
+
+	nSequential   : Linear Search
+		Complexity      : O(n)
+		Execution Time  : 18000.0
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 4355000.0
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 5.490819E9
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Linear Search
+		Complexity      : O(n)
+		Execution Time  : 42000.0
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 4564000.0
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 4.947067E9
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Linear Search
+		Complexity      : O(n)
+		Execution Time  : 18000.0
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 4718000.0
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 5.809843E9
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Linear Search
+		Complexity      : O(n)
+		Execution Time  : 1.9E-5
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 0.006626
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 5.1304799999999995
+		Cores           : 8
+		Size            : 1000
+
+-----------------------------------------
+
+
+
+	nSequential   : Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 65.376968
+		Cores           : 8
+		Size            : 2000
+
+-----------------------------------------
+
+
+
+	nSequential   : Return First
+		Complexity      : O(1)
+		Execution Time  : 1.0E-6
+		Cores           : 8
+		Size            : 2000
+
+-----------------------------------------
+
+
+
+	nSequential   : Linear Search
+		Complexity      : O(n)
+		Execution Time  : 5.3E-5
+		Cores           : 8
+		Size            : 2000
+
+-----------------------------------------
+
+
+
+	nSequential   : Bubble Sort
+		Complexity      : O(n^2)
+		Execution Time  : 0.011177
+		Cores           : 8
+		Size            : 2000
+
+-----------------------------------------
+
+
+
+	nSequential   : Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 66.08770600000001
+		Cores           : 8
+		Size            : 2000
+
+-----------------------------------------
+

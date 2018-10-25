@@ -1,3 +1,6 @@
+package services;
+
+import core.*;
 import java.util.Arrays;
 
 public class Bubble {
@@ -20,7 +23,8 @@ public class Bubble {
         ReportModel model = new ReportModel();
         model.setAlgorythmName("Bubble Sort");
         model.setComplexity("O(n^2)");
-        model.setDuration((double) (endTime - startTime));
+        model.setDuration((((double) (endTime - startTime) / 1000000) / 1000));
+        model.setSize(size);
         Report.create(model);
 
         return arr;

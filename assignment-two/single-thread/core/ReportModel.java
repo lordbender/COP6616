@@ -1,6 +1,7 @@
+package core;
 
 public class ReportModel {
-
+    private int size;
     private String complexity;
     private String algorythmName;
     private double duration;
@@ -10,6 +11,20 @@ public class ReportModel {
      */
     public String getComplexity() {
         return complexity;
+    }
+
+    /**
+     * @return the size
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSize(int size) {
+        this.size = size;
     }
 
     /**
@@ -23,8 +38,7 @@ public class ReportModel {
      * @param duration the duration to set
      */
     public void setDuration(double duration) {
-        double helper = ((duration / 1000000) / 1000);
-        this.duration = Common.round(helper, 2);
+        this.duration = duration;
     }
 
     /**

@@ -1,3 +1,6 @@
+package services;
+
+import core.*;
 import java.util.Arrays;
 
 public class Search {
@@ -16,7 +19,8 @@ public class Search {
         ReportModel model = new ReportModel();
         model.setAlgorythmName("Linear Search");
         model.setComplexity("O(n)");
-        model.setDuration((double) (endTime - startTime));
+        model.setDuration((((double) (endTime - startTime) / 1000000) / 1000));
+        model.setSize(size);
         Report.create(model);
 
         return hits;
