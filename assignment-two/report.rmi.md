@@ -1,4 +1,4 @@
-# Linear Test Cases
+# Threaded / RMI Test Cases
 > RMI tests were performed on dedicated hardware, and osprey, cisatlas and uranus. 
 > For reporting purposes, I am reporting the results from CISAtlas as that is where I 
 > got the best outcomes. Moreover, the para
@@ -14,7 +14,7 @@
  >        Size           : 1000
 
 ## Linear Search
-> Linear Search sequential testing was done on 1,000,000 and 1,000,000,000 numbers.
+> Linear Search threaded testing was done on 1,000,000 and 1,000,000,000 numbers.
 
 > RMI: Linear Search
 >         Complexity      : O(n)
@@ -29,7 +29,7 @@
 >        Size           : 1000000000
 
 ## Bubble Sort
-> Bubble sort sequential testing was done on 100,000 and 500,000 numbers.
+> Bubble sort threaded testing was done on 100,000 and 500,000 numbers.
 
 >RMI: Bubble Sort
 >        Complexity      : O(n^2)
@@ -42,6 +42,12 @@
 >        Execution Time  : 0.41642341299999996
 >        Cores           : 64
 >        Size           : 500000
+
+>RMI: Bubble Sort
+>        Complexity      : O(n^2)
+>        Execution Time  : 104.611297396
+>        Cores           : 64
+>        Size           : 10000000
 
 ## Matrix Multiplication
 > Matrix Multiplication testing was performed for RMI and Sequential 

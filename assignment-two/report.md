@@ -33,7 +33,8 @@ S = S(s) / S(p) = 32.485004863 / 0.062451097 = 520.167
 
 Fantastic speedup achieved by pre-sorting chunks, then  merging those chunks into a sorted array.
 I thought for a bit that I had an error in my merge that was cutting the time somewhere, but 
-it appears that my merge just wins.
+it appears that my merge just wins. The upper range for Bubble Sort sequential is about 500,000, whereas we 
+can get to 10,000,000 with the parallel option.
 
 ## Complexity O(n^3)
 S = S(s) / S(p) = 82.002710229 / 79.85027253 = 1.02695592176
