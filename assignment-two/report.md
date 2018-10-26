@@ -32,6 +32,13 @@ S = S(s) / S(p) = 2.696181591 / 16.200298623000002 = 0.1664
 S = S(s) / S(p) = 32.485004863 / 0.062451097 = 520.167
 
 Fantastic speedup achieved by pre-sorting chunks, then  merging those chunks into a sorted array.
+I thought for a bit that I had an error in my merge that was cutting the time somewhere, but 
+it appears that my merge just wins.
 
 ## Complexity O(n^3)
-S = S(s) / S(p) = 82.002710229 / 82.996110144 = 0.988
+S = S(s) / S(p) = 82.002710229 / 79.85027253 = 1.02695592176
+
+After Several runs, and MUCH tuning I was able to get some speedup, but on sets large enough to matter
+execution times were getting into the multiple hour range. Looks like on n^3 we get non-optimal 
+speedup when dividing work to multiple cores. Another possible reason, might be that the JVM 
+is better at managing the division of work than I am...

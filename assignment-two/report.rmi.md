@@ -47,14 +47,14 @@
 > Matrix Multiplication testing was performed for RMI and Sequential 
 > on a set of N x N matrices, where N == 1000, and N == 2000.
 
- >RMI: Matrix Multiplication
- >        Complexity      : O(n^3)
- >        Execution Time  : 4.959185671999999
- >        Cores           : 64
- >        Size            : 1000
+>RMI: Matrix Multiplication
+>        Complexity      : O(n^3)
+>        Execution Time  : 4.980966829
+>        Cores           : 64
+>        Size           : 1000
 
 >RMI: Matrix Multiplication
 >        Complexity      : O(n^3)
->        Execution Time  : 82.002710229
+>        Execution Time  : 79.85027253
 >        Cores           : 64
 >        Size           : 2000

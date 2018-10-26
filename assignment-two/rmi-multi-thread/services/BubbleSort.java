@@ -21,18 +21,19 @@ public class BubbleSort {
         long startTime = System.nanoTime();
         Future f = exec.submit(new BubbleSortTask(arr));
         try {
-            f.get();
+            long[] c = (long[]) f.get();
             exec.shutdown();
             long endTime = System.nanoTime();
 
             return (((double) (endTime - startTime) / 1000000) / 1000);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return -1.0;
         }
     }
 
-    class BubbleSortTask implements Runnable {
+    class BubbleSortTask implements Callable {
         private int size = 0;
         private long arr[];
         private long sorted[];
@@ -46,9 +47,12 @@ public class BubbleSort {
             this.size = a.length;
         }
 
-        public void run() {
+        public Object call() {
+            System.out.println("Here 1: Size " + this.size);
+
             FutureTask[] futureTasks = new FutureTask[POOL_SIZE];
             int chunkSize = (int) Math.ceil(this.size / POOL_SIZE);
+
             for (int i = 0; i < POOL_SIZE; i++) {
                 long[] subArr = Arrays.copyOfRange(this.arr, i * chunkSize, i * chunkSize + chunkSize);
                 CallableSort callable = new CallableSort(subArr);
@@ -72,6 +76,7 @@ public class BubbleSort {
                     // Merge the sorted arrays...
 
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -87,7 +92,10 @@ public class BubbleSort {
             // n^2 operations done - mergesort now...
             this.sort(c, 0, c.length - 1);
 
-            this.sorted = c;
+            // for (int i = 0; i < c.length; i++) {
+            //     System.out.println(c[i]);
+            // }
+            return c;
         }
 
         // Citation
