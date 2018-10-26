@@ -29,12 +29,12 @@ public class Client {
             return;
         }
 
-        String host = null; // Needs to be host IP
+        // iig host = "127.0.0.1:5150"; // Needs to be host IP
         int size = Integer.parseInt(args[0]);
         int operation = Integer.parseInt(args[1]);
 
         try {
-            Registry registry = LocateRegistry.getRegistry(host);
+            Registry registry = LocateRegistry.getRegistry(5150);
             IOperations stub = (IOperations) registry.lookup("IOperations");
 
             if (operation == 4 || operation == 0) {

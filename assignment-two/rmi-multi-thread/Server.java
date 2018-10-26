@@ -38,7 +38,7 @@ public class Server implements IOperations {
             IOperations stub = (IOperations) UnicastRemoteObject.exportObject(obj, 0);
 
             // Bind the remote object's stub in the registry
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry(5150);
             registry.bind("IOperations", stub);
 
             System.err.println("Server ready");
