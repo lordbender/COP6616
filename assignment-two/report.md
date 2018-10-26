@@ -19,13 +19,19 @@ See [Linear Report](./report.seq.md) for details on sequential Executions.
 See [RMI/Futures Report](./report.rmi.md) for details on distributed Executions.
 
 ## Complexity O(1)
-S = S(s) / S(p) = 
+S = S(s) / S(p) = 6.18E-7 / 9.33146E-4 = 0.00066
+
+#No Speedup#
 
 ## Complexity O(n)
-S = S(s) / S(p) = 
+S = S(s) / S(p) = 2.696181591 / 16.200298623000002 = 0.1664
+
+#No Speedup#
 
 ## Complexity O(n^2)
-S = S(s) / S(p) = 
+S = S(s) / S(p) = 32.485004863 / 0.062451097 = 520.167
+
+Fantastic speedup achieved by pre-sorting chunks, then  merging those chunks into a sorted array.
 
 ## Complexity O(n^3)
-S = S(s) / S(p) = 
+S = S(s) / S(p) = 82.002710229 / 82.996110144 = 0.988

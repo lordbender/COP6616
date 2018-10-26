@@ -168,3 +168,23 @@
 
 -----------------------------------------
 
+
+
+	RMI: Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 1.8433510000000002
+		Cores           : 8
+		Size           : 100
+
+-----------------------------------------
+
+
+
+	RMI: Matrix Multiplication
+		Complexity      : O(n^3)
+		Execution Time  : 37.088696000000006
+		Cores           : 8
+		Size           : 500
+
+-----------------------------------------
+
