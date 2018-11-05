@@ -5,8 +5,7 @@ import (
 	"time"
 )
 
-func bubbleSort() {
-	const size = 100000
+func bubbleSort(size int) {
 	var array = getArray(size)
 
 	start := time.Now()

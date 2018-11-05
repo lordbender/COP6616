@@ -4,8 +4,7 @@ import "fmt"
 import "time"
 
 // Returns an int >= min, < max
-func search() {
-	const size = 100000
+func search(size int) {
 	var a = getArray(size)
 	var target = getTarget()
 	hits := 0
