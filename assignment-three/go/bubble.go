@@ -17,6 +17,6 @@ func bubbleSort(size int) {
 			}
 		}
 	}
-	elapsed := time.Since(start)
-	fmt.Printf("\tSorted %d numbers in %s seconds\n", size, elapsed)
+	duration := time.Since(start)
+	fmt.Printf("\n\tBubble Sort on %d numbers\n\tO(n^2) Operations\n\tRan in %s\n\n", size, duration)
 }
