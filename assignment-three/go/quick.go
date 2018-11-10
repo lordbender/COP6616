@@ -18,7 +18,7 @@ func sorter(a []int64) []int64 {
 
 	a[pivot], a[right] = a[right], a[pivot]
 
-	for i, _ := range a {
+	for i := range a {
 		if a[i] < a[right] {
 			a[left], a[i] = a[i], a[left]
 			left++
