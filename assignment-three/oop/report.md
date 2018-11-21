@@ -97,7 +97,7 @@ Report for: Linear MergeSort
             Size of test set  : 100000
 
 
-### 1,00,0000
+### 1,000,0000
     Report for: Linear MergeSort
             Hostname          : cisatlas.ccec.unf.edu
             Complexity        : O(n*log(n))
