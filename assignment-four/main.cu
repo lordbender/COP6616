@@ -7,7 +7,7 @@ static const int BLOCK_SIZE = 256;
 static const int N = 10;
 
 // Device code
-__global__ void vecSquare(float* a, float* c, int n)
+__global__ void vecSquare(int* a, int* c, int n)
 {
 	int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
@@ -19,21 +19,21 @@ int main()
 {
 	printf("Starting on size %d!!!\n", N);
 
-    float* host_A = (float*)malloc(N * sizeof(float*));
-    float* host_C = (float*)malloc(N* sizeof(float*));
+    int* host_A = (int*)malloc(N * sizeof(int*));
+    int* host_C = (int*)malloc(N* sizeof(int*));
 
 	for (int i = 0; i < N; i++)
     {
-		host_A[i] = (float)(i + i);
+		host_A[i] = i + i;
 		host_C[i] = 0.0;
 	}
 
-    float* device_A;
-	gpuErrchk(cudaMalloc((void**) &device_A, sizeof(float) * N));
+    int* device_A;
+	gpuErrchk(cudaMalloc((void**) &device_A, sizeof(int) * N));
 	gpuErrchk(cudaGetLastError());
 
-	float* device_C;
-	gpuErrchk(cudaMalloc((void**) &device_C, sizeof(float) * N));
+	int* device_C;
+	gpuErrchk(cudaMalloc((void**) &device_C, sizeof(int) * N));
 	gpuErrchk(cudaGetLastError());
    
     gpuErrchk(cudaMemcpy(device_A, host_A, N, cudaMemcpyHostToDevice));
@@ -44,13 +44,13 @@ int main()
 	cudaDeviceSynchronize();
 	gpuErrchk(cudaGetLastError());
 
-	cudaMemcpy(host_C, device_C, sizeof(float) * N, cudaMemcpyDeviceToHost);
+	cudaMemcpy(host_C, device_C, sizeof(int) * N, cudaMemcpyDeviceToHost);
 
     cudaFree(device_A);
 	cudaFree(device_C);
 	
  	for (int i = 0; i < N; i++) {
-		printf("\tCool Story %f\n", host_C[i]);
+		printf("\tCool Story %d\n", host_C[i]);
 	}
 
 	free(host_A);
