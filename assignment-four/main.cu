@@ -1,54 +1,79 @@
+#include <stdio.h>
+#include "main_cuda.h"
+
+#define N 1000
+
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+   if (code != cudaSuccess) 
+   {
+      fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+      if (abort) exit(code);
+   }
+}
+
 // Device code
-__global__ void VecAdd(long* A, long* B, long* C, int N)
+__global__ void VecSquare(float* A, float* C, int size)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
-    if (i < N)
-        C[i] = A[i] + B[i];
+    if (i < size)
+        C[i] = A[i] * A[i];
 }
             
 // Host code
 int main()
 {
-    int N = 1000;
-    size_t size = N * sizeof(long);
 
-    // Allocate input vectors h_A and h_B in host memory
-    long* h_A = (long*)malloc(size);
-    long* h_B = (long*)malloc(size);
-    long* h_C = (long*)malloc(size);
+	printf("Starting on size %d!!!\n", N);
 
-	for (int i = 0; i < size; ++i)
+    float* h_A = (float*)malloc(N);
+    float* h_C = (float*)malloc(N);
+
+	for (int i = 0; i < N; i++)
     {
-		h_A[i] = i + i;
-		h_B[i] = i - i;
-		h_C[i] = 0;
+		h_A[i] = (float)(i + i);
+		h_C[i] = 0.0;
 	}
+	printf("Working Arrays Created\n");
 
-    // Allocate vectors in device memory
-    long* d_A;
-    cudaMalloc(&d_A, size);
-    long* d_B;
-    cudaMalloc(&d_B, size);
-    long* d_C;
-    cudaMalloc(&d_C, size);
+    float* d_A;
+	gpuErrchk(cudaMalloc(&d_A, N));
+	
+	float* d_C;
+	gpuErrchk(cudaMalloc(&d_C, N));
 
-    // Copy vectors from host memory to device memory
-    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+	printf("Cuda Memory Allocated\n");
+
+    // Copy vector from host memory to device memory
+    gpuErrchk(cudaMemcpy(d_A, h_A, N, cudaMemcpyHostToDevice));
+
+	printf("Cuda Data Copy Completed\n");
 
     // Invoke kernel
     int threadsPerBlock = 256;
     int blocksPerGrid =
-            (N + threadsPerBlock - 1) / threadsPerBlock;
-    VecAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N);
+			(N + threadsPerBlock - 1) / threadsPerBlock;
+			
+    VecSquare<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_C, N);
 
-    // Copy result from device memory to host memory
-    // h_C contains the result in host memory
-    cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+	gpuErrchk( cudaPeekAtLastError() );
+	gpuErrchk( cudaDeviceSynchronize() );
+
+	cudaMemcpy(h_C, d_C, N, cudaMemcpyDeviceToHost);
+	
+
 
     // Free device memory
     cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
- 
+	cudaFree(d_C);
+	
+ 	for (int i = 0; i < N; i++){
+		printf("\tCool Story %f\n", h_C[i]);
+	}
+
+	free(h_A);
+	free(h_C);
+	
+	printf("Done!!!\n");
 }
