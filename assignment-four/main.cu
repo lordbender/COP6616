@@ -17,44 +17,43 @@ __global__ void vecSquare(int* a, int* c, int n)
 // Host code
 int main()
 {
+	int *ha, *hc, *da, *dc;
 	printf("Starting on size %d!!!\n", N);
 
-    int* host_A = (int*)malloc(N * sizeof(int*));
-    int* host_C = (int*)malloc(N* sizeof(int*));
+    ha = (int*)malloc(N * sizeof(int));
+    hc = (int*)malloc(N * sizeof(int));
 
 	for (int i = 0; i < N; i++)
     {
-		host_A[i] = i + i;
-		host_C[i] = 0.0;
+		ha[i] = i + i;
+		hc[i] = 0.0;
 	}
 
-    int* device_A;
-	gpuErrchk(cudaMalloc((void**) &device_A, sizeof(int) * N));
+	gpuErrchk(cudaMalloc((void**) &da, sizeof(int) * N));
 	gpuErrchk(cudaGetLastError());
 
-	int* device_C;
-	gpuErrchk(cudaMalloc((void**) &device_C, sizeof(int) * N));
+	gpuErrchk(cudaMalloc((void**) &dc, sizeof(int) * N));
 	gpuErrchk(cudaGetLastError());
    
-    gpuErrchk(cudaMemcpy(device_A, host_A, N, cudaMemcpyHostToDevice));
+    gpuErrchk(cudaMemcpy(da, ha, N, cudaMemcpyHostToDevice));
 	gpuErrchk(cudaGetLastError());
 
     int grid = ceil(N * 1.0 / BLOCK_SIZE);
-    vecSquare<<<grid, BLOCK_SIZE>>>(device_A, device_C, N);
+    vecSquare<<<grid, BLOCK_SIZE>>>(da, dc, N);
 	cudaDeviceSynchronize();
 	gpuErrchk(cudaGetLastError());
 
-	cudaMemcpy(host_C, device_C, sizeof(int) * N, cudaMemcpyDeviceToHost);
+	cudaMemcpy(ha, dc, sizeof(int) * N, cudaMemcpyDeviceToHost);
 
-    cudaFree(device_A);
-	cudaFree(device_C);
+    cudaFree(da);
+	cudaFree(dc);
 	
  	for (int i = 0; i < N; i++) {
-		printf("\tCool Story %d\n", host_C[i]);
+		printf("\tCool Story %d\n", hc[i]);
 	}
 
-	free(host_A);
-	free(host_C);
+	free(ha);
+	free(hc);
 	
 	cudaDeviceReset();
 
