@@ -1,0 +1,60 @@
+{
+  "computeNodes": [
+    {
+      "id": "root",
+      "uri": "127.0.0.1"
+    },
+    {
+      "id": "compute-0-0",
+      "uri": "compute-0-0"
+    },
+    {
+      "id": "compute-0-1",
+      "uri": "compute-0-1"
+    },
+    {
+      "id": "compute-0-2",
+      "uri": "compute-0-2"
+    },
+    {
+      "id": "compute-0-3",
+      "uri": "compute-0-3"
+    },
+    {
+      "id": "compute-0-4",
+      "uri": "compute-0-4"
+    },
+    {
+      "id": "compute-0-5",
+      "uri": "compute-0-5"
+    },
+    {
+      "id": "compute-0-6",
+      "uri": "compute-0-6"
+    },
+    {
+      "id": "compute-0-7",
+      "uri": "compute-0-7"
+    },
+    {
+      "id": "compute-0-8",
+      "uri": "compute-0-8"
+    },
+    {
+      "id": "compute-0-9",
+      "uri": "compute-0-9"
+    },
+    {
+      "id": "compute-0-10",
+      "uri": "compute-0-10"
+    },
+    {
+      "id": "compute-0-11",
+      "uri": "compute-0-11"
+    },
+    {
+      "id": "compute-0-12",
+      "uri": "compute-0-12"
+    }
+  ]
+}

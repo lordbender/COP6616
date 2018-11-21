@@ -1,0 +1,1 @@
+go run main.go --size=10000 --nlogn=true
