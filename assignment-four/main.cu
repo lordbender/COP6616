@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "main_cuda.h"
 
@@ -15,8 +16,16 @@ __global__ void vecSquare(int* a, int* c, int n)
 }
             
 // Host code
-int main()
+double time_calc(clock_t start, clock_t end)
 {
+    return ((double)(end - start)) / CLOCKS_PER_SEC;
+}
+int main(int argc, char *argv[])
+{
+  	srand(time(0));
+
+ 	int size = atoi(argv[1]);
+
 	int *ha, *hc, *da, *dc;
 	printf("Starting on size %d!!!\n", N);
 
@@ -28,6 +37,8 @@ int main()
 		ha[i] = i + i;
 		hc[i] = 0;
 	}
+
+	clock_t start = clock();
 
 	gpuErrchk(cudaMalloc((void**) &da, sizeof(int) * N));
 	gpuErrchk(cudaGetLastError());
@@ -48,6 +59,8 @@ int main()
     cudaFree(da);
 	cudaFree(dc);
 	
+	clock_t end = clock();
+
  	for (int i = 0; i < N; i++) {
 		printf("\tCool Story %d\n", hc[i]);
 	}
@@ -57,5 +70,5 @@ int main()
 	
 	cudaDeviceReset();
 
-	printf("Done!!!\n\n");
+	printf("Completed in %f seconds!!!\n\n", time_calc(start, end));
 }
