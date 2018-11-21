@@ -19,11 +19,8 @@ int main()
 {
 	printf("Starting on size %d!!!\n", N);
 
-    // float* host_A = (float*)malloc(N * sizeof(float*));
-    // float* host_C = (float*)malloc(N* sizeof(float*));
-
-	float* host_A = new float[N];
-	float* host_C = new float[N];
+    float* host_A = (float*)malloc(N * sizeof(float*));
+    float* host_C = (float*)malloc(N* sizeof(float*));
 
 	for (int i = 0; i < N; i++)
     {
@@ -44,7 +41,7 @@ int main()
 	printf("Cuda device_C Memory Allocated\n");
 
 	gpuErrchk(cudaGetLastError());
-	
+
 	printf("Cuda Memory Allocated\n");
 
     // Copy vector from host memory to device memory
