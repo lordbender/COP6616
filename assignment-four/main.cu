@@ -5,7 +5,6 @@
 #include "main_cuda.h"
 
 static const int BLOCK_SIZE = 256;
-static const int N = 16;
 
 // Device code
 __global__ void vecSquare(int* a, int* c, int n)
@@ -27,12 +26,12 @@ int main(int argc, char *argv[])
  	int size = atoi(argv[1]);
 
 	int *ha, *hc, *da, *dc;
-	printf("Starting on size %d!!!\n", N);
+	printf("Starting on size %d!!!\n", size);
 
-    ha = new int[N];
-    hc = new int[N];
+    ha = new int[size];
+    hc = new int[size];
 
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < size; i++)
     {
 		ha[i] = i + i;
 		hc[i] = 0;
@@ -40,28 +39,28 @@ int main(int argc, char *argv[])
 
 	clock_t start = clock();
 
-	gpuErrchk(cudaMalloc((void**) &da, sizeof(int) * N));
+	gpuErrchk(cudaMalloc((void**) &da, sizeof(int) * size));
 	gpuErrchk(cudaGetLastError());
 
-	gpuErrchk(cudaMalloc((void**) &dc, sizeof(int) * N));
+	gpuErrchk(cudaMalloc((void**) &dc, sizeof(int) * size));
 	gpuErrchk(cudaGetLastError());
    
-    gpuErrchk(cudaMemcpy(da, ha,  sizeof(int) * N, cudaMemcpyHostToDevice));
+    gpuErrchk(cudaMemcpy(da, ha,  sizeof(int) * size, cudaMemcpyHostToDevice));
 	gpuErrchk(cudaGetLastError());
 
-    int grid = ceil(N * 1.0 / BLOCK_SIZE);
-    vecSquare<<<grid, BLOCK_SIZE>>>(da, dc, N);
+    int grid = ceil(size * 1.0 / BLOCK_SIZE);
+    vecSquare<<<grid, BLOCK_SIZE>>>(da, dc, size);
 	cudaDeviceSynchronize();
 	gpuErrchk(cudaGetLastError());
 
-	cudaMemcpy(hc, dc, sizeof(int) * N, cudaMemcpyDeviceToHost);
+	cudaMemcpy(hc, dc, sizeof(int) * size, cudaMemcpyDeviceToHost);
 
     cudaFree(da);
 	cudaFree(dc);
 	
 	clock_t end = clock();
 
- 	for (int i = 0; i < N; i++) {
+ 	for (int i = 0; i < size; i++) {
 		printf("\tCool Story %d\n", hc[i]);
 	}
 
