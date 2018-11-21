@@ -11,7 +11,7 @@ __global__ void vecSquare(float* a, float* c, int n)
 {
 	int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
-        c[id] = (float)a[id] + (float)5.0;
+        c[id] = a[id] * a[id];
 }
             
 // Host code
@@ -31,13 +31,13 @@ int main()
 	printf("Working Arrays Created\n");
 
     float* device_A;
-	cudaMalloc((void**) &device_A, sizeof(float) * N);
+	gpuErrchk(cudaMalloc((void**) &device_A, sizeof(float) * N));
 	printf("Cuda device_A Memory Allocated\n");
 
 	gpuErrchk(cudaGetLastError());
 
 	float* device_C;
-	cudaMalloc((void**) &device_C, sizeof(float) * N);
+	gpuErrchk(cudaMalloc((void**) &device_C, sizeof(float) * N));
 	printf("Cuda device_C Memory Allocated\n");
 
 	gpuErrchk(cudaGetLastError());
@@ -45,7 +45,7 @@ int main()
 	printf("Cuda Memory Allocated\n");
 
     // Copy vector from host memory to device memory
-    cudaMemcpy(device_A, host_A, N, cudaMemcpyHostToDevice);
+    gpuErrchk(cudaMemcpy(device_A, host_A, N, cudaMemcpyHostToDevice));
 
 	printf("Cuda Data Copy Completed\n");
 
