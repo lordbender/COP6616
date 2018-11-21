@@ -4,7 +4,7 @@
 #include "main_cuda.h"
 
 static const int BLOCK_SIZE = 256;
-static const int N = 10;
+static const int N = 1000;
 
 // Device code
 __global__ void vecSquare(int* a, int* c, int n)
@@ -20,13 +20,13 @@ int main()
 	int *ha, *hc, *da, *dc;
 	printf("Starting on size %d!!!\n", N);
 
-    ha = (int*)malloc(N * sizeof(int));
-    hc = (int*)malloc(N * sizeof(int));
+    ha = new int[N];
+    hc = new int[N];
 
 	for (int i = 0; i < N; i++)
     {
 		ha[i] = i + i;
-		hc[i] = 0.0;
+		hc[i] = 0;
 	}
 
 	gpuErrchk(cudaMalloc((void**) &da, sizeof(int) * N));
