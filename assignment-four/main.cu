@@ -14,6 +14,8 @@ __global__ void VecSquare(float* A, float* C, int size)
 // Host code
 int main()
 {
+	size_t size = N;
+
 	printf("Starting on size %d!!!\n", N);
 
     float* host_A = (float*)malloc(N);
@@ -28,39 +30,39 @@ int main()
 	printf("Working Arrays Created\n");
 
     float* device_A;
-	cudaMalloc((void**)&device_A, 1000);
+	cudaError_t cudaMalloc(void** &device_A, size);
 	printf("Cuda device_A Memory Allocated\n");
 
-	float* device_C;
-	cudaMalloc((void**)&device_C, N);
-	printf("Cuda device_C Memory Allocated\n");
+	// float* device_C;
+	// cudaMalloc((void**)&device_C, N);
+	// printf("Cuda device_C Memory Allocated\n");
 
-	printf("Cuda Memory Allocated\n");
+	// printf("Cuda Memory Allocated\n");
 
-    // Copy vector from host memory to device memory
-    cudaMemcpy(device_A, host_A, N, cudaMemcpyHostToDevice);
+    // // Copy vector from host memory to device memory
+    // cudaMemcpy(device_A, host_A, N, cudaMemcpyHostToDevice);
 
-	printf("Cuda Data Copy Completed\n");
+	// printf("Cuda Data Copy Completed\n");
 
-    // Invoke kernel
-    int threadsPerBlock = 256;
-    int blocksPerGrid =
-			(N + threadsPerBlock - 1) / threadsPerBlock;
+    // // Invoke kernel
+    // int threadsPerBlock = 256;
+    // int blocksPerGrid =
+	// 		(N + threadsPerBlock - 1) / threadsPerBlock;
 			
-    VecSquare<<<blocksPerGrid, threadsPerBlock>>>(device_A, device_C, N);
+    // VecSquare<<<blocksPerGrid, threadsPerBlock>>>(device_A, device_C, N);
 
-	cudaPeekAtLastError();
-	cudaDeviceSynchronize();
+	// cudaPeekAtLastError();
+	// cudaDeviceSynchronize();
 
-	cudaMemcpy(host_C, device_C, N, cudaMemcpyDeviceToHost);
+	// cudaMemcpy(host_C, device_C, N, cudaMemcpyDeviceToHost);
 	
     // Free device memory
     cudaFree(device_A);
-	cudaFree(device_C);
+	// cudaFree(device_C);
 	
- 	for (int i = 0; i < N; i++){
-		printf("\tCool Story %f\n", host_C[i]);
-	}
+ 	// for (int i = 0; i < N; i++){
+	// 	printf("\tCool Story %f\n", host_C[i]);
+	// }
 
 	free(host_A);
 	free(host_C);
