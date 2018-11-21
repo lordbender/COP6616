@@ -28,39 +28,24 @@ int main()
 		host_C[i] = 0.0;
 	}
 
-	printf("Working Arrays Created\n");
-
     float* device_A;
 	gpuErrchk(cudaMalloc((void**) &device_A, sizeof(float) * N));
-	printf("Cuda device_A Memory Allocated\n");
-
 	gpuErrchk(cudaGetLastError());
 
 	float* device_C;
 	gpuErrchk(cudaMalloc((void**) &device_C, sizeof(float) * N));
-	printf("Cuda device_C Memory Allocated\n");
-
+	gpuErrchk(cudaGetLastError());
+   
+    gpuErrchk(cudaMemcpy(device_A, host_A, N, cudaMemcpyHostToDevice));
 	gpuErrchk(cudaGetLastError());
 
-	printf("Cuda Memory Allocated\n");
-
-    // Copy vector from host memory to device memory
-    gpuErrchk(cudaMemcpy(device_A, host_A, N, cudaMemcpyHostToDevice));
-
-	printf("Cuda Data Copy Completed\n");
-
-    // Invoke kernel
     int grid = ceil(N * 1.0 / BLOCK_SIZE);
     vecSquare<<<grid, BLOCK_SIZE>>>(device_A, device_C, N);
-
 	cudaDeviceSynchronize();
-
 	gpuErrchk(cudaGetLastError());
 
-	// Copy the result back from the device to the host.
 	cudaMemcpy(host_C, device_C, sizeof(float) * N, cudaMemcpyDeviceToHost);
-	
-    // Free device memory
+
     cudaFree(device_A);
 	cudaFree(device_C);
 	
