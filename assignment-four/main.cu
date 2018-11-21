@@ -4,7 +4,7 @@
 #include "main_cuda.h"
 
 static const int BLOCK_SIZE = 256;
-static const int N = 1000;
+static const int N = 16;
 
 // Device code
 __global__ void vecSquare(int* a, int* c, int n)
@@ -35,7 +35,7 @@ int main()
 	gpuErrchk(cudaMalloc((void**) &dc, sizeof(int) * N));
 	gpuErrchk(cudaGetLastError());
    
-    gpuErrchk(cudaMemcpy(da, ha, N, cudaMemcpyHostToDevice));
+    gpuErrchk(cudaMemcpy(da, ha,  sizeof(int) * N, cudaMemcpyHostToDevice));
 	gpuErrchk(cudaGetLastError());
 
     int grid = ceil(N * 1.0 / BLOCK_SIZE);
