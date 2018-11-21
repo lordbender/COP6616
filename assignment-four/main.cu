@@ -43,7 +43,7 @@ int main()
 	cudaDeviceSynchronize();
 	gpuErrchk(cudaGetLastError());
 
-	cudaMemcpy(ha, dc, sizeof(int) * N, cudaMemcpyDeviceToHost);
+	cudaMemcpy(hc, dc, sizeof(int) * N, cudaMemcpyDeviceToHost);
 
     cudaFree(da);
 	cudaFree(dc);
