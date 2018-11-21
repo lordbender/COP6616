@@ -60,14 +60,14 @@ int main(int argc, char *argv[])
 	
 	clock_t end = clock();
 
- 	for (int i = 0; i < size; i++) {
-		printf("\tCool Story %d\n", hc[i]);
-	}
+ 	// for (int i = 0; i < size; i++) {
+	// 	printf("\tCool Story %d\n", hc[i]);
+	// }
 
 	free(ha);
 	free(hc);
 	
 	cudaDeviceReset();
 
-	printf("Completed in %f seconds!!!\n\n", time_calc(start, end));
+	printf("Completed %d numbers in %f seconds!!!\n\n", size, time_calc(start, end));
 }
