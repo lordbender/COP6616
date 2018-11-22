@@ -3,8 +3,7 @@
 #include <time.h>
 
 #include "main_cuda.cuh"
-
-// A utility function to swap two elements 
+ 
 void swap(int* a, int* b) 
 { 
 	int t = *a; 
@@ -12,11 +11,6 @@ void swap(int* a, int* b)
 	*b = t; 
 } 
 
-/* This function takes last element as pivot, places 
-the pivot element at its correct position in sorted 
-	array, and places all smaller (smaller than pivot) 
-to left of pivot and all greater elements to right 
-of pivot */
 int partition (int arr[], int low, int high) 
 { 
 	int pivot = arr[high]; // pivot 
@@ -24,11 +18,9 @@ int partition (int arr[], int low, int high)
 
 	for (int j = low; j <= high- 1; j++) 
 	{ 
-		// If current element is smaller than or 
-		// equal to pivot 
 		if (arr[j] <= pivot) 
 		{ 
-			i++; // increment index of smaller element 
+			i++;
 			swap(&arr[i], &arr[j]); 
 		} 
 	} 
@@ -47,14 +39,22 @@ void quickSort(int arr[], int low, int high)
 	} 
 } 
 
+double quickSort_cpu(int size) {
+	int *ha = (int*)malloc(sizeof(int) * size);
+  
+	for (int i = 0; i < size; i++)
+	{
+		ha[i] = rand();
+	}
 
+	clock_t start = clock();
+	quickSort(ha, 0, size - 1);
+	clock_t end= clock();
 
-// Driver program to test above functions 
-// int main() 
-// { 
+	// Testing that sort is working, keep commented out on large values of N (say N > 1000)
+	// for (int i = 0; i < size; i++) {
+    // 	printf("\t %d\n", ha_seq[i]);
+	// }
 
-// 	quickSort(arr, 0, n-1); 
-// 	printf("Sorted array: n"); 
-// 	printArray(arr, n); 
-// 	return 0; 
-// } 
+	return time_calc(start, end);
+}
