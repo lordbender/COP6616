@@ -13,14 +13,14 @@ int main(int argc, char *argv[])
     /* ------------------------ End CPU Sequential Benchmarking ------------------------ */
 	
 	double cpu_runtime = quickSort_cpu(size);
-	printf("CPU: Completed %d numbers in %f seconds!!!\n\n", size, cpu_runtime);
+	printf("\n\tCPU: Completed %d numbers in %f seconds!!!\n", size, cpu_runtime);
 
 	/* ------------------------ End CPU Sequential Benchmarking ------------------------ */
 
 	/* ------------------------ Begin GPU Parallel Benchmarking ------------------------ */
 
 	double gpu_runtime = quickSort_gpu(size);
-	printf("GPU: Completed %d numbers in %f seconds!!!\n\n", size, gpu_runtime);
+	printf("\tGPU: Completed %d numbers in %f seconds!!!\n\n", size, gpu_runtime);
 	
 	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
 }
