@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "main_cuda.h"
+#include "main_cuda.cuh"
 
 static const int BLOCK_SIZE = 256;
 
@@ -14,29 +14,45 @@ __global__ void vecSquare(int* a, int* c, int n)
         c[id] = a[id] * a[id];
 }
             
-// Host code
-double time_calc(clock_t start, clock_t end)
-{
-    return ((double)(end - start)) / CLOCKS_PER_SEC;
-}
 int main(int argc, char *argv[])
 {
   	srand(time(0));
 
  	int size = atoi(argv[1]);
 
-	int *ha, *hc, *da, *dc;
+	int *ha, *ha_seq, *hc, *da, *dc;
 	printf("Starting on size %d!!!\n", size);
 
-    ha = new int[size];
-    hc = new int[size];
+    ha = (int*)malloc(sizeof(int) * size);
+    hc = (int*)malloc(sizeof(int) * size);
+    ha_seq = (int*)malloc(sizeof(int) * size);
 
+	// Fill the tet arrays
 	for (int i = 0; i < size; i++)
     {
-		ha[i] = i + i;
+		int rand_num = rand();
+		ha[i] = rand_num;
+		ha_seq[i] = rand_num;
 		hc[i] = 0;
 	}
 
+	/* ------------------------ Begin CPU Sequential Benchmarking ------------------------ */
+
+	// Sequential For Benchmarking
+	clock_t start_seq = clock();
+	quickSort(ha_seq, 0, size - 1);
+	clock_t end_seq = clock();
+
+	// Testing that sort is working, keep commented out on large values of N (say N > 1000)
+	// for (int i = 0; i < size; i++) {
+    // 	printf("\t %d\n", ha_seq[i]);
+	// }
+	
+	printf("CPU: Completed %d numbers in %f seconds!!!\n\n", size, time_calc(start_seq, end_seq));
+
+	/* ------------------------ End CPU Sequential Benchmarking ------------------------ */
+
+	/* ------------------------ Begin GPU Parallel Benchmarking ------------------------ */
 	clock_t start = clock();
 
 	gpuErrchk(cudaMalloc((void**) &da, sizeof(int) * size));
@@ -60,14 +76,17 @@ int main(int argc, char *argv[])
 	
 	clock_t end = clock();
 
- 	// for (int i = 0; i < size; i++) {
-	// 	printf("\tCool Story %d\n", hc[i]);
-	// }
-
 	free(ha);
 	free(hc);
 	
 	cudaDeviceReset();
 
-	printf("Completed %d numbers in %f seconds!!!\n\n", size, time_calc(start, end));
+	// Testing that sort is working, keep commented out on large values of N (say N > 1000)
+	// for (int i = 0; i < size; i++) {
+    // 	printf("\t %d\n", hc[i]);
+	// }
+	
+	printf("GPU: Completed %d numbers in %f seconds!!!\n\n", size, time_calc(start, end));
+	
+	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
 }

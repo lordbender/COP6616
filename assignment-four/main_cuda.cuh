@@ -13,3 +13,6 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort =
       exit(code);
   }
 }
+
+void quickSort(int arr[], int low, int high);
+double time_calc(clock_t start, clock_t end);
