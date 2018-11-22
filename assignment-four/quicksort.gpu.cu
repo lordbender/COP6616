@@ -133,21 +133,42 @@ void quicksort(int *ls, int l, int r, int length)
         vars *d_endpts;
         int *d_leq, *d_gt, *d_leq_val, *d_gt_val;
         int size = sizeof(int);
-        cudaMalloc(&(d_ls), size * length);
-        cudaMalloc(&(d_ls2), size * length);
-        cudaMalloc(&(d_endpts), sizeof(vars));
-        cudaMalloc(&(d_leq), 4 * numBlocks);
-        cudaMalloc(&(d_gt), 4 * numBlocks);
-        cudaMalloc(&d_leq_val, 4);
-        cudaMalloc(&d_gt_val, 4);
-        cudaMemcpy(d_ls, ls, size * length, cudaMemcpyHostToDevice);
+		cudaMalloc(&(d_ls), size * length);
+		gpuErrchk(cudaGetLastError());
+
+		cudaMalloc(&(d_ls2), size * length);
+		gpuErrchk(cudaGetLastError());
+
+		cudaMalloc(&(d_endpts), sizeof(vars));
+		gpuErrchk(cudaGetLastError());
+
+		cudaMalloc(&(d_leq), 4 * numBlocks);
+		gpuErrchk(cudaGetLastError());
+
+		cudaMalloc(&(d_gt), 4 * numBlocks);
+		gpuErrchk(cudaGetLastError());
+
+		cudaMalloc(&d_leq_val, 4);
+		gpuErrchk(cudaGetLastError());
+
+		cudaMalloc(&d_gt_val, 4);
+		gpuErrchk(cudaGetLastError());
+				
+		cudaMemcpy(d_ls, ls, size * length, cudaMemcpyHostToDevice);
+		gpuErrchk(cudaGetLastError());
+
         cudaMemcpy(d_ls2, ls, size * length, cudaMemcpyHostToDevice);
+		gpuErrchk(cudaGetLastError());
 
         gpuPartitionSwap<<<numBlocks, BLOCK_SIZE>>>(d_ls, d_ls2, d_endpts, pivot, l, r, d_leq, d_gt, d_leq_val, d_gt_val, numBlocks);
+		gpuErrchk(cudaGetLastError());
 
-        cudaMemcpy(ls, d_ls2, size * length, cudaMemcpyDeviceToHost);
-        cudaMemcpy(&(endpts), d_endpts, sizeof(vars), cudaMemcpyDeviceToHost);
+		cudaMemcpy(ls, d_ls2, size * length, cudaMemcpyDeviceToHost);
+		gpuErrchk(cudaGetLastError());
 
+		cudaMemcpy(&(endpts), d_endpts, sizeof(vars), cudaMemcpyDeviceToHost);
+		gpuErrchk(cudaGetLastError());
+		
         cudaThreadSynchronize();
 
         cudaFree(d_ls);
