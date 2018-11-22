@@ -6,112 +6,172 @@
 
 static const int BLOCK_SIZE = 256;
 
-// Device code
-__global__ void vecSquare(int* a, int* c, int n)
+#define swap(A, B)    \
+    {                 \
+        int temp = A; \
+        A = B;        \
+        B = temp;     \
+    }
+
+typedef struct vars
 {
-	int id = blockIdx.x * blockDim.x + threadIdx.x;
-    if (id < n)
-        c[id] = a[id] * a[id];
+    int l;
+    int r;
+    int leq;
+} vars;
+
+// Portions of this code were based on / modeled after
+// https://github.com/khaman1/GPU-QuickSort-Algorithm/blob/master/GPU_quicksort.cu
+
+// Device Portion of Quick Sort
+__global__ void gpuPartitionSwap(int *input, int *output, vars *endpts,
+                                 int pivot, int l, int r,
+                                 int d_leq[],
+                                 int d_gt[], int *d_leq_val, int *d_gt_val,
+                                 int nBlocks)
+{
+    __shared__ int bInput[BLOCK_SIZE];
+    __syncthreads();
+    int idx = l + blockIdx.x * BLOCK_SIZE + threadIdx.x;
+    __shared__ int lThisBlock, rThisBlock;
+    __shared__ int lOffset, rOffset;
+
+    if (threadIdx.x == 0)
+    {
+        d_leq[blockIdx.x] = 0;
+        d_gt[blockIdx.x] = 0;
+        *d_leq_val = 0;
+        *d_gt_val = 0;
+    }
+    __syncthreads();
+
+    if (idx <= (r - 1))
+    {
+        bInput[threadIdx.x] = input[idx];
+        if (bInput[threadIdx.x] <= pivot)
+        {
+            atomicAdd(&(d_leq[blockIdx.x]), 1);
+        }
+        else
+        {
+            atomicAdd(&(d_gt[blockIdx.x]), 1);
+        }
+    }
+    __syncthreads();
+
+    if (threadIdx.x == 0)
+    {
+        lThisBlock = d_leq[blockIdx.x];
+        lOffset = l + atomicAdd(d_leq_val, lThisBlock);
+    }
+    if (threadIdx.x == 1)
+    {
+        rThisBlock = d_gt[blockIdx.x];
+        rOffset = r - atomicAdd(d_gt_val, rThisBlock);
+    }
+
+    __syncthreads();
+
+    if (threadIdx.x == 0)
+    {
+
+        int m = 0;
+        int n = 0;
+        for (int j = 0; j < BLOCK_SIZE; j++)
+        {
+            int chk = l + blockIdx.x * BLOCK_SIZE + j;
+            if (chk <= (r - 1))
+            {
+                if (bInput[j] <= pivot)
+                {
+                    output[lOffset + m] = bInput[j];
+                    ++m;
+                }
+                else
+                {
+                    output[rOffset - n] = bInput[j];
+                    ++n;
+                }
+            }
+        }
+    }
+
+    __syncthreads();
+
+    if ((blockIdx.x == 0) && (threadIdx.x == 0))
+    {
+        int pOffset = l;
+        for (int k = 0; k < nBlocks; k++)
+            pOffset += d_leq[k];
+
+        output[pOffset] = pivot;
+        endpts->l = (pOffset - 1);
+        endpts->r = (pOffset + 1);
+    }
+
+    return;
 }
 
-double quickSort_gpu(int size) {
-	int *ha, *hc, *da, *dc;
+// Host Portion of Quick Sort
 
-    ha = (int*)malloc(sizeof(int) * size);
-	hc = (int*)malloc(sizeof(int) * size);
-	
-	for (int i = 0; i < size; i++)
-	{
-		ha[i] = rand();
-		hc[i] = 0;
-	}
+void quicksort(int *ls, int l, int r, int length)
+{
+    if ((r - l) >= 1)
+    {
+        int pivot = ls[r];
 
-	clock_t start = clock();
+        int numBlocks = (r - l) / BLOCK_SIZE;
+        if ((numBlocks * BLOCK_SIZE) < (r - l))
+            numBlocks++;
 
-	gpuErrchk(cudaMalloc((void**) &da, sizeof(int) * size));
-	gpuErrchk(cudaGetLastError());
+        int *d_ls;
+        int *d_ls2;
+        vars endpts;
+        endpts.l = l;
+        endpts.r = r;
 
-	gpuErrchk(cudaMalloc((void**) &dc, sizeof(int) * size));
-	gpuErrchk(cudaGetLastError());
+        vars *d_endpts;
+        int *d_leq, *d_gt, *d_leq_val, *d_gt_val;
+        int size = sizeof(int);
+        cudaMalloc(&(d_ls), size * length);
+        cudaMalloc(&(d_ls2), size * length);
+        cudaMalloc(&(d_endpts), sizeof(vars));
+        cudaMalloc(&(d_leq), 4 * numBlocks);
+        cudaMalloc(&(d_gt), 4 * numBlocks);
+        cudaMalloc(&d_leq_val, 4);
+        cudaMalloc(&d_gt_val, 4);
+        cudaMemcpy(d_ls, ls, size * length, cudaMemcpyHostToDevice);
+        cudaMemcpy(d_ls2, ls, size * length, cudaMemcpyHostToDevice);
 
-	gpuErrchk(cudaMemcpy(da, ha,  sizeof(int) * size, cudaMemcpyHostToDevice));
-	gpuErrchk(cudaGetLastError());
+        gpuPartitionSwap<<<numBlocks, BLOCK_SIZE>>>(d_ls, d_ls2, d_endpts, pivot, l, r, d_leq, d_gt, d_leq_val, d_gt_val, numBlocks);
 
-	int grid = ceil(size * 1.0 / BLOCK_SIZE);
-	vecSquare<<<grid, BLOCK_SIZE>>>(da, dc, size);
-	cudaDeviceSynchronize();
-	gpuErrchk(cudaGetLastError());
+        cudaMemcpy(ls, d_ls2, size * length, cudaMemcpyDeviceToHost);
+        cudaMemcpy(&(endpts), d_endpts, sizeof(vars), cudaMemcpyDeviceToHost);
 
-	cudaMemcpy(hc, dc, sizeof(int) * size, cudaMemcpyDeviceToHost);
+        cudaThreadSynchronize();
 
-	cudaFree(da);
-	cudaFree(dc);
-	cudaDeviceReset();
+        cudaFree(d_ls);
+        cudaFree(d_ls2);
+        cudaFree(d_endpts);
+        cudaFree(d_leq);
+        cudaFree(d_gt);
 
-	free(ha);
-	free(hc);
-	
-	clock_t end = clock();
+        if (endpts.l >= l)
+			quicksort(ls, l, endpts.l, length);
+        if (endpts.r <= r)
+			quicksort(ls, endpts.r, r, length);
+    }
 
-	// Testing that sort is working, keep commented out on large values of N (say N > 1000)
-	// for (int i = 0; i < size; i++) {
-    // 	printf("\t %d\n", hc[i]);
-	// }
-
-	return time_calc(start, end);
+    return;
 }
 
-// // A utility function to swap two elements 
-// void swap(int* a, int* b) 
-// { 
-// 	int t = *a; 
-// 	*a = *b; 
-// 	*b = t; 
-// } 
+double quicksort_gpu(int size)
+{
+    int *ha = (int *)malloc(sizeof(int) * size);
 
-// /* This function takes last element as pivot, places 
-// the pivot element at its correct position in sorted 
-// 	array, and places all smaller (smaller than pivot) 
-// to left of pivot and all greater elements to right 
-// of pivot */
-// int partition (int arr[], int low, int high) 
-// { 
-// 	int pivot = arr[high]; // pivot 
-// 	int i = (low - 1); // Index of smaller element 
+    clock_t start = clock();
+    quicksort(ha, 0, size - 1, size);
+    clock_t end = clock();
 
-// 	for (int j = low; j <= high- 1; j++) 
-// 	{ 
-// 		// If current element is smaller than or 
-// 		// equal to pivot 
-// 		if (arr[j] <= pivot) 
-// 		{ 
-// 			i++; // increment index of smaller element 
-// 			swap(&arr[i], &arr[j]); 
-// 		} 
-// 	} 
-// 	swap(&arr[i + 1], &arr[high]); 
-// 	return (i + 1); 
-// } 
-
-// void quickSort_gpu(int arr[], int low, int high) 
-// { 
-// 	if (low < high) 
-// 	{ 
-// 		int pi = partition(arr, low, high); 
-
-// 		quickSort(arr, low, pi - 1); 
-// 		quickSort(arr, pi + 1, high); 
-// 	} 
-// } 
-
-
-
-// // Driver program to test above functions 
-// // int main() 
-// // { 
-
-// // 	quickSort(arr, 0, n-1); 
-// // 	printf("Sorted array: n"); 
-// // 	printArray(arr, n); 
-// // 	return 0; 
-// // } 
+    return time_calc(start, end);
+}

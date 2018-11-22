@@ -28,18 +28,18 @@ int partition (int arr[], int low, int high)
 	return (i + 1); 
 } 
 
-void quickSort(int arr[], int low, int high) 
+void quicksort(int arr[], int low, int high) 
 { 
 	if (low < high) 
 	{ 
 		int pi = partition(arr, low, high); 
 
-		quickSort(arr, low, pi - 1); 
-		quickSort(arr, pi + 1, high); 
+		quicksort(arr, low, pi - 1); 
+		quicksort(arr, pi + 1, high); 
 	} 
 } 
 
-double quickSort_cpu(int size) {
+double quicksort_cpu(int size) {
 	int *ha = (int*)malloc(sizeof(int) * size);
   
 	for (int i = 0; i < size; i++)
@@ -48,7 +48,7 @@ double quickSort_cpu(int size) {
 	}
 
 	clock_t start = clock();
-	quickSort(ha, 0, size - 1);
+	quicksort(ha, 0, size - 1);
 	clock_t end= clock();
 
 	// Testing that sort is working, keep commented out on large values of N (say N > 1000)
