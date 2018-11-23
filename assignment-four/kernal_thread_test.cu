@@ -28,6 +28,9 @@ int stream_support_test()
     }
 
     cudaDeviceReset();
+    for (int i = 0; i < num_streams; i++){
+        printf("data point %f", data[i]);
+    }
 
     return 0;
 }
