@@ -20,8 +20,8 @@ __global__ void quicksort_device(int *a) {
 
 void quicksort_host(int *da, int left, int right, int size)
 {
-	int pivot_index = left;
-    int pivot_new_index = partition(da, left, right, pivot_index);
+	// int pivot_index = left;
+    // int pivot_new_index = partition(da, left, right, pivot_index);
     
     // int new_right = pivot_new_index - 1;
     // int new_left = pivot_new_index + 1;
