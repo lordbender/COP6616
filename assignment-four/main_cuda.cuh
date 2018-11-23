@@ -19,8 +19,10 @@ double square_vector_gpu(int size);
 
 // Actual Benchmarking Functions
 double quicksort_cpu(int size);
-double quicksort_cpu_pthreads(int size);
+double quicksort_cpu_threads(int size);
 double quicksort_gpu_streams(int size);
 
 // Shared Functions
 double time_calc(clock_t start, clock_t end);
+void swap(int array[], int left, int right);
+int partition(int array[], int left, int right, int pivot_index);

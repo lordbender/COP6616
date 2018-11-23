@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
 
 	/* ------------------------ Begin CPU Parallel Benchmarking ------------------------ */
 
-	double cpu_pthreads_runtime = quicksort_cpu_pthreads(size);
-	printf("\tCPU O(n*log(n)) Threaded: Completed %d numbers in %f seconds!!!\n\n", size, cpu_pthreads_runtime);
+	double cpu_threads_runtime = quicksort_cpu_threads(size);
+	printf("\tCPU O(n*log(n)) Threaded: Completed %d numbers in %f seconds!!!\n\n", size, cpu_threads_runtime);
 	
 	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
 
