@@ -1,6 +1,6 @@
 # Build Instructions
 1. From the root directory run.
-    - "nvcc -arch=compute_35 -rdc=true *.cu"
+    - "nvcc -arch=compute_35 -rdc=true --default-stream per-thread *.cu"
 
 # Running the program Instructions
 1. Build the Cuda Files

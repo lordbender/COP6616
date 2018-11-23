@@ -77,7 +77,7 @@ double quicksort_gpu(int size)
 
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
 
-    cudaDeviceSynchronize();
+	cudaStreamSynchronize(0);
     gpuErrchk(cudaGetLastError());
 
     cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);

@@ -25,6 +25,9 @@ int main(int argc, char *argv[])
 	
 	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
 
+	int proof = stream_support_test();
+	printf("\tGPU Streams Work: Completed %d!!!\n\n", proof);
+
 	/* ------------------------ Begin GPU Parallel Benchmarking ------------------------ */
 
 	double gpu_runtime = quicksort_gpu(size);

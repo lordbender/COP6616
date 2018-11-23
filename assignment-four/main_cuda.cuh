@@ -15,6 +15,7 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort =
 }
 
 double quicksort_cpu(int size);
+int stream_support_test();
 double quicksort_gpu(int size);
 double square_vector_gpu(int size);
 double time_calc(clock_t start, clock_t end);
