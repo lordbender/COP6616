@@ -1,1 +1,1 @@
-nvcc *.cu
+nvcc -arch=compute_35 -rdc=true *.cu

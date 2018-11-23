@@ -38,7 +38,9 @@ __global__ void quicksort_device(int *arr, int low, int high, int grid, int bloc
 
 		quicksort_device<<<grid, block>>>(arr, low, pi - 1, grid, block); 
 		quicksort_device<<<grid, block>>>(arr, pi + 1, high, grid, block); 
-	} 
+	} else{
+		return;
+	}
 
 	// if (left < right){
 	// 	cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
