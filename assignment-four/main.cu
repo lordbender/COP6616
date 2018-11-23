@@ -13,14 +13,22 @@ int main(int argc, char *argv[])
     /* ------------------------ End CPU Sequential Benchmarking ------------------------ */
 	
 	double cpu_runtime = quicksort_cpu(size);
-	printf("\n\tCPU: Completed %d numbers in %f seconds!!!\n", size, cpu_runtime);
+	printf("\n\tCPU O(n*log(n)): Completed %d numbers in %f seconds!!!\n", size, cpu_runtime);
 
 	/* ------------------------ End CPU Sequential Benchmarking ------------------------ */
 
+	
+	/* ------------------------ Begin GPU Parallel Benchmarking Test Case ------------------------ */
+
+	double gpu_runtime_n_operations = square_vector_gpu(size);
+	printf("\tGPU O(n): Completed %d numbers in %f seconds!!!\n\n", size, gpu_runtime_n_operations);
+	
+	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
+
 	/* ------------------------ Begin GPU Parallel Benchmarking ------------------------ */
 
-	double gpu_runtime = square_vector_gpu(size);
-	printf("\tGPU: Completed %d numbers in %f seconds!!!\n\n", size, gpu_runtime);
+	double gpu_runtime = quicksort_gpu(size);
+	printf("\tGPU O(n*log(n)): Completed %d numbers in %f seconds!!!\n\n", size, gpu_runtime);
 	
 	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
 }

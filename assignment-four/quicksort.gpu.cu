@@ -1,198 +1,87 @@
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-// #include "main_cuda.cuh"
+#include "main_cuda.cuh"
 
-// static const int BLOCK_SIZE = 256;
+static const int BLOCK_SIZE = 256;
 
-// #define swap(A, B)    \
-//     {                 \
-//         int temp = A; \
-//         A = B;        \
-//         B = temp;     \
-//     }
+__global__ void swap(int* a, int* b) 
+{ 
+	int t = *a; 
+	*a = *b; 
+	*b = t; 
+} 
 
-// typedef struct vars
-// {
-//     int l;
-//     int r;
-//     int leq;
-// } vars;
+__global__ int partition (int arr[], int low, int high) 
+{ 
+	int pivot = arr[high];
+	int i = (low - 1);
 
-// // Portions of this code were based on / modeled after
-// // https://github.com/khaman1/GPU-QuickSort-Algorithm/blob/master/GPU_quicksort.cu
+	for (int j = low; j <= high- 1; j++) 
+	{ 
+		if (arr[j] <= pivot) 
+		{ 
+			i++;
+			swap(&arr[i], &arr[j]); 
+		} 
+	} 
+	swap(&arr[i + 1], &arr[high]); 
+	return (i + 1); 
+} 
 
-// // Device Portion of Quick Sort
-// __global__ void gpuPartitionSwap(int *input, int *output, vars *endpts,
-//                                  int pivot, int l, int r,
-//                                  int d_leq[],
-//                                  int d_gt[], int *d_leq_val, int *d_gt_val,
-//                                  int nBlocks)
-// {
-//     __shared__ int bInput[BLOCK_SIZE];
-//     __syncthreads();
-//     int idx = l + blockIdx.x * BLOCK_SIZE + threadIdx.x;
-//     __shared__ int lThisBlock, rThisBlock;
-//     __shared__ int lOffset, rOffset;
+__global__ void quicksort_device(int *data, int left, int right)
+{
+	int nleft, nright;
+	cudaStream_t s1, s2;	
 
-//     if (threadIdx.x == 0)
-//     {
-//         d_leq[blockIdx.x] = 0;
-//         d_gt[blockIdx.x] = 0;
-//         *d_leq_val = 0;
-//         *d_gt_val = 0;
-//     }
-//     __syncthreads();
+	partition(data, nleft, nright);
 
-//     if (idx <= (r - 1))
-//     {
-//         bInput[threadIdx.x] = input[idx];
-//         if (bInput[threadIdx.x] <= pivot)
-//         {
-//             atomicAdd(&(d_leq[blockIdx.x]), 1);
-//         }
-//         else
-//         {
-//             atomicAdd(&(d_gt[blockIdx.x]), 1);
-//         }
-//     }
-//     __syncthreads();
+	if (left < right){
+		cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
+		quicksort_device<<< ..., s1 >>> (data, left, right);
+	}
 
-//     if (threadIdx.x == 0)
-//     {
-//         lThisBlock = d_leq[blockIdx.x];
-//         lOffset = l + atomicAdd(d_leq_val, lThisBlock);
-//     }
-//     if (threadIdx.x == 1)
-//     {
-//         rThisBlock = d_gt[blockIdx.x];
-//         rOffset = r - atomicAdd(d_gt_val, rThisBlock);
-//     }
+	if (nleft < right){
+		cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
+		quicksort_device<<< ..., s2 >>> (data, nleft, right);
+	}
 
-//     __syncthreads();
+    return;
+}
 
-//     if (threadIdx.x == 0)
-//     {
+double quicksort_gpu(int size)
+{
+	int *ha, *da;
 
-//         int m = 0;
-//         int n = 0;
-//         for (int j = 0; j < BLOCK_SIZE; j++)
-//         {
-//             int chk = l + blockIdx.x * BLOCK_SIZE + j;
-//             if (chk <= (r - 1))
-//             {
-//                 if (bInput[j] <= pivot)
-//                 {
-//                     output[lOffset + m] = bInput[j];
-//                     ++m;
-//                 }
-//                 else
-//                 {
-//                     output[rOffset - n] = bInput[j];
-//                     ++n;
-//                 }
-//             }
-//         }
-//     }
+    ha = (int *)malloc(sizeof(int) * size);
 
-//     __syncthreads();
+    for (int i = 0; i < size; i++)
+    {
+        ha[i] = rand();
+    }
 
-//     if ((blockIdx.x == 0) && (threadIdx.x == 0))
-//     {
-//         int pOffset = l;
-//         for (int k = 0; k < nBlocks; k++)
-//             pOffset += d_leq[k];
+    clock_t start = clock();
 
-//         output[pOffset] = pivot;
-//         endpts->l = (pOffset - 1);
-//         endpts->r = (pOffset + 1);
-//     }
+    gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
+    gpuErrchk(cudaGetLastError());
 
-//     return;
-// }
+    gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
+    gpuErrchk(cudaGetLastError());
 
-// // Host Portion of Quick Sort
+	int grid = ceil(size * 1.0 / BLOCK_SIZE);
+	
+    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
+    cudaDeviceSynchronize();
+    gpuErrchk(cudaGetLastError());
 
-// void quicksort(int *ls, int l, int r, int length)
-// {
-//     if ((r - l) >= 1)
-//     {
-//         int pivot = ls[r];
+    cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 
-//         int numBlocks = (r - l) / BLOCK_SIZE;
-//         if ((numBlocks * BLOCK_SIZE) < (r - l))
-//             numBlocks++;
+    cudaFree(da);
+    cudaDeviceReset();
 
-//         int *d_ls;
-//         int *d_ls2;
-//         vars endpts;
-//         endpts.l = l;
-//         endpts.r = r;
+    free(ha);
 
-//         vars *d_endpts;
-//         int *d_leq, *d_gt, *d_leq_val, *d_gt_val;
-//         int size = sizeof(int);
-// 		cudaMalloc(&(d_ls), size * length);
-// 		gpuErrchk(cudaGetLastError());
-
-// 		cudaMalloc(&(d_ls2), size * length);
-// 		gpuErrchk(cudaGetLastError());
-
-// 		cudaMalloc(&(d_endpts), sizeof(vars));
-// 		gpuErrchk(cudaGetLastError());
-
-// 		cudaMalloc(&(d_leq), 4 * numBlocks);
-// 		gpuErrchk(cudaGetLastError());
-
-// 		cudaMalloc(&(d_gt), 4 * numBlocks);
-// 		gpuErrchk(cudaGetLastError());
-
-// 		cudaMalloc(&d_leq_val, 4);
-// 		gpuErrchk(cudaGetLastError());
-
-// 		cudaMalloc(&d_gt_val, 4);
-// 		gpuErrchk(cudaGetLastError());
-				
-// 		cudaMemcpy(d_ls, ls, size * length, cudaMemcpyHostToDevice);
-// 		gpuErrchk(cudaGetLastError());
-
-//         cudaMemcpy(d_ls2, ls, size * length, cudaMemcpyHostToDevice);
-// 		gpuErrchk(cudaGetLastError());
-
-//         gpuPartitionSwap<<<numBlocks, BLOCK_SIZE>>>(d_ls, d_ls2, d_endpts, pivot, l, r, d_leq, d_gt, d_leq_val, d_gt_val, numBlocks);
-// 		gpuErrchk(cudaGetLastError());
-
-// 		cudaMemcpy(ls, d_ls2, size * length, cudaMemcpyDeviceToHost);
-// 		gpuErrchk(cudaGetLastError());
-
-// 		cudaMemcpy(&(endpts), d_endpts, sizeof(vars), cudaMemcpyDeviceToHost);
-// 		gpuErrchk(cudaGetLastError());
-		
-//         cudaThreadSynchronize();
-
-//         cudaFree(d_ls);
-//         cudaFree(d_ls2);
-//         cudaFree(d_endpts);
-//         cudaFree(d_leq);
-//         cudaFree(d_gt);
-
-//         if (endpts.l >= l)
-// 			quicksort(ls, l, endpts.l, length);
-//         if (endpts.r <= r)
-// 			quicksort(ls, endpts.r, r, length);
-//     }
-
-//     return;
-// }
-
-// double quicksort_gpu(int size)
-// {
-//     int *ha = (int *)malloc(sizeof(int) * size);
-
-//     clock_t start = clock();
-//     quicksort(ha, 0, size - 1, size);
-//     clock_t end = clock();
-
-//     return time_calc(start, end);
-// }
+    clock_t end = clock();
+    return time_calc(start, end);
+}
