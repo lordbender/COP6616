@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
 	/* ------------------------ Begin GPU Parallel Benchmarking ------------------------ */
 
-	double gpu_runtime = quicksort_gpu(size);
+	double gpu_runtime = square_vector_gpu(size);
 	printf("\tGPU: Completed %d numbers in %f seconds!!!\n\n", size, gpu_runtime);
 	
 	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
