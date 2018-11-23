@@ -7,3 +7,6 @@
     - See Instructions Above.
 2. Run "./a.out 1000"
     - Of the form "./a.out \[size of test set\]
+
+
+nvcc -arch=compute_35 -rdc=true --default-stream per-thread *.cu
