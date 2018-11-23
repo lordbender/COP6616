@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ctime>
+#include <ratio>
+#include <chrono>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/ipc.h>
@@ -12,6 +15,7 @@
 #include "main_cuda.cuh"
 
 using namespace std; 
+using namespace std::chrono;
 
 void quicksort_threaded(int *array, int left, int right)
 {
@@ -62,23 +66,21 @@ void quicksort_threaded(int *array, int left, int right)
 	}
 }
 
-double quicksort_cpu_threads(int size)
+duration<double> quicksort_cpu_threads(int size)
 {   
-	size = size < 5000 ? size : 5000;
-	
+	size = size < 1000 ? size : 1000;
+
     int *a = (int *)malloc(sizeof(int) * size);
 
     for (int i = 0; i < size; i++)
     {
         a[i] = rand();
     }
-
-    clock_t start = clock();
-
+ 
+  	high_resolution_clock::time_point start = high_resolution_clock::now();
     quicksort_threaded(a, 0, size - 1); 
-    
-    clock_t end = clock();
-
+    high_resolution_clock::time_point end = high_resolution_clock::now();
+	
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     // for (int i = 0; i < size; i++)
     // {

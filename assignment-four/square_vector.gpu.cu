@@ -3,9 +3,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
 #include "main_cuda.cuh"
+
+using namespace std::chrono;
 
 static const int BLOCK_SIZE = 256;
 
@@ -18,7 +22,7 @@ __global__ void vecSquare(int *a, int *c, int n)
 }
 
 // Device Portion of Quick Sort
-double square_vector_gpu(int size)
+duration<double> square_vector_gpu(int size)
 {
     int *ha, *hc, *da, *dc;
 
@@ -31,7 +35,7 @@ double square_vector_gpu(int size)
         hc[i] = 0;
     }
 
-    clock_t start = clock();
+    high_resolution_clock::time_point start = high_resolution_clock::now();
 
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
     gpuErrchk(cudaGetLastError());
@@ -56,7 +60,7 @@ double square_vector_gpu(int size)
     free(ha);
     free(hc);
 
-    clock_t end = clock();
+    high_resolution_clock::time_point end = high_resolution_clock::now();
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     // for (int i = 0; i < size; i++) {

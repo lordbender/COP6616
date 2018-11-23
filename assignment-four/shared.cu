@@ -1,13 +1,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-
+#include <ctime>
+#include <ratio>
+#include <chrono>
 #include "main_cuda.cuh"
 
-double time_calc(clock_t start, clock_t end)
+using namespace std::chrono;
+
+duration<double> time_calc(high_resolution_clock::time_point start, high_resolution_clock::time_point end)
 {
-    return ((double)(end - start)) / CLOCKS_PER_SEC;
+    return duration_cast<duration<double>>(end - start);
 }
 
 void swap(int array[], int left, int right)

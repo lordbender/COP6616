@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
 #include "main_cuda.cuh"
+
+using namespace std::chrono;
 
 void quicksort(int arr[], int low, int high) 
 { 
@@ -17,7 +21,8 @@ void quicksort(int arr[], int low, int high)
 	} 
 } 
 
-double quicksort_cpu(int size) {
+duration<double> quicksort_cpu(int size) {
+
 	int *ha = (int*)malloc(sizeof(int) * size);
   
 	for (int i = 0; i < size; i++)
@@ -25,10 +30,10 @@ double quicksort_cpu(int size) {
 		ha[i] = rand();
 	}
 
-	clock_t start = clock();
-	quicksort(ha, 0, size - 1);
-	clock_t end= clock();
-
+	high_resolution_clock::time_point start = high_resolution_clock::now();
+    quicksort(ha, 0, size - 1);
+	high_resolution_clock::time_point end = high_resolution_clock::now();
+	
 	// Testing that sort is working, keep commented out on large values of N (say N > 1000)
 	// for (int i = 0; i < size; i++) {
     // 	printf("\t %d\n", ha_seq[i]);

@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
 #include "main_cuda.cuh"
+
+using namespace std::chrono;
 
 static const int BLOCK_SIZE = 256;
 
@@ -35,7 +39,7 @@ __global__ void quicksort_device(int *data, int left, int right)
 
 }
 
-double quicksort_gpu_streams(int size)
+duration<double> quicksort_gpu_streams(int size)
 {
     int *ha, *da;
 
@@ -46,7 +50,7 @@ double quicksort_gpu_streams(int size)
         ha[i] = rand();
     }
 
-    clock_t start = clock();
+    high_resolution_clock::time_point start = high_resolution_clock::now();
 
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
     gpuErrchk(cudaGetLastError());
@@ -68,6 +72,7 @@ double quicksort_gpu_streams(int size)
 
     free(ha);
 
-    clock_t end = clock();
+    high_resolution_clock::time_point end = high_resolution_clock::now();
+
     return time_calc(start, end);
 }
