@@ -43,6 +43,7 @@ __global__ void quicksort_device(int *arr, int low, int high)
 		quicksort_device<<<1, 64, 0, s1>>>(arr, low, pi - 1);
 		quicksort_device<<<1, 64, 0, s2>>>(arr, pi + 1, high);
 	}
+	return;
 }
 
 double quicksort_gpu(int size)
