@@ -40,7 +40,7 @@ int stream_support_test()
     cudaDeviceReset();
 
     for (int i = 0; i < num_streams; i++) {
-        cout << data[i] << endl; 
+        cout << *data[i] << endl; 
     }
 
     return 0;
