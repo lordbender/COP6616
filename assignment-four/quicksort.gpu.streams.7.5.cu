@@ -1,8 +1,10 @@
+// http://on-demand.gputechconf.com/gtc/2014/presentations/S4158-cuda-streams-best-practices-common-pitfalls.pdf
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctime>
 #include <ratio>
 #include <chrono>
+#include <vector>
 
 #include "main_cuda.cuh"
 
@@ -10,33 +12,41 @@ using namespace std::chrono;
 
 static const int BLOCK_SIZE = 256;
 
-// __device__ void swap_device(int *a, int *b)
-// {
-//     int t = *a;
-//     *a = *b;
-//     *b = t;
-// }
+__global__ void quicksort_device(int *a) {
+    // do the work!!!
 
-// __device__ int partition_device(int *arr, int low, int high)
-// {
-//     int pivot = arr[high];
-//     int i = (low - 1);
+    return;
+}
 
-//     for (int j = low; j <= high - 1; j++)
-//     {
-//         if (arr[j] <= pivot)
-//         {
-//             i++;
-//             swap_device(&arr[i], &arr[j]);
-//         }
-//     }
-//     swap_device(&arr[i + 1], &arr[high]);
-//     return (i + 1);
-// }
-
-__global__ void quicksort_device(int *data, int left, int right)
+void quicksort_host(int *da, int left, int right, int size)
 {
+	int pivot_index = left;
+    int pivot_new_index = partition(da, left, right, pivot_index);
+    
+    // int new_right = pivot_new_index - 1;
+    // int new_left = pivot_new_index + 1;
 
+    // Create a thread pool on the GPU
+    // Use Streams to Parallelize on the GPU tobreduce copy footprint.
+    cudaStream_t s1, s2;
+    cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
+    cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
+
+    // split up the work so we can thread it!!!
+    int *db = (int*)malloc(sizeof(int) * 1);
+    int *dc = (int*)malloc(sizeof(int) * 1);
+
+    // partition based on the pivot;
+    int grid = ceil(size * 1.0 / BLOCK_SIZE);
+    quicksort_device<<<grid, BLOCK_SIZE, 0, s1>>>(db);
+    quicksort_device<<<grid, BLOCK_SIZE, 0, s2>>>(dc);
+
+	cudaStreamSynchronize(0);
+    gpuErrchk(cudaGetLastError());
+
+    // Clean up the thread pool.
+    cudaStreamDestroy(s1);
+    cudaStreamDestroy(s2);
 }
 
 duration<double> quicksort_gpu_streams(int size)
@@ -58,12 +68,7 @@ duration<double> quicksort_gpu_streams(int size)
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
     gpuErrchk(cudaGetLastError());
 
-    int grid = ceil(size * 1.0 / BLOCK_SIZE);
-
-    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
-
-	cudaStreamSynchronize(0);
-    gpuErrchk(cudaGetLastError());
+    quicksort_host(da, 0, size - 1, size);
 
     cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 
