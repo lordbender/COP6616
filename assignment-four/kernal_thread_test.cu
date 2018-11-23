@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream> 
+using namespace std; 
 
 #include "main_cuda.cuh"
 
 const int N = 1 << 20;
 
-__global__ void kernel(int *x, int n)
+__global__ void kernel(float *x, int n)
 {
     int tid = threadIdx.x + blockIdx.x * blockDim.x;
     for (int i = tid; i < n; i += blockDim.x * gridDim.x) {
@@ -15,31 +17,30 @@ __global__ void kernel(int *x, int n)
 
 int stream_support_test()
 {
-    const int size = 8;
+    const int num_streams = 8;
 
-    cudaStream_t streams[size];
-    int *da = (int*) malloc(sizeof(int) * size);
+    cudaStream_t streams[num_streams];
+    float *data[num_streams];
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < num_streams; i++) {
         gpuErrchk(cudaStreamCreate(&streams[i]));
         gpuErrchk(cudaGetLastError());
 
-        gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
+        gpuErrchk(cudaMalloc(&data[i], N * sizeof(float)));
         gpuErrchk(cudaGetLastError());
 
         // launch one worker kernel per stream
-        kernel<<<1, 64, 0, streams[i]>>>(da, N);
+        kernel<<<1, 64, 0, streams[i]>>>(data[i], N);
         gpuErrchk(cudaGetLastError());
 
         // launch a dummy kernel on the default stream
         kernel<<<1, 1>>>(0, 0);
-        gpuErrchk(cudaGetLastError());
     }
 
     cudaDeviceReset();
 
-    for (int i = 0; i < size; i++){
-        printf("data point %d", da[i]);
+    for (int i = 0; i < num_streams; i++) {
+        cout << data[i] << endl; 
     }
 
     return 0;
