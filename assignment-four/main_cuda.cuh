@@ -14,8 +14,13 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort =
   }
 }
 
-double quicksort_cpu(int size);
-int stream_support_test();
-double quicksort_gpu(int size);
+// Sandboxes and proof of support on device!
 double square_vector_gpu(int size);
+
+// Actual Benchmarking Functions
+double quicksort_cpu(int size);
+double quicksort_cpu_pthreads(int size);
+double quicksort_gpu_streams(int size);
+
+// Shared Functions
 double time_calc(clock_t start, clock_t end);

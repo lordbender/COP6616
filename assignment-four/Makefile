@@ -1,1 +1,1 @@
-nvcc -arch=compute_35 -rdc=true --default-stream per-thread *.cu
+nvcc -arch=compute_35 -rdc=true --default-stream per-thread -std=c++11 *.cu

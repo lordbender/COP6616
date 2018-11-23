@@ -54,7 +54,7 @@ __global__ void quicksort_device(int *data, int left, int right)
     return;
 }
 
-double quicksort_gpu(int size)
+double quicksort_gpu_streams(int size)
 {
     int *ha, *da;
 

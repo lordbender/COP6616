@@ -11,28 +11,26 @@ int main(int argc, char *argv[])
 
  	int size = atoi(argv[1]);
 
-    /* ------------------------ End CPU Sequential Benchmarking ------------------------ */
+    /* ------------------------ Begin CPU Sequential Benchmarking ------------------------ */
 	
 	double cpu_runtime = quicksort_cpu(size);
-	printf("\n\tCPU O(n*log(n)): Completed %d numbers in %f seconds!!!\n", size, cpu_runtime);
+	printf("\n\tCPU O(n*log(n)) Sequential: Completed %d numbers in %f seconds!!!\n", size, cpu_runtime);
 
 	/* ------------------------ End CPU Sequential Benchmarking ------------------------ */
 
-	
-	/* ------------------------ Begin GPU Parallel Benchmarking Test Case ------------------------ */
 
-	double gpu_runtime_n_operations = square_vector_gpu(size);
-	printf("\tGPU O(n): Completed %d numbers in %f seconds!!!\n\n", size, gpu_runtime_n_operations);
+	/* ------------------------ Begin CPU Parallel Benchmarking ------------------------ */
+
+	double cpu_pthreads_runtime = quicksort_cpu_pthreads(size);
+	printf("\tCPU O(n*log(n)) Threaded: Completed %d numbers in %f seconds!!!\n\n", size, cpu_pthreads_runtime);
 	
 	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
 
-	int proof = stream_support_test();
-	printf("\tGPU Streams Work: Completed %d!!!\n\n", proof);
-
+	
 	/* ------------------------ Begin GPU Parallel Benchmarking ------------------------ */
 
-	double gpu_runtime = quicksort_gpu(size);
-	printf("\tGPU O(n*log(n)): Completed %d numbers in %f seconds!!!\n\n", size, gpu_runtime);
+	double gpu_streams_runtime = quicksort_gpu_streams(size);
+	printf("\tGPU O(n*log(n)) Streamed: Completed %d numbers in %f seconds!!!\n\n", size, gpu_streams_runtime);
 	
 	/* ------------------------ END GPU Parallel Benchmarking ------------------------ */
 }
