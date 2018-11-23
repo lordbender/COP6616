@@ -1,6 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "main_cuda.cuh"
+
 const int N = 1 << 20;
 
-__global__ void kernel(float *x, int n)
+__global__ void kernel(double *x, int n)
 {
     int tid = threadIdx.x + blockIdx.x * blockDim.x;
     for (int i = tid; i < n; i += blockDim.x * gridDim.x) {
@@ -13,12 +18,12 @@ int stream_support_test()
     const int num_streams = 8;
 
     cudaStream_t streams[num_streams];
-    float *data[num_streams];
+    double *data[num_streams];
 
     for (int i = 0; i < num_streams; i++) {
         cudaStreamCreate(&streams[i]);
  
-        cudaMalloc(&data[i], N * sizeof(float));
+        cudaMalloc(&data[i], N * sizeof(double));
         
         // launch one worker kernel per stream
         kernel<<<1, 64, 0, streams[i]>>>(data[i], N);
@@ -29,7 +34,7 @@ int stream_support_test()
 
     cudaDeviceReset();
     for (int i = 0; i < num_streams; i++){
-        printf("data point %f", data[i]);
+        printf("data point %f", *data[i]);
     }
 
     return 0;
