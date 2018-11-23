@@ -6,14 +6,14 @@
 
 static const int BLOCK_SIZE = 256;
 
-__device__ void swap_device(int* a, int* b) 
+__device__ void swap_device(int *a, int* b) 
 { 
 	int t = *a; 
 	*a = *b; 
 	*b = t; 
 } 
 
-__device__ int partition_device (int arr[], int low, int high) 
+__device__ int partition_device (int *arr, int low, int high) 
 { 
 	int pivot = arr[high];
 	int i = (low - 1);
@@ -30,29 +30,19 @@ __device__ int partition_device (int arr[], int low, int high)
 	return (i + 1); 
 } 
 
-__global__ void quicksort_device(int *arr, int low, int high, int grid, int block)
+__global__ void quicksort_device(int *arr, int low, int high)
 {
-	if (low < high) 
-	{ 
+	cudaStream_t s1, s2;
+
+	if (low < high){
 		int pi = partition_device(arr, low, high); 
 
-		quicksort_device<<<grid, block>>>(arr, low, pi - 1, grid, block); 
-		quicksort_device<<<grid, block>>>(arr, pi + 1, high, grid, block); 
-	} else{
-		return;
+		cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
+		cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
+
+		quicksort_device<<<1, 64, 0, s1>>>(arr, low, pi - 1);
+		quicksort_device<<<1, 64, 0, s2>>>(arr, pi + 1, high);
 	}
-
-	// if (left < right){
-	// 	cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-	// 	quicksort_device<<< ..., s1 >>> (data, left, right);
-	// }
-
-	// if (nleft < right){
-	// 	cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
-	// 	quicksort_device<<< ..., s2 >>> (data, nleft, right);
-	// }
-
-    // return;
 }
 
 double quicksort_gpu(int size)
@@ -76,7 +66,7 @@ double quicksort_gpu(int size)
 
 	int grid = ceil(size * 1.0 / BLOCK_SIZE);
 	
-    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1, grid, BLOCK_SIZE);
+    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
     cudaDeviceSynchronize();
     gpuErrchk(cudaGetLastError());
 
