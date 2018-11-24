@@ -12,13 +12,12 @@ using namespace std::chrono;
 
 static const int BLOCK_SIZE = 256;
 
-__global__ void countsort_device(int *arr, int *c, int n, int exp)
+__global__ void countsort_device(int *arr, int *output, int n, int exp)
 {
     // int id = blockIdx.x * blockDim.x + threadIdx.x;
     // if (id < n)
     //     c[id] = a[id] * a[id];
 
-    int *output = (int *)malloc(sizeof(int) * n);
     int i, count[10] = {0};
 
     for (i = 0; i < n; i++)
@@ -32,12 +31,6 @@ __global__ void countsort_device(int *arr, int *c, int n, int exp)
     {
         output[count[(arr[i] / exp) % 10] - 1] = arr[i];
         count[(arr[i] / exp) % 10]--;
-    }
-
-    for (i = 0; i < n; i++)
-    {
-        a[i] = output[i];
-        c[i] = a[i];
     }
 }
 
