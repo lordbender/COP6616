@@ -74,23 +74,18 @@ __device__ void partition_by_bit(int *values, int bit)
 
 duration<double> radixsort_gpu(int size)
 {
-    int *ha, *hc, *da, *dc;
+    int *ha, *da;
 
     ha = (int *)malloc(sizeof(int) * size);
-    hc = (int *)malloc(sizeof(int) * size);
 
     for (int i = 0; i < size; i++)
     {
         ha[i] = rand();
-        hc[i] = 0;
     }
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
 
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
-    gpuErrchk(cudaGetLastError());
-
-    gpuErrchk(cudaMalloc((void **)&dc, sizeof(int) * size));
     gpuErrchk(cudaGetLastError());
 
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
@@ -102,21 +97,19 @@ duration<double> radixsort_gpu(int size)
     cudaDeviceSynchronize();
     gpuErrchk(cudaGetLastError());
 
-    cudaMemcpy(hc, dc, sizeof(int) * size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 
     cudaFree(da);
-    cudaFree(dc);
     cudaDeviceReset();
 
     free(ha);
-    free(hc);
  
     high_resolution_clock::time_point end = high_resolution_clock::now();
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     for (int i = 0; i < size; i++)
     {
-        printf("\t %d\n", hc[i]);
+        printf("\t %d\n", ha[i]);
     }
 
     return time_calc(start, end);
