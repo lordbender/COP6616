@@ -74,6 +74,12 @@ duration<double> quicksort_gpu_streams(int size)
 
     free(ha);
 
+    // Testing that sort is working, keep commented out on large values of N (say N > 1000)
+    for (int i = 0; i < size; i++)
+    {
+        printf("\t %d\n", ha[i]);
+    }
+
     return time_calc(start, end);
 }
 
