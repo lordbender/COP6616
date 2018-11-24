@@ -8,7 +8,6 @@
 
 using namespace std::chrono;
  
-// See: https://devblogs.nvidia.com/gpu-pro-tip-cuda-7-streams-simplify-concurrency/
 int main(int argc, char *argv[])
 {
   	srand(time(0));

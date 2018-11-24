@@ -21,18 +21,6 @@ struct qsort_starter
     y = tmp;\
 } while(0)
 
-void quicksort_serial(int *array, int left, int right)
-{
-     if (right > left)
-     {
-        int pivotIndex = left + (right - left)/2;
-        pivotIndex = partition(array, left, right, pivotIndex);
-        quicksort_serial(array, left, pivotIndex-1);
-        quicksort_serial(array, pivotIndex+1, right);
-     }
-}
-
-
 void parallel_quicksort(int *array, int left, int right, int depth);
 
 void* quicksort_thread(void *init)
@@ -64,8 +52,8 @@ void parallel_quicksort(int *array, int left, int right, int depth)
         }
         else
         {
-            quicksort_serial(array, left, pivotIndex-1);
-            quicksort_serial(array, pivotIndex+1, right);
+            quicksort(array, left, pivotIndex-1);
+            quicksort(array, pivotIndex+1, right);
         }
     }
 }
@@ -87,10 +75,10 @@ duration<double> quicksort_cpu_threads(int size)
     high_resolution_clock::time_point end = high_resolution_clock::now();
 	
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
-    for (int i = 0; i < size; i++)
-    {
-        printf("\t %d\n", a[i]);
-    }
+    // for (int i = 0; i < size; i++)
+    // {
+    //     printf("\t %d\n", a[i]);
+    // }
 
     return time_calc(start, end);
 }
