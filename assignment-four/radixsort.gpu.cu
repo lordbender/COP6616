@@ -48,21 +48,21 @@ void radixsort_host(int *ha, int *hc, int size)
     gpuErrchk(cudaGetLastError());
 
     int m = getMax(ha, size); 
-    cudaStream_t streams[size];
+    // cudaStream_t streams[size];
 
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
 
     int i = 0;
     for (int exp = 1; m/exp > 0; exp *= 10) {
-        cudaStreamCreate(&streams[i]);  
+        // cudaStreamCreate(&streams[i]);  
 
-        gpuErrchk(cudaMalloc((void **)&ha, sizeof(int) * size));
-        gpuErrchk(cudaGetLastError());
+        // gpuErrchk(cudaMalloc((void **)&ha, sizeof(int) * size));
+        // gpuErrchk(cudaGetLastError());
         
-        countsort_device<<<grid, BLOCK_SIZE, 0, streams[i++]>>>(da, dc, size, exp);
+        countsort_device<<<grid, BLOCK_SIZE>>>(da, dc, size, exp);
     }
 
-    cudaStreamSynchronize(0);
+    cudaDeviceSynchronize();
     cudaMemcpy(hc, dc, sizeof(int) * size, cudaMemcpyDeviceToHost);
 
     cudaFree(da);
