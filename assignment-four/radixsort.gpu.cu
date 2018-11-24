@@ -113,8 +113,6 @@ duration<double> radixsort_gpu(int size)
  
     high_resolution_clock::time_point end = high_resolution_clock::now();
 
-    free(ha);
-
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     for (int i = 0; i < size; i++)
     {
