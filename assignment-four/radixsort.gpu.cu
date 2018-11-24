@@ -76,7 +76,7 @@ void radixsort_host(int *ha, int size)
 
     free(ha);
     free(hc);
-    free(streamss);
+    free(streams);
 }
 
 
