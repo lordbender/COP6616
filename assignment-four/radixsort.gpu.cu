@@ -76,13 +76,15 @@ duration<double> radixsort_gpu(int size)
 {
     srand(time(0));
 
-    int *ha, *da;
+    int *ha, *hc, *da;
 
     ha = (int *)malloc(sizeof(int) * size);
+    hc = (int *)malloc(sizeof(int) * size);
 
     for (int i = 0; i < size; i++)
     {
         ha[i] = rand();
+        hc[i] = 0;
     }
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
@@ -99,12 +101,13 @@ duration<double> radixsort_gpu(int size)
     cudaDeviceSynchronize();
     gpuErrchk(cudaGetLastError());
 
-    cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 
     cudaFree(da);
     cudaDeviceReset();
 
     free(ha);
+    free(hc);
  
     high_resolution_clock::time_point end = high_resolution_clock::now();
 

@@ -12,3 +12,4 @@
 
 
 nvcc -rdc=true --default-stream per-thread -std=c++11 *.cu
+nvcc -rdc=true --default-stream per-thread -std=c++11 *.cu
