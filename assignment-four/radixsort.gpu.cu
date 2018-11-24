@@ -37,7 +37,7 @@ __global__ void countsort_device(int *arr, int n, int exp)
 void radixsort_host(int *ha, int size) 
 { 
     int m = getMax(ha, size); 
-    cudaStream_t streams[m];
+    cudaStream_t streams[size];
 
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
 
