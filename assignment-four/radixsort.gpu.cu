@@ -74,6 +74,8 @@ __device__ void partition_by_bit(int *values, int bit)
 
 duration<double> radixsort_gpu(int size)
 {
+    srand(time(0));
+
     int *ha, *da;
 
     ha = (int *)malloc(sizeof(int) * size);
@@ -107,10 +109,10 @@ duration<double> radixsort_gpu(int size)
     high_resolution_clock::time_point end = high_resolution_clock::now();
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
-    for (int i = 0; i < size; i++)
-    {
-        printf("\t %d\n", ha[i]);
-    }
+    // for (int i = 0; i < size; i++)
+    // {
+    //     printf("\t %d\n", ha[i]);
+    // }
 
     return time_calc(start, end);
 }
