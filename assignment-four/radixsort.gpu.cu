@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctime>
+#include <vector>
 #include <ratio>
 #include <chrono>
 
@@ -11,83 +12,35 @@ using namespace std::chrono;
 
 static const int BLOCK_SIZE = 256;
 
-__device__ void partition_by_bit(int *values, int bit);
+__global__ void countsort_device(int *arr, int n, int exp) 
+{ 
+    int *output = (int *)malloc(sizeof(int) * n); 
+    int i, count[10] = {0}; 
+  
+    for (i = 0; i < n; i++) 
+        count[ (arr[i]/exp)%10 ]++; 
 
-__global__ void radix_sort(int *values)
-{
-    int  bit;
-    for( bit = 0; bit < 32; ++bit )
-    {
-        partition_by_bit(values, bit);
-        __syncthreads();
-    }
-}
+    for (i = 1; i < 10; i++) 
+        count[i] += count[i - 1]; 
+  
+    // Build the output array 
+    for (i = n - 1; i >= 0; i--) 
+    { 
+        output[count[ (arr[i]/exp)%10 ] - 1] = arr[i]; 
+        count[ (arr[i]/exp)%10 ]--; 
+    } 
 
-template<class T>
-__device__ T plus_scan(T *x)
-{
-    int i = threadIdx.x; // id of thread executing this instance
-    int n = blockDim.x;  // total number of threads in this block
-    int offset;          // distance between elements to be added
+    for (i = 0; i < n; i++) 
+        arr[i] = output[i]; 
+} 
 
-    for( offset = 1; offset < n; offset *= 2) {
-        T t;
-
-        if ( i >= offset ) 
-            t = x[i-offset];
-        
-        __syncthreads();
-
-        if ( i >= offset ) 
-            x[i] = t + x[i];   
-
-        __syncthreads();
-    }
-    return x[i];
-}
-
-
-__device__ void partition_by_bit(int *values, int bit)
-{
-    int i = threadIdx.x;
-    int size = blockDim.x;
-    int x_i = values[i];          // value of integer at position i
-    int p_i = (x_i >> bit) & 1;   // value of bit at position bit
-
-    values[i] = p_i;  
-
-    __syncthreads();
-
-    int T_before = plus_scan(values);
-
-    int T_total  = values[size-1];
-
-    int F_total  = size - T_total;
-
-    __syncthreads();
-
-    if ( p_i )
-        values[T_before-1 + F_total] = x_i;
-    else
-        values[i - T_before] = x_i;
-}
-
-duration<double> radixsort_gpu(int size)
-{
-    srand(time(0));
-
-    int *ha, *hc, *da;
-
-    ha = (int *)malloc(sizeof(int) * size);
+void radixsort_host(int *ha, int size) 
+{ 
+    int *hc, *da;
     hc = (int *)malloc(sizeof(int) * size);
 
-    for (int i = 0; i < size; i++)
-    {
-        ha[i] = rand();
-        hc[i] = 0;
-    }
-
-    high_resolution_clock::time_point start = high_resolution_clock::now();
+    int m = getMax(ha, size); 
+    std::vector< cudaStream_t > streams;
 
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
     gpuErrchk(cudaGetLastError());
@@ -95,8 +48,17 @@ duration<double> radixsort_gpu(int size)
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
     gpuErrchk(cudaGetLastError());
 
-    int grid = ceil(size * 1.0 / BLOCK_SIZE);
-    radix_sort<<<grid, BLOCK_SIZE>>>(da);
+    for (int exp = 1; m/exp > 0; exp *= 10) {
+        cudaStream_t s1;
+        cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
+        streams.push_back(s1);
+
+        int grid = ceil(size * 1.0 / BLOCK_SIZE);
+        countsort_device<<<grid, BLOCK_SIZE, 0, s1>>>(ha, size, exp);
+    }
+
+    cudaStreamSynchronize(0);
+    gpuErrchk(cudaGetLastError());
 
     cudaDeviceSynchronize();
     gpuErrchk(cudaGetLastError());
@@ -105,11 +67,27 @@ duration<double> radixsort_gpu(int size)
 
     cudaFree(da);
     cudaDeviceReset();
+    
+    for (int i = 0; i < size; i++)
+        ha[i] = hc[i];
 
     free(ha);
     free(hc);
- 
+}
+
+
+duration<double> radixsort_gpu(int size)
+{
+   int *ha = (int *)malloc(sizeof(int) * size);
+
+    for (int i = 0; i < size; i++)
+        ha[i] = rand();
+
+    high_resolution_clock::time_point start = high_resolution_clock::now();
+    radixsort_host(ha, size);
     high_resolution_clock::time_point end = high_resolution_clock::now();
+
+    free(ha);
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     // for (int i = 0; i < size; i++)
