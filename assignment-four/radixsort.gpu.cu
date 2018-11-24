@@ -60,9 +60,6 @@ void radixsort_host(int *ha, int size)
     cudaStreamSynchronize(0);
     gpuErrchk(cudaGetLastError());
 
-    cudaDeviceSynchronize();
-    gpuErrchk(cudaGetLastError());
-
     cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 
     cudaFree(da);
