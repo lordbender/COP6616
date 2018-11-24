@@ -55,11 +55,15 @@ void radixsort_host(int *ha, int *hc, int size)
         countsort_device<<<grid, BLOCK_SIZE>>>(da, dc, size, exp);
     }
 
-    cudaDeviceSynchronize();
-    cudaMemcpy(hc, dc, sizeof(int) * size, cudaMemcpyDeviceToHost);
+    gpuErrchk(cudaDeviceSynchronize());
+    gpuErrchk(cudaGetLastError());
+
+    gpuErrchk(cudaMemcpy(hc, dc, sizeof(int) * size, cudaMemcpyDeviceToHost));
+    gpuErrchk(cudaGetLastError());
 
     cudaFree(da);
     cudaFree(dc);
+    
     cudaDeviceReset();
 }
 
