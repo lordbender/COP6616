@@ -12,30 +12,37 @@ using namespace std::chrono;
 
 static const int BLOCK_SIZE = 256;
 
-__global__ void countsort_device(int *arr, int *c, int n, int exp) 
-{ 
-    int *output = (int *)malloc(sizeof(int) * n); 
-    int i, count[10] = {0}; 
-  
-    for (i = 0; i < n; i++) 
-        count[ (arr[i]/exp)%10 ]++; 
+__global__ void countsort_device(int *arr, int *c, int n, int exp)
+{
+    // int id = blockIdx.x * blockDim.x + threadIdx.x;
+    // if (id < n)
+    //     c[id] = a[id] * a[id];
 
-    for (i = 1; i < 10; i++) 
-        count[i] += count[i - 1]; 
-  
-    // Build the output array 
-    for (i = n - 1; i >= 0; i--) 
-    { 
-        output[count[ (arr[i]/exp)%10 ] - 1] = arr[i]; 
-        count[ (arr[i]/exp)%10 ]--; 
-    } 
+    int *output = (int *)malloc(sizeof(int) * n);
+    int i, count[10] = {0};
 
-    for (i = 0; i < n; i++) 
-        c[i] = output[i]; 
-} 
+    for (i = 0; i < n; i++)
+        count[(arr[i] / exp) % 10]++;
 
-void radixsort_host(int *ha, int *hc, int size) 
-{ 
+    for (i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+
+    // Build the output array
+    for (i = n - 1; i >= 0; i--)
+    {
+        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+        count[(arr[i] / exp) % 10]--;
+    }
+
+    for (i = 0; i < n; i++)
+    {
+        a[i] = output[i];
+        c[i] = a[i];
+    }
+}
+
+void radixsort_host(int *ha, int *hc, int size)
+{
     int *da, *dc;
 
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
@@ -47,18 +54,11 @@ void radixsort_host(int *ha, int *hc, int size)
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
     gpuErrchk(cudaGetLastError());
 
-    int m = getMax(ha, size); 
-    // cudaStream_t streams[size];
-
+    int m = getMax(ha, size);
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
 
-    int i = 0;
-    for (int exp = 1; m/exp > 0; exp *= 10) {
-        // cudaStreamCreate(&streams[i]);  
-
-        // gpuErrchk(cudaMalloc((void **)&ha, sizeof(int) * size));
-        // gpuErrchk(cudaGetLastError());
-        
+    for (int exp = 1; m / exp > 0; exp *= 10)
+    {
         countsort_device<<<grid, BLOCK_SIZE>>>(da, dc, size, exp);
     }
 
@@ -70,13 +70,13 @@ void radixsort_host(int *ha, int *hc, int size)
     cudaDeviceReset();
 }
 
-
 duration<double> radixsort_gpu(int size)
 {
-   int *ha = (int *)malloc(sizeof(int) * size);
-   int *hc = (int *)malloc(sizeof(int) * size);
+    int *ha = (int *)malloc(sizeof(int) * size);
+    int *hc = (int *)malloc(sizeof(int) * size);
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++)
+    {
         ha[i] = rand();
         hc[i] = 0;
     }
@@ -85,13 +85,12 @@ duration<double> radixsort_gpu(int size)
     radixsort_host(ha, hc, size);
     high_resolution_clock::time_point end = high_resolution_clock::now();
 
-    
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     for (int i = 0; i < size; i++)
     {
-      printf("\t %d\n", hc[i]);
+        printf("\t %d\n", hc[i]);
     }
-        
+
     free(ha);
     free(hc);
 
