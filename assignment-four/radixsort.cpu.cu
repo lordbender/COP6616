@@ -8,15 +8,6 @@
 #include "main_cuda.cuh"
 
 using namespace std::chrono;
-
-int getMax(int *arr, int n) 
-{ 
-    int mx = arr[0]; 
-    for (int i = 1; i < n; i++) 
-        if (arr[i] > mx) 
-            mx = arr[i]; 
-    return mx; 
-} 
   
 // A function to do counting sort of arr[] according to 
 // the digit represented by exp. 
@@ -49,7 +40,6 @@ void radixsort(int *arr, int n)
     for (int exp = 1; m/exp > 0; exp *= 10) 
         countSort(arr, n, exp); 
 }
-
 
 duration<double> radixsort_cpu(int size)
 {   

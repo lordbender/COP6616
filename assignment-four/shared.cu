@@ -13,6 +13,15 @@ duration<double> time_calc(high_resolution_clock::time_point start, high_resolut
     return duration_cast<duration<double>>(end - start);
 }
 
+int getMax(int *arr, int n) 
+{ 
+    int mx = arr[0]; 
+    for (int i = 1; i < n; i++) 
+        if (arr[i] > mx) 
+            mx = arr[i]; 
+    return mx; 
+} 
+
 void swap(int array[], int left, int right)
 {
 	int temp;
