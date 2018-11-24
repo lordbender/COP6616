@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
 	printf("\tGPU O(n*log(n)) Streamed Radix: Completed %d numbers in %f seconds!!!\n\n", size, gpu_radix_runtime.count());
 
 	duration<double> cpu_runtime = quicksort_cpu(size);
-	printf("\tCPU O(n*log(n)) Sequential: Completed %d numbers in %f seconds!!!\n", size, cpu_runtime.count());
+	printf("\tCPU O(n*log(n)) Sequential Quicksort: Completed %d numbers in %f seconds!!!\n", size, cpu_runtime.count());
 
 	duration<double> cpu_threads_runtime = quicksort_cpu_threads(size);
-	printf("\tCPU O(n*log(n)) Threaded: Completed %d numbers in %f seconds!!!\n", size, cpu_threads_runtime.count());
+	printf("\tCPU O(n*log(n)) Threaded Quicksort: Completed %d numbers in %f seconds!!!\n", size, cpu_threads_runtime.count());
 	
-	duration<double> gpu_streams_runtime = quicksort_gpu_streams(size);
-	printf("\tGPU O(n*log(n)) Streamed: Completed %d numbers in %f seconds!!!\n\n", size, gpu_streams_runtime.count());
+	// duration<double> gpu_streams_runtime = quicksort_gpu_streams(size);
+	// printf("\tGPU O(n*log(n)) Streamed: Completed %d numbers in %f seconds!!!\n\n", size, gpu_streams_runtime.count());
 }
