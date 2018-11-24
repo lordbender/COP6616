@@ -73,10 +73,13 @@ void radixsort_host(int *ha, int *hc, int size)
 
 duration<double> radixsort_gpu(int size)
 {
-   int *ha, *hc = (int *)malloc(sizeof(int) * size);
+   int *ha = (int *)malloc(sizeof(int) * size);
+   int *hc = (int *)malloc(sizeof(int) * size);
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < size; i++) {
         ha[i] = rand();
+        hc[i] = 0;
+    }
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
     radixsort_host(ha, hc, size);
