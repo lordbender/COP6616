@@ -34,36 +34,36 @@ __global__ void countsort_device(int *arr, int *output, int n, int exp)
     }
 }
 
-void radixsort_host(int *ha, int *hc, int size)
+void radixsort_host(int *ha, int *hc, int n)
 {
     int *da, *dc;
 
-    gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
+    gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * n));
     gpuErrchk(cudaGetLastError());
 
-    gpuErrchk(cudaMalloc((void **)&dc, sizeof(int) * size));
+    gpuErrchk(cudaMalloc((void **)&dc, sizeof(int) * n));
     gpuErrchk(cudaGetLastError());
 
-    gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
+    gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * n, cudaMemcpyHostToDevice));
     gpuErrchk(cudaGetLastError());
 
-    int m = getMax(ha, size);
-    int grid = ceil(size * 1.0 / BLOCK_SIZE);
+    int m = getMax(ha, n);
+    int grid = ceil(n * 1.0 / BLOCK_SIZE);
 
     for (int exp = 1; m / exp > 0; exp *= 10)
     {
-        countsort_device<<<grid, BLOCK_SIZE>>>(da, dc, size, exp);
+        countsort_device<<<grid, BLOCK_SIZE>>>(da, dc, n, exp);
     }
 
     gpuErrchk(cudaDeviceSynchronize());
     gpuErrchk(cudaGetLastError());
 
-    gpuErrchk(cudaMemcpy(hc, dc, sizeof(int) * size, cudaMemcpyDeviceToHost));
+    gpuErrchk(cudaMemcpy(hc, dc, sizeof(int) * n, cudaMemcpyDeviceToHost));
     gpuErrchk(cudaGetLastError());
 
     cudaFree(da);
     cudaFree(dc);
-    
+
     cudaDeviceReset();
 }
 
