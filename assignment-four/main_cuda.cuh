@@ -26,6 +26,7 @@ duration<double> square_vector_gpu(int size);
 duration<double> quicksort_cpu(int size);
 duration<double> quicksort_cpu_threads(int size);
 duration<double> quicksort_gpu_streams(int size);
+duration<double> radixsort_cpu(int size);
 
 // Shared Functions
 duration<double> time_calc(high_resolution_clock::time_point start, high_resolution_clock::time_point end);
