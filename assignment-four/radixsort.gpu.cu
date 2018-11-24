@@ -12,7 +12,7 @@ using namespace std::chrono;
 
 static const int BLOCK_SIZE = 256;
 
-__global__ void countsort_device(int *arr, int n, int exp) 
+__global__ void countsort_device(int *arr, int *c, int n, int exp) 
 { 
     int *output = (int *)malloc(sizeof(int) * n); 
     int i, count[10] = {0}; 
@@ -31,11 +31,22 @@ __global__ void countsort_device(int *arr, int n, int exp)
     } 
 
     for (i = 0; i < n; i++) 
-        arr[i] = output[i]; 
+        c[i] = output[i]; 
 } 
 
-void radixsort_host(int *ha, int size) 
+void radixsort_host(int *ha, int *hc, int size) 
 { 
+    int *da, *dc;
+
+    gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
+    gpuErrchk(cudaGetLastError());
+
+    gpuErrchk(cudaMalloc((void **)&dc, sizeof(int) * size));
+    gpuErrchk(cudaGetLastError());
+
+    gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
+    gpuErrchk(cudaGetLastError());
+
     int m = getMax(ha, size); 
     cudaStream_t streams[size];
 
@@ -48,32 +59,38 @@ void radixsort_host(int *ha, int size)
         gpuErrchk(cudaMalloc((void **)&ha, sizeof(int) * size));
         gpuErrchk(cudaGetLastError());
         
-        countsort_device<<<grid, BLOCK_SIZE, 0, streams[i++]>>>(ha, size, exp);
+        countsort_device<<<grid, BLOCK_SIZE, 0, streams[i++]>>>(da, dc, size, exp);
     }
-    
+
     cudaStreamSynchronize(0);
+    cudaMemcpy(hc, dc, sizeof(int) * size, cudaMemcpyDeviceToHost);
+
+    cudaFree(da);
+    cudaFree(dc);
     cudaDeviceReset();
 }
 
 
 duration<double> radixsort_gpu(int size)
 {
-   int *ha = (int *)malloc(sizeof(int) * size);
+   int *ha, *hc = (int *)malloc(sizeof(int) * size);
 
     for (int i = 0; i < size; i++)
         ha[i] = rand();
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
-    radixsort_host(ha, size);
+    radixsort_host(ha, hc, size);
     high_resolution_clock::time_point end = high_resolution_clock::now();
 
     
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     for (int i = 0; i < size; i++)
     {
-      printf("\t %d\n", ha[i]);
+      printf("\t %d\n", hc[i]);
     }
         
     free(ha);
+    free(hc);
+
     return time_calc(start, end);
 }
