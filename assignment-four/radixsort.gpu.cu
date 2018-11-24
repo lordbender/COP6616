@@ -50,7 +50,8 @@ void radixsort_host(int *ha, int size)
         
         countsort_device<<<grid, BLOCK_SIZE, 0, streams[i++]>>>(ha, size, exp);
     }
-
+    
+    cudaStreamSynchronize(0);
     cudaDeviceReset();
 }
 
