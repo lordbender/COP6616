@@ -1,74 +1,79 @@
-// https://www.geeksforgeeks.org/multithreading-in-cpp/
-// https://github.com/markwkm/quicksort/blob/master/recursive/quicksort-parallel.c
-
+// #define _XOPEN_SOURCE 600
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <ctime>
-#include <ratio>
-#include <chrono>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
+#include <assert.h>
+#include <pthread.h>
 
 #include "main_cuda.cuh"
 
-using namespace std; 
-using namespace std::chrono;
-
-void quicksort_threaded(int *array, int left, int right)
+struct qsort_starter
 {
-	int pivot_index = left;
-	int pivot_new_index;
+	int *array;
+	int left;
+	int right;
+	int depth;
+};
 
-	/*
-	 * Use -1 to initialize because fork() uses 0 to identify a process as a
-	 * child.
-	 */
-	int lchild = -1;
-	int rchild = -1;
+// Macro for swapping two values.
+#define SWAP(x,y) do {\
+    __typeof__(x) tmp = x;\
+    x = y;\
+    y = tmp;\
+} while(0)
 
-	if (right > left) {
-		int status; /* For waitpid() only. */
-
-		pivot_new_index = partition(array, left, right, pivot_index);
-
-		/*
-		 * Parallize by processing the left and right partion siultaneously.
-		 * Start by spawning the 'left' child.
-		 */
-		lchild = fork();
-		if (lchild < 0) {
-			perror("fork");
-			exit(1);
-		}
-		if (lchild == 0) {
-			/* The 'left' child starts processing. */
-			quicksort_threaded(array, left, pivot_new_index - 1);
-			exit(0);
-		} else {
-			/* The parent spawns the 'right' child. */
-			rchild = fork();
-			if (rchild < 0) {
-				perror("fork");
-				exit(1);
-			}
-			if (rchild == 0) {
-				/* The 'right' child starts processing. */
-				quicksort_threaded(array, pivot_new_index + 1, right);
-				exit(0);
-			}
-		}
-		/* Parent waits for children to finish. */
-		waitpid(lchild, &status, 0);
-		waitpid(rchild, &status, 0);
-	}
+void quicksort_serial(int *array, int left, int right)
+{
+     if (right > left)
+     {
+        int pivotIndex = left + (right - left)/2;
+        pivotIndex = partition(array, left, right, pivotIndex);
+        quicksort_serial(array, left, pivotIndex-1);
+        quicksort_serial(array, pivotIndex+1, right);
+     }
 }
+
+
+void parallel_quicksort(int *array, int left, int right, int depth);
+
+void* quicksort_thread(void *init)
+{
+    struct qsort_starter *start = (qsort_starter*)init;
+    parallel_quicksort(start->array, start->left, start->right, start->depth);
+    return NULL;
+}
+
+void parallel_quicksort(int *array, int left, int right, int depth)
+{
+    if (right > left)
+    {
+        int pivotIndex = left + (right - left)/2;
+        pivotIndex = partition(array, left, right, pivotIndex);
+        // Either do the parallel or serial quicksort, depending on the depth
+        // specified.
+        if (depth-- > 0)
+        {
+            // Create the thread for the first recursive call
+            struct qsort_starter arg = {array, left, pivotIndex-1, depth};
+            pthread_t thread;
+            int ret = pthread_create(&thread, NULL, quicksort_thread, &arg);
+            assert((ret == 0) && "Thread creation failed");
+            // Perform the second recursive call in this thread
+            parallel_quicksort(array, pivotIndex+1, right, depth);
+            // Wait for the first call to finish.
+            pthread_join(thread, NULL);
+        }
+        else
+        {
+            quicksort_serial(array, left, pivotIndex-1);
+            quicksort_serial(array, pivotIndex+1, right);
+        }
+    }
+}
+
 
 duration<double> quicksort_cpu_threads(int size)
 {   
-	size = size < 1000 ? size : 1000;
+	int depth = 5;
 
     int *a = (int *)malloc(sizeof(int) * size);
 
@@ -78,7 +83,7 @@ duration<double> quicksort_cpu_threads(int size)
     }
  
   	high_resolution_clock::time_point start = high_resolution_clock::now();
-    quicksort_threaded(a, 0, size - 1); 
+	parallel_quicksort(a, 0, size - 1, depth); 
     high_resolution_clock::time_point end = high_resolution_clock::now();
 	
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
