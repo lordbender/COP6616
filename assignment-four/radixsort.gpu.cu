@@ -66,7 +66,8 @@ void radixsort_host(int *ha, int size)
     cudaStreamSynchronize(0);
     gpuErrchk(cudaGetLastError());
 
-    cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
+    gpuErrchk(cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost));
+    gpuErrchk(cudaGetLastError());
 
     cudaFree(da);
     cudaDeviceReset();
@@ -74,7 +75,6 @@ void radixsort_host(int *ha, int size)
     for (int i = 0; i < size; i++)
         ha[i] = hc[i];
 
-    free(ha);
     free(hc);
     free(streams);
 }
@@ -91,13 +91,13 @@ duration<double> radixsort_gpu(int size)
     radixsort_host(ha, size);
     high_resolution_clock::time_point end = high_resolution_clock::now();
 
-    free(ha);
-
+    
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     // for (int i = 0; i < size; i++)
     // {
-    //     printf("\t %d\n", ha[i]);
-    // }
-
+        //     printf("\t %d\n", ha[i]);
+        // }
+        
+    free(ha);
     return time_calc(start, end);
 }
