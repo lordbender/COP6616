@@ -56,16 +56,16 @@ duration<double> square_vector_gpu(int size)
     cudaFree(da);
     cudaFree(dc);
     cudaDeviceReset();
-
-    free(ha);
-    free(hc);
-
+    
     high_resolution_clock::time_point end = high_resolution_clock::now();
-
+    
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     // for (int i = 0; i < size; i++) {
-    // 	printf("\t %d\n", hc[i]);
-    // }
-
+        // 	printf("\t %d\n", hc[i]);
+        // }
+        
+        
+            free(ha);
+            free(hc);
     return time_calc(start, end);
 }
