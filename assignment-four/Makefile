@@ -1,1 +1,1 @@
-nvcc -arch=compute_53 -rdc=true --default-stream per-thread -std=c++11 *.cu
+nvcc --gpu-code=compute_72 -arch=compute_72 -rdc=true -std=c++14 --default-stream per-thread  *.cu

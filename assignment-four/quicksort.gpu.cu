@@ -43,14 +43,13 @@ __global__ void quicksort_device(int *data, int left, int right)
     if (left < nright)
     {
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_device<<<64, 64, 0, s1>>>(data, left, nright);
+        quicksort_device<<<1, 32, 0, s1>>>(data, left, nright);
     }
 
     if (nleft < right)
     {
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
-        quicksort_device<<<64, 64, 0, s2>>>(data, nleft, right);
-        cudaDeviceSynchronize();
+        quicksort_device<<<1, 32, 0, s2>>>(data, nleft, right);
     }
 }
 
