@@ -5,37 +5,7 @@
 #include <chrono>
 #include "main_cuda.cuh"
 
-#define MAX_DEPTH       16
-
 static const int BLOCK_SIZE = 256;
-
-__device__ void selection_sort(int *data, int left, int right)
-{
-    for (int i = left ; i <= right ; ++i)
-    {
-        int min_val = data[i];
-        int min_idx = i;
-
-        // Find the smallest value in the range [left, right].
-        for (int j = i+1 ; j <= right ; ++j)
-        {
-            int val_j = data[j];
-
-            if (val_j < min_val)
-            {
-                min_idx = j;
-                min_val = val_j;
-            }
-        }
-
-        // Swap the values.
-        if (i != min_idx)
-        {
-            data[min_idx] = data[i];
-            data[i] = min_val;
-        }
-    }
-}
 
 __device__ void swap_device(int *a, int *b)
 {
@@ -62,68 +32,27 @@ __device__ int partition_device(int *arr, int low, int high)
 }
 
 // Based on CUDA Examples - But Optimized
-__global__ void quicksort_device(int *data, int left, int right, int depth)
+__global__ void quicksort_device(int *data, int left, int right)
 {
-    // If we're too deep or there are few elements left, we use an insertion sort...
-    if (depth >= MAX_DEPTH || right-left <= 32)
-    {
-        selection_sort(data, left, right);
-        return;
-    }
+    int pi = partition_device(data, left, right);
 
-    int *lptr = data+left;
-    int *rptr = data+right;
-    int  pivot = data[(left+right)/2];
+    int nright = pi - 1;
+    int nleft = pi + 1;
 
-    // Do the partitioning.
-    while (lptr <= rptr)
-    {
-        // Find the next left- and right-hand values to swap
-        int lval = *lptr;
-        int rval = *rptr;
-
-        // Move the left pointer as long as the pointed element is smaller than the pivot.
-        while (lval < pivot)
-        {
-            lptr++;
-            lval = *lptr;
-        }
-
-        // Move the right pointer as long as the pointed element is larger than the pivot.
-        while (rval > pivot)
-        {
-            rptr--;
-            rval = *rptr;
-        }
-
-        // If the swap points are valid, do the swap!
-        if (lptr <= rptr)
-        {
-            *lptr++ = rval;
-            *rptr-- = lval;
-        }
-    }
-
-    // Now the recursive part
-    int nright = rptr - data;
-    int nleft  = lptr - data;
-
-    // Launch a new block to sort the left part.
-    if (left < (rptr-data))
-    {
-        cudaStream_t s;
-        cudaStreamCreateWithFlags(&s, cudaStreamNonBlocking);
-        quicksort_device<<< 1, 1, 0, s >>>(data, left, nright, depth+1);
-        cudaStreamDestroy(s);
-    }
-
-    // Launch a new block to sort the right part.
-    if ((lptr-data) < right)
+    if (left < nright)
     {
         cudaStream_t s1;
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_device<<< 1, 1, 0, s1 >>>(data, nleft, right, depth+1);
+        quicksort_device<<<1, 64, 0, s1>>>(data, left, nright);
         cudaStreamDestroy(s1);
+    }
+
+    if (nleft < right)
+    {
+        cudaStream_t s2;
+        cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
+        quicksort_device<<<1, 64, 0, s2>>>(data, nleft, right);
+        cudaStreamDestroy(s2);
     }
 }
 
@@ -158,9 +87,9 @@ duration<double> quicksort_gpu_streams(int size)
             exit(cudaStatus);
 	}
 
-    cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, MAX_DEPTH);
+    // cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, 16);
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
-    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1, 0);
+    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
     cudaDeviceSynchronize();
 
     cudaStatus = cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
