@@ -54,6 +54,13 @@ __global__ void quicksort_device(int *data, int left, int right)
         quicksort_device<<<1, 64, 0, s2>>>(data, nleft, right);
         cudaStreamDestroy(s2);
     }
+
+    __syncthreads();
+    if(threadIdx.x == 0) {
+      cudaDeviceSynchronize();
+    }
+    __syncthreads();
+
     return;
 }
 
