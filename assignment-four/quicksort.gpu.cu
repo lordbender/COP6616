@@ -55,12 +55,6 @@ __global__ void quicksort_device(int *data, int left, int right)
         cudaStreamDestroy(s2);
     }
 
-    __syncthreads();
-    if(threadIdx.x == 0) {
-      cudaDeviceSynchronize();
-    }
-    __syncthreads();
-
     return;
 }
 
@@ -97,7 +91,7 @@ duration<double> quicksort_gpu_streams(int size)
 
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
-    cudaStreamSynchronize(0);
+    cudaDeviceSynchronize();
 
     cudaStatus = cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
