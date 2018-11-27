@@ -7,16 +7,16 @@
 
 static const int BLOCK_SIZE = 256;
 
-__device__ void swap_device(int *a, int *b)
+__device__ void swap_device(unsigned int *a, unsigned int *b)
 {
-    int t = *a;
+    unsigned int t = *a;
     *a = *b;
     *b = t;
 }
 
-__device__ int partition_device(int *arr, int low, int high)
+__device__ unsigned int partition_device(unsigned int *arr, int low, int high)
 {
-    int pivot = arr[high];
+    unsigned int pivot = arr[high];
     int i = (low - 1);
 
     for (int j = low; j <= high - 1; j++)
@@ -32,7 +32,7 @@ __device__ int partition_device(int *arr, int low, int high)
 }
 
 // Based on CUDA Examples - But Optimized
-__global__ void quicksort_device(int *data, int left, int right)
+__global__ void quicksort_device(unsigned int *data, int left, int right)
 {
     int pi = partition_device(data, left, right);
 
@@ -60,25 +60,25 @@ duration<double> quicksort_gpu_streams(int size)
 {
     cudaError_t cudaStatus;
 
-    int *ha, *da;
+    unsigned int *ha, *da;
 
-    ha = (int *)malloc(sizeof(int) * size);
+    ha = (unsigned int *)malloc(sizeof(unsigned int) * size);
 
     for (int i = 0; i < size; i++)
     {
-        ha[i] = rand();
+        ha[i] = rand() % size;
     }
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
 
-    cudaStatus = cudaMalloc((void **)&da, sizeof(int) * size);
+    cudaStatus = cudaMalloc((void **)&da, sizeof(unsigned int) * size);
 	if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMalloc failed!  Do you have a CUDA-capable GPU installed?");
         if (abort)
             exit(cudaStatus);
 	}
 
-    cudaStatus = cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice);
+    cudaStatus = cudaMemcpy(da, ha, sizeof(unsigned int) * size, cudaMemcpyHostToDevice);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
         if (abort)
@@ -95,8 +95,8 @@ duration<double> quicksort_gpu_streams(int size)
             exit(cudaStatus);
     }
 
-    int *hc = (int *)malloc(sizeof(int) * size);
-    cudaStatus = cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
+    unsigned int *hc = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    cudaStatus = cudaMemcpy(hc, da, sizeof(unsigned int) * size, cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
         if (abort)
@@ -104,10 +104,10 @@ duration<double> quicksort_gpu_streams(int size)
 	}
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
-    // for (int i = 0; i < size; i++)
-    // {
-    //     printf("\t hc[ %d ] => %d\n", i, hc[i]);
-    // }
+    for (int i = 0; i < size; i++)
+    {
+        printf("\t hc[ %d ] => %d\n", i, hc[i]);
+    }
     
     cudaFree(da);
     cudaDeviceReset();
