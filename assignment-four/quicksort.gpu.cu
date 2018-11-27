@@ -55,24 +55,30 @@ __global__ void quicksort_device(int *data, int left, int right)
 
 void quicksort_host(int *da, int *hc, int size)
 {
+    // Call the device.
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
-    gpuErrchk(cudaDeviceSynchronize());
+    gpuErrchk(cudaGetLastError());
 
+    // Ensure the Device is in sync, before we copy the data back!
+    gpuErrchk(cudaDeviceSynchronize());
+    gpuErrchk(cudaGetLastError());
+
+    // Copy the results back from the device.
     gpuErrchk(cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost));
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
-    for (int i = 0; i < size; i++)
-    {
-        printf("\t %d\n", hc[i]);
-    }
+    // for (int i = 0; i < size; i++)
+    // {
+    //     printf("\t %d\n", hc[i]);
+    // }
 }
 
 duration<double> quicksort_gpu_streams(int size)
 {
     int* ha = (int *)malloc(sizeof(int) * size);
     int* hc = (int *)malloc(sizeof(int) * size);
-    
+
     for (int i = 0; i < size; i++)
     {
         ha[i] = rand();
@@ -85,7 +91,7 @@ duration<double> quicksort_gpu_streams(int size)
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
 
-    int grid = ceil(size * 1.0 / BLOCK_SIZE);
+    // Kick off the sort!
     quicksort_host(da, hc, size);
 
     gpuErrchk(cudaFree(da));
