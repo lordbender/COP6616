@@ -71,12 +71,12 @@ duration<double> quicksort_gpu_streams(int size)
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
 
-    cudaStatus = cudaMalloc((void **)&da, sizeof(int) * size);
-    cudaStatus = cudaMalloc((void **)&dc, sizeof(int) * size);
+    cudaMalloc((void **)&da, sizeof(int) * size);
+    cudaMalloc((void **)&dc, sizeof(int) * size);
 
     cudaStatus = cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice);
     if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
+        printf("cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
         if (abort)
             exit(cudaStatus);
 	}
@@ -85,23 +85,15 @@ duration<double> quicksort_gpu_streams(int size)
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, dc, 0, size - 1, size);
 
-    cudaStatus = cudaDeviceSynchronize();
-	if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
-        if (abort)
-            exit(cudaStatus);
-    }
-
-    cudaStatus = cudaDeviceSynchronize();
-	if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
-        if (abort)
-            exit(cudaStatus);
-    }
-
     cudaStatus = cudaStreamSynchronize(0);
-	if (cudaStatus != cudaSuccess) {
+    if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
+        if (abort)
+            exit(cudaStatus);
+    }
+    cudaStatus = cudaDeviceSynchronize();
+	if (cudaStatus != cudaSuccess) {
+        printf("cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
         if (abort)
             exit(cudaStatus);
     }
@@ -123,8 +115,11 @@ duration<double> quicksort_gpu_streams(int size)
     }
     
     cudaFree(da);
+    cudaFree(dc);
     cudaDeviceReset();
+
     free(ha);
+    free(hc);
 
     high_resolution_clock::time_point end = high_resolution_clock::now();
     return time_calc(start, end);
