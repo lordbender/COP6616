@@ -86,6 +86,7 @@ duration<double> quicksort_gpu_streams(int size)
     // cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, 16);
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
+
     cudaStatus = cudaDeviceSynchronize();
 	if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
@@ -108,6 +109,7 @@ duration<double> quicksort_gpu_streams(int size)
     }
 
     int *hc = (int *)malloc(sizeof(int) * size);
+
     cudaStatus = cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
@@ -118,6 +120,7 @@ duration<double> quicksort_gpu_streams(int size)
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     for (int i = 0; i < size; i++)
     {
+        printf("\t ha[ %d ] => %d\n", i, ha[i]);
         printf("\t hc[ %d ] => %d\n", i, hc[i]);
     }
     
