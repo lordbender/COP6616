@@ -134,7 +134,10 @@ void check_results(int n, unsigned int *results_d)
 {
     unsigned int *results_h = new unsigned[n];
     cudaMemcpy(results_h, results_d, n*sizeof(unsigned), cudaMemcpyDeviceToHost);
-
+    for (int i = 0; i < size; i++)
+    {
+        printf("\t hc[ %d ] => %d\n", i, results_h[i]);
+    }
 
     delete[] results_h;
 }
@@ -154,11 +157,6 @@ duration<double> quicksort_gpu_streams(int size)
     run_qsort(d_data, size);
 
     check_results(size, d_data);
-
-    for (int i = 0; i < size; i++)
-    {
-        printf("\t d_data[ %d ] => %d\n", i, d_data[i]);
-    }
 
     free(h_data);
     cudaFree(d_data);
