@@ -71,15 +71,15 @@ duration<double> quicksort_gpu_streams(int size)
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
 
-    cudaMalloc((void **)&da, sizeof(int) * size);
-    cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice);
+    gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
+    gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
 
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
-    cudaDeviceSynchronize();
+    gpuErrchk(cudaDeviceSynchronize());
 
     int *hc = (int *)malloc(sizeof(int) * size);
-    cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
+    gpuErrchk(cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost));
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     for (int i = 0; i < size; i++)
@@ -87,8 +87,7 @@ duration<double> quicksort_gpu_streams(int size)
         printf("\t hc[ %d ] => %d\n", i, hc[i]);
     }
     
-    cudaFree(da);
-    cudaDeviceReset();
+    gpuErrchk(cudaFree(da));
     free(ha);
 
     high_resolution_clock::time_point end = high_resolution_clock::now();
