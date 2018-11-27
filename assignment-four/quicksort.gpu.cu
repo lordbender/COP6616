@@ -52,7 +52,7 @@ __global__ void quicksort_device(int *da, int *dc, int left, int right, int size
         quicksort_device<<<1, 1, 0, s2>>>(da, dc, nleft, right, size);
     }
 
-    int tid = threadIdx.x + blockIdx.x * blockDim.x;
+    int tid = threadIdx.x;
     if(tid == 0)
         for (int i = 0; i <= size - 1; i++)
             dc[i] = da[i];
