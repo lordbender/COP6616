@@ -134,7 +134,7 @@ void check_results(int n, unsigned int *results_d)
 {
     unsigned int *results_h = new unsigned[n];
     cudaMemcpy(results_h, results_d, n*sizeof(unsigned), cudaMemcpyDeviceToHost);
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < n; i++)
     {
         printf("\t hc[ %d ] => %d\n", i, results_h[i]);
     }
