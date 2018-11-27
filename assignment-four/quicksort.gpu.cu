@@ -7,12 +7,15 @@
 
 static const int BLOCK_SIZE = 256;
 
-__device__ void threadBlockDeviceSynchronize(void) {
+__device__ void threadBlockDeviceSynchronize(void) 
+{
     __syncthreads();
-    if(threadIdx.x == 0)
-      cudaDeviceSynchronize();
+    if(threadIdx.x == 0){
+        cudaDeviceSynchronize();
+        cudaStreamSynchronize();
+    }
     __syncthreads();
-  }
+}
 
 __device__ void swap_device(int *a, int *b)
 {
