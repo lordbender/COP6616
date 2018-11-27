@@ -1,16 +1,23 @@
+# Assignment Definition
+```text
+    Project 4 Parallel Computing --- Due 12/1/18 at 23:59
+
+    For this project you are to take advantage of GPU's  
+    capabilities offered.
+
+    Implement Listing 2.8 of parallel quicksort. Determine speed
+    up realized.
+```
+
 # Build Instructions
-1. For 7.5 (UNF Machines), run the command below from the root directory run.
-    - "nvcc -rdc=true --default-stream per-thread -std=c++11 *.cu"
-2. if you have a cuda 8 capable device, switch out all 7.5 files for 8.0 files.
+2. Requires a Cuda 8 or higher capable device, Device Side Recursion needs to be supported.
     - "nvcc -arch=compute_53 -rdc=true --default-stream per-thread -std=c++11 *.cu"
 
 # Running the program Instructions
 1. Build the Cuda Files
     - See Instructions Above.
+    - There is a Makefile if you prefer.
+        - chmod 777 Makefile
+        - ./Makefile
 2. Run "./a.out 1000"
     - Of the form "./a.out \[size of test set\]
-
-
-nvcc -rdc=true --default-stream per-thread -std=c++11 *.cu
-nvcc -rdc=true --default-stream per-thread -std=c++11 *.cu
-nvcc -std=c++11 *.cu
