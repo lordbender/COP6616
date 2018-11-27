@@ -42,28 +42,21 @@ __global__ void quicksort_device(int *data, int left, int right)
 
     if (left < nright)
     {
-       
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_device<<<1, 1, 0, s1>>>(data, left, nright);
-        cudaDeviceSynchronize();
+        quicksort_device<<<64, 64, 0, s1>>>(data, left, nright);
     }
 
     if (nleft < right)
     {
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
-        quicksort_device<<<1, 1, 0, s2>>>(data, nleft, right);
+        quicksort_device<<<64, 64, 0, s2>>>(data, nleft, right);
         cudaDeviceSynchronize();
     }
-
-    cudaDeviceSynchronize();
 }
 
 duration<double> quicksort_gpu_streams(int size)
 {
-    int *ha, *da;
-
-    ha = (int *)malloc(sizeof(int) * size);
-
+    int* ha = (int *)malloc(sizeof(int) * size);
     for (int i = 0; i < size; i++)
     {
         ha[i] = rand();
@@ -71,6 +64,7 @@ duration<double> quicksort_gpu_streams(int size)
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
 
+    int *da;
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
 
@@ -89,6 +83,7 @@ duration<double> quicksort_gpu_streams(int size)
     
     gpuErrchk(cudaFree(da));
     free(ha);
+    free(hc);
 
     high_resolution_clock::time_point end = high_resolution_clock::now();
     return time_calc(start, end);
