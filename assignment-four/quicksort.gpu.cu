@@ -34,12 +34,44 @@ __device__ int partition_device(int *arr, int low, int high)
 // Based on CUDA Examples - But Optimized
 __global__ void quicksort_device(int *data, int left, int right)
 {
-    int pi = partition_device(data, left, right);
+    int *lptr = data+left;
+    int *rptr = data+right;
+    int  pivot = data[(left+right)/2];
 
-    int nright = pi - 1;
-    int nleft = pi + 1;
+    // Do the partitioning.
+    while (lptr <= rptr)
+    {
+        // Find the next left- and right-hand values to swap
+        int lval = *lptr;
+        int rval = *rptr;
 
-    if (left < nright)
+        // Move the left pointer as long as the pointed element is smaller than the pivot.
+        while (lval < pivot)
+        {
+            lptr++;
+            lval = *lptr;
+        }
+
+        // Move the right pointer as long as the pointed element is larger than the pivot.
+        while (rval > pivot)
+        {
+            rptr--;
+            rval = *rptr;
+        }
+
+        // If the swap points are valid, do the swap!
+        if (lptr <= rptr)
+        {
+            *lptr++ = rval;
+            *rptr-- = lval;
+        }
+    }
+
+    // Now the recursive part
+    int nright = rptr - data;
+    int nleft  = lptr - data;
+
+    if (left < (rptr-data))
     {
         cudaStream_t s1;
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
@@ -47,7 +79,7 @@ __global__ void quicksort_device(int *data, int left, int right)
         cudaStreamDestroy(s1);
     }
 
-    if (nleft < right)
+    if ((lptr-data) < right)
     {
         cudaStream_t s2;
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
@@ -94,6 +126,7 @@ duration<double> quicksort_gpu_streams(int size)
         if (abort)
             exit(cudaStatus);
     }
+    
     int *hc = (int *)malloc(sizeof(int) * size);
     cudaStatus = cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
