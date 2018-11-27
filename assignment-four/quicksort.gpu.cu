@@ -5,7 +5,37 @@
 #include <chrono>
 #include "main_cuda.cuh"
 
+#define MAX_DEPTH       16
+
 static const int BLOCK_SIZE = 256;
+
+__device__ void selection_sort(int *data, int left, int right)
+{
+    for (int i = left ; i <= right ; ++i)
+    {
+        int min_val = data[i];
+        int min_idx = i;
+
+        // Find the smallest value in the range [left, right].
+        for (int j = i+1 ; j <= right ; ++j)
+        {
+            int val_j = data[j];
+
+            if (val_j < min_val)
+            {
+                min_idx = j;
+                min_val = val_j;
+            }
+        }
+
+        // Swap the values.
+        if (i != min_idx)
+        {
+            data[min_idx] = data[i];
+            data[i] = min_val;
+        }
+    }
+}
 
 __device__ void swap_device(int *a, int *b)
 {
@@ -32,8 +62,15 @@ __device__ int partition_device(int *arr, int low, int high)
 }
 
 // Based on CUDA Examples - But Optimized
-__global__ void quicksort_device(int *data, int left, int right)
+__global__ void quicksort_device(int *data, int left, int right, int depth)
 {
+    // If we're too deep or there are few elements left, we use an insertion sort...
+    if (depth >= MAX_DEPTH || right-left <= 32)
+    {
+        selection_sort(data, left, right);
+        return;
+    }
+        
     int pi = partition_device(data, left, right);
 
     int nright = pi - 1;
@@ -43,7 +80,7 @@ __global__ void quicksort_device(int *data, int left, int right)
     {
         cudaStream_t s1;
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_device<<<1, 64, 0, s1>>>(data, left, nright);
+        quicksort_device<<<1, 64, 0, s1>>>(data, left, nright, depth + 1);
         cudaStreamDestroy(s1);
     }
 
@@ -51,11 +88,9 @@ __global__ void quicksort_device(int *data, int left, int right)
     {
         cudaStream_t s2;
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
-        quicksort_device<<<1, 64, 0, s2>>>(data, nleft, right);
+        quicksort_device<<<1, 64, 0, s2>>>(data, nleft, right, depth + 1);
         cudaStreamDestroy(s2);
     }
-
-    return;
 }
 
 duration<double> quicksort_gpu_streams(int size)
@@ -89,9 +124,9 @@ duration<double> quicksort_gpu_streams(int size)
             exit(cudaStatus);
 	}
 
-    cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, 16);
+    cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, MAX_DEPTH);
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
-    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
+    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1, 0);
     cudaDeviceSynchronize();
 
     cudaStatus = cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
