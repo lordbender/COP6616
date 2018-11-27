@@ -85,7 +85,8 @@ duration<double> quicksort_gpu_streams(int size)
 
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
-   
+    cudaStreamSynchronize(0);
+
     cudaStatus = cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
@@ -94,7 +95,13 @@ duration<double> quicksort_gpu_streams(int size)
 	}
 
 	cudaFree(da);
-	cudaDeviceReset();
+    cudaDeviceReset();
+    // Testing that sort is working, keep commented out on large values of N (say N > 1000)
+    for (int i = 0; i < size; i++)
+    {
+        printf("\t %d\n", ha[i]);
+    }
+
     free(ha);
 
     high_resolution_clock::time_point end = high_resolution_clock::now();
