@@ -7,6 +7,13 @@
 
 static const int BLOCK_SIZE = 256;
 
+__device__ void threadBlockDeviceSynchronize(void) {
+    __syncthreads();
+    if(threadIdx.x == 0)
+      cudaDeviceSynchronize();
+    __syncthreads();
+  }
+
 __device__ void swap_device(int *a, int *b)
 {
     int t = *a;
@@ -54,6 +61,8 @@ __global__ void quicksort_device(int *data, int left, int right)
         quicksort_device<<<1, 1, 0, s2>>>(data, nleft, right);
         cudaStreamDestroy(s2);
     }
+
+    threadBlockDeviceSynchronize();
 }
 
 duration<double> quicksort_gpu_streams(int size)
