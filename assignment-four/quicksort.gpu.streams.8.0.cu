@@ -52,6 +52,7 @@ __global__ void quicksort_device(int *data, int left, int right)
         quicksort_device<<<1, 64, 0, s2>>>(data, nleft, right);
     }
 
+    cudaStreamSynchronize(0);
     return;
 }
 
@@ -77,8 +78,6 @@ duration<double> quicksort_gpu_streams(int size)
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
 
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
-
-	cudaStreamSynchronize(0);
     gpuErrchk(cudaGetLastError());
 
     cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
