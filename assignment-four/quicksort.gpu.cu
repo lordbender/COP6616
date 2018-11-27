@@ -7,30 +7,6 @@
 
 static const int BLOCK_SIZE = 256;
 
-__device__ void swap_device(int array[], int left, int right)
-{
-	int temp;
-	temp = array[left];
-	array[left] = array[right];
-	array[right] = temp;
-}
-
-__device__ int partition_device(int array[], int left, int right, int pivot_index)
-{
-	int pivot_value = array[pivot_index];
-	int store_index = left;
-	int i;
-
-	swap_device(array, pivot_index, right);
-	for (i = left; i < right; i++)
-		if (array[i] <= pivot_value) {
-			swap_device(array, i, store_index);
-			++store_index;
-		}
-	swap_device(array, store_index, right);
-	return store_index;
-}
-// Based on CUDA Examples - But Optimized
 __global__ void quicksort_device(int arr[], int low, int high)
 { 
     cudaStream_t s1, s2;
@@ -39,13 +15,28 @@ __global__ void quicksort_device(int arr[], int low, int high)
 
 	if (low < high) 
 	{ 
-		int pi = partition_device(arr, low, high, pivot_index); 
+        int pivot_value = arr[pivot_index];
+        int store_index = low;
+    
+        for (int i = low; i < high; i++)
+            if (arr[i] <= pivot_value) {
+            
+                int temp = arr[i];
+                arr[i] = arr[store_index];
+                arr[store_index] = temp;
+
+                ++store_index;
+            }
+
+            int temp = arr[store_index];
+            arr[store_index] = arr[high];
+            arr[low] = temp;
 
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_device<<<1, 64, 0, s1>>>(arr, low, pi - 1);
+        quicksort_device<<<1, 64, 0, s1>>>(arr, low, store_index - 1);
         
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
-        quicksort_device<<<1, 64, 0, s2>>>(arr, pi + 1, high);
+        quicksort_device<<<1, 64, 0, s2>>>(arr, store_index + 1, high);
 	} 
 }
 
