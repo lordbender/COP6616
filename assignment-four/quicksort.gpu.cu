@@ -111,23 +111,46 @@ __global__ void cdp_simple_quicksort(int *data, int left, int right, int depth)
 //     }
 // }
 
-void quicksort_host(int *da, int *hc, int size)
-{
-    // Call the device.
-    int grid = ceil(size * 1.0 / BLOCK_SIZE);
-    cdp_simple_quicksort<<<grid, BLOCK_SIZE>>>(da, 0, size - 1, MAX_DEPTH);
-    gpuErrchk(cudaGetLastError());
+// void quicksort_host(int *da, int *hc, int size)
+// {
+//     // Call the device.
+//     int grid = ceil(size * 1.0 / BLOCK_SIZE);
+//     cdp_simple_quicksort<<<grid, BLOCK_SIZE>>>(da, 0, size - 1, MAX_DEPTH);
+//     gpuErrchk(cudaGetLastError());
 
-    // Ensure the Device is in sync, before we copy the data back!
-    gpuErrchk(cudaDeviceSynchronize());
+//     // Ensure the Device is in sync, before we copy the data back!
+//     gpuErrchk(cudaDeviceSynchronize());
+//     gpuErrchk(cudaGetLastError());
+
+//     // Copy the results back from the device.
+//     gpuErrchk(cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost));
+//     gpuErrchk(cudaGetLastError());
+
+//     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
+//     for (int i = 0; i < size; i++)
+//     {
+//         printf("\t %d\n", hc[i]);
+//     }
+// }
+
+void quicksort_host(int *data, int *hc, int nitems)
+{
+    // Prepare CDP for the max depth 'MAX_DEPTH'.
+    cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, MAX_DEPTH);
+
+    // Launch on device
+    int left = 0;
+    int right = nitems-1;
+    cdp_simple_quicksort<<< 1, 1 >>>(data, left, right, 0);
     gpuErrchk(cudaGetLastError());
+    cudaDeviceSynchronize();
 
     // Copy the results back from the device.
-    gpuErrchk(cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost));
+    gpuErrchk(cudaMemcpy(hc, data, sizeof(int) * nitems, cudaMemcpyDeviceToHost));
     gpuErrchk(cudaGetLastError());
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < nitems; i++)
     {
         printf("\t %d\n", hc[i]);
     }
