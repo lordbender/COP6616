@@ -60,15 +60,13 @@ duration<double> quicksort_gpu_streams(int size)
 {
     cudaError_t cudaStatus;
 
-    int *ha, *da, *hc;
+    int *ha, *da;
 
     ha = (int *)malloc(sizeof(int) * size);
-    hc = (int *)malloc(sizeof(int) * size);
 
     for (int i = 0; i < size; i++)
     {
         ha[i] = rand();
-        hc[i] = 0;
     }
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
@@ -90,8 +88,13 @@ duration<double> quicksort_gpu_streams(int size)
     // cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, 16);
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
-    cudaDeviceSynchronize();
-
+    cudaStatus = cudaDeviceSynchronize();
+	if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
+        if (abort)
+            exit(cudaStatus);
+    }
+    int *hc = (int *)malloc(sizeof(int) * size);
     cudaStatus = cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
@@ -99,14 +102,14 @@ duration<double> quicksort_gpu_streams(int size)
             exit(cudaStatus);
 	}
 
-	cudaFree(da);
-    cudaDeviceReset();
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     for (int i = 0; i < size; i++)
     {
         printf("\t %d\n", hc[i]);
     }
-
+    
+    cudaFree(da);
+    cudaDeviceReset();
     free(ha);
 
     high_resolution_clock::time_point end = high_resolution_clock::now();
