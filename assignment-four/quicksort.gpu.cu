@@ -105,7 +105,7 @@ duration<double> quicksort_gpu_streams(int size)
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     for (int i = 0; i < size; i++)
     {
-        printf("\t %d\n", hc[i]);
+        printf("\t hc[ %d ] => %d\n", i, hc[i]);
     }
     
     cudaFree(da);
