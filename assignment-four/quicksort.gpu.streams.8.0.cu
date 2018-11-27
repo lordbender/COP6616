@@ -51,13 +51,13 @@ __global__ void quicksort_device(int *data, int left, int right)
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
         quicksort_device<<<1, 64, 0, s2>>>(data, nleft, right);
     }
-
-    cudaStreamSynchronize(0);
     return;
 }
 
 duration<double> quicksort_gpu_streams(int size)
 {
+    cudaError_t cudaStatus;
+
     int *ha, *da;
 
     ha = (int *)malloc(sizeof(int) * size);
@@ -69,22 +69,32 @@ duration<double> quicksort_gpu_streams(int size)
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
 
-    gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
-    gpuErrchk(cudaGetLastError());
+    cudaStatus = cudaMalloc((void **)&da, sizeof(int) * size);
+	if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaMalloc failed!  Do you have a CUDA-capable GPU installed?");
+        if (abort)
+            exit(cudaStatus);
+	}
 
-    gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
-    gpuErrchk(cudaGetLastError());
+    cudaStatus = cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice);
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
+        if (abort)
+            exit(cudaStatus);
+	}
 
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
-
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
-    gpuErrchk(cudaGetLastError());
+   
+    cudaStatus = cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
+	if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaMemcpy failed!  Do you have a CUDA-capable GPU installed?");
+        if (abort)
+            exit(cudaStatus);
+	}
 
-    cudaMemcpy(ha, da, sizeof(int) * size, cudaMemcpyDeviceToHost);
-
-    cudaFree(da);
-    cudaDeviceReset();
-
+	cudaFree(da);
+	cudaDeviceReset();
     free(ha);
 
     high_resolution_clock::time_point end = high_resolution_clock::now();
