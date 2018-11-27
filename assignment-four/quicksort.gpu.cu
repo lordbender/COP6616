@@ -42,14 +42,14 @@ __global__ void quicksort_device(int *data, int left, int right)
 
     if (left < nright)
     {
-        cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_device<<<1, 32, 0, s1>>>(data, left, nright);
+        // cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
+        // quicksort_device<<<1, 32, 0, s1>>>(data, left, nright);
     }
 
     if (nleft < right)
     {
-        cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
-        quicksort_device<<<1, 32, 0, s2>>>(data, nleft, right);
+        // cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
+        // quicksort_device<<<1, 32, 0, s2>>>(data, nleft, right);
     }
 }
 
@@ -66,6 +66,7 @@ void quicksort_host(int *da, int *hc, int size)
 
     // Copy the results back from the device.
     gpuErrchk(cudaMemcpy(hc, da, sizeof(int) * size, cudaMemcpyDeviceToHost));
+    gpuErrchk(cudaGetLastError());
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
     // for (int i = 0; i < size; i++)
@@ -90,6 +91,7 @@ duration<double> quicksort_gpu_streams(int size)
     int *da;
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
+    gpuErrchk(cudaGetLastError());
 
     // Kick off the sort!
     quicksort_host(da, hc, size);
