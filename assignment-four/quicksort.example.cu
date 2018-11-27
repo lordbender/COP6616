@@ -157,7 +157,7 @@ duration<double> quicksort_gpu_streams(int size)
 
     for (int i = 0; i < size; i++)
     {
-        printf("\t hc[ %d ] => %d\n", i, h_data[i]);
+        printf("\t d_data[ %d ] => %d\n", i, d_data[i]);
     }
 
     free(h_data);
