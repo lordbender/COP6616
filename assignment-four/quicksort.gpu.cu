@@ -161,10 +161,10 @@ void quicksort_host(int *da, int *hc, int size)
     gpuErrchk(cudaGetLastError());
 
     // Testing that sort is working, keep commented out on large values of N (say N > 1000)
-    // for (int i = 0; i < size; i++)
-    // {
-    //     printf("\t %d\n", hc[i]);
-    // }
+    for (int i = 0; i < size; i++)
+    {
+        printf("\t %d\n", hc[i]);
+    }
 }
 
 duration<double> quicksort_gpu_streams(int size)
