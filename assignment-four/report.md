@@ -5,6 +5,7 @@ Video BIOS:    84.00.45.00.90
 ```
 [Specs for GPU: GTX TITAN X](https://www.geforce.com/hardware/desktop-gpus/geforce-gtx-titan-x/specifications)
 [Concurrency Model Based On](https://devblogs.nvidia.com/gpu-pro-tip-cuda-7-streams-simplify-concurrency/)
+[Dynamic Parallelizm](https://devblogs.nvidia.com/cuda-dynamic-parallelism-api-principles/)
 
 ## Speedup and Efficiency
 ```text
