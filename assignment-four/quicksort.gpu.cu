@@ -10,42 +10,8 @@ static const int BLOCK_SIZE = 256;
 #define MAX_DEPTH       16
 #define INSERTION_SORT  32
 
-__device__ void selection_sort(int *data, int left, int right)
-{
-    for (int i = left ; i <= right ; ++i)
-    {
-        int min_val = data[i];
-        int min_idx = i;
-
-        // Find the smallest value in the range [left, right].
-        for (int j = i+1 ; j <= right ; ++j)
-        {
-            int val_j = data[j];
-
-            if (val_j < min_val)
-            {
-                min_idx = j;
-                min_val = val_j;
-            }
-        }
-
-        // Swap the values.
-        if (i != min_idx)
-        {
-            data[min_idx] = data[i];
-            data[i] = min_val;
-        }
-    }
-}
-
 __global__ void cdp_simple_quicksort(int *data, int left, int right, int depth)
 {
-    if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
-    {
-        selection_sort(data, left, right);
-        return;
-    }
-
     int *lptr = data+left;
     int *rptr = data+right;
     int  pivot = data[(left+right)/2];
