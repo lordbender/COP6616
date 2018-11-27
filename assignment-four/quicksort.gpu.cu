@@ -51,6 +51,7 @@ __global__ void quicksort_device(int *data, int left, int right)
         cudaStream_t s1;
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
         quicksort_device<<<1, 1, 0, s1>>>(data, left, nright);
+        threadBlockDeviceSynchronize();
         cudaStreamDestroy(s1);
     }
 
@@ -59,6 +60,7 @@ __global__ void quicksort_device(int *data, int left, int right)
         cudaStream_t s2;
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
         quicksort_device<<<1, 1, 0, s2>>>(data, nleft, right);
+        threadBlockDeviceSynchronize();
         cudaStreamDestroy(s2);
     }
 
