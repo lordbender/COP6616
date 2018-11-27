@@ -93,6 +93,13 @@ duration<double> quicksort_gpu_streams(int size)
             exit(cudaStatus);
     }
 
+    cudaStatus = cudaDeviceSynchronize()
+	if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
+        if (abort)
+            exit(cudaStatus);
+    }
+    
     cudaStatus = cudaStreamSynchronize(0);
 	if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
