@@ -7,16 +7,6 @@
 
 static const int BLOCK_SIZE = 256;
 
-__device__ void threadBlockDeviceSynchronize(void) 
-{
-    __syncthreads();
-    if(threadIdx.x == 0){
-        cudaDeviceSynchronize();
-        cudaStreamSynchronize();
-    }
-    __syncthreads();
-}
-
 __device__ void swap_device(int *a, int *b)
 {
     int t = *a;
@@ -43,7 +33,8 @@ __device__ int partition_device(int *arr, int low, int high)
 
 // Based on CUDA Examples - But Optimized
 __global__ void quicksort_device(int *data, int left, int right)
-{
+{ 
+    cudaStream_t s1, s2;
     int pi = partition_device(data, left, right);
 
     int nright = pi - 1;
@@ -51,23 +42,16 @@ __global__ void quicksort_device(int *data, int left, int right)
 
     if (left < nright)
     {
-        cudaStream_t s1;
+       
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
         quicksort_device<<<1, 1, 0, s1>>>(data, left, nright);
-        threadBlockDeviceSynchronize();
-        cudaStreamDestroy(s1);
     }
 
     if (nleft < right)
     {
-        cudaStream_t s2;
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
         quicksort_device<<<1, 1, 0, s2>>>(data, nleft, right);
-        threadBlockDeviceSynchronize();
-        cudaStreamDestroy(s2);
     }
-
-    threadBlockDeviceSynchronize();
 }
 
 duration<double> quicksort_gpu_streams(int size)
@@ -103,6 +87,13 @@ duration<double> quicksort_gpu_streams(int size)
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
     cudaStatus = cudaDeviceSynchronize();
+	if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
+        if (abort)
+            exit(cudaStatus);
+    }
+
+    cudaStatus = cudaStreamSynchronize(0);
 	if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "cudaDeviceSynchronize failed!  Do you have a CUDA-capable GPU installed?");
         if (abort)

@@ -14,7 +14,6 @@ struct qsort_starter
 	int depth;
 };
 
-// Macro for swapping two values.
 #define SWAP(x,y) do {\
     __typeof__(x) tmp = x;\
     x = y;\
@@ -36,18 +35,15 @@ void parallel_quicksort(int *array, int left, int right, int depth)
     {
         int pivotIndex = left + (right - left)/2;
         pivotIndex = partition(array, left, right, pivotIndex);
-        // Either do the parallel or serial quicksort, depending on the depth
-        // specified.
+
         if (depth-- > 0)
         {
-            // Create the thread for the first recursive call
             struct qsort_starter arg = {array, left, pivotIndex-1, depth};
             pthread_t thread;
             int ret = pthread_create(&thread, NULL, quicksort_thread, &arg);
             assert((ret == 0) && "Thread creation failed");
-            // Perform the second recursive call in this thread
+
             parallel_quicksort(array, pivotIndex+1, right, depth);
-            // Wait for the first call to finish.
             pthread_join(thread, NULL);
         }
         else
