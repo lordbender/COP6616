@@ -53,6 +53,16 @@ __global__ void quicksort_device(int *data, int left, int right)
     }
 }
 
+__global__ void quicksort_root_device(int *da, int *dc, int size)
+{
+    int grid = ceil(size * 1.0 / BLOCK_SIZE);
+    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
+    cudaDeviceSynchronize();
+
+    for(int i = 0; i < size; i++)
+        dc[i] = da[i];
+}
+
 duration<double> quicksort_gpu_streams(int size)
 {
     int* ha = (int *)malloc(sizeof(int) * size);
@@ -63,12 +73,13 @@ duration<double> quicksort_gpu_streams(int size)
 
     high_resolution_clock::time_point start = high_resolution_clock::now();
 
-    int *da;
+    int *da, *dc;
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
+    gpuErrchk(cudaMalloc((void **)&dc, sizeof(int) * size));
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
 
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
-    quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
+    quicksort_root_device<<<grid, BLOCK_SIZE>>>(da, dc, size);
     gpuErrchk(cudaDeviceSynchronize());
 
     int *hc = (int *)malloc(sizeof(int) * size);
