@@ -89,7 +89,7 @@ duration<double> quicksort_gpu_streams(int size)
             exit(cudaStatus);
 	}
 
-    cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, 16)
+    cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, 16);
     int grid = ceil(size * 1.0 / BLOCK_SIZE);
     quicksort_device<<<grid, BLOCK_SIZE>>>(da, 0, size - 1);
     cudaDeviceSynchronize();
