@@ -7,55 +7,46 @@
 
 static const int BLOCK_SIZE = 256;
 
-__device__ void swap_device(int *a, int *b)
+__device__ void swap_device(int array[], int left, int right)
 {
-    int t = *a;
-    *a = *b;
-    *b = t;
+	int temp;
+	temp = array[left];
+	array[left] = array[right];
+	array[right] = temp;
 }
 
-__device__ int partition_device(int *arr, int low, int high)
+__device__ int partition_device(int array[], int left, int right, int pivot_index)
 {
-    int pivot = arr[high];
-    int i = (low - 1);
+	int pivot_value = array[pivot_index];
+	int store_index = left;
+	int i;
 
-    for (int j = low; j <= high - 1; j++)
-    {
-        if (arr[j] <= pivot)
-        {
-            i++;
-            swap_device(&arr[i], &arr[j]);
-        }
-    }
-    swap_device(&arr[i + 1], &arr[high]);
-    return (i + 1);
+	swap_device(array, pivot_index, right);
+	for (i = left; i < right; i++)
+		if (array[i] <= pivot_value) {
+			swap_device(array, i, store_index);
+			++store_index;
+		}
+	swap_device(array, store_index, right);
+	return store_index;
 }
-
 // Based on CUDA Examples - But Optimized
-__global__ void quicksort_device(int *data, int left, int right)
+__global__ void quicksort_device(int arr[], int low, int high)
 { 
     cudaStream_t s1, s2;
-    int pi = partition_device(data, left, right);
 
-    int nright = pi - 1;
-    int nleft = pi + 1;
+    int pivot_index = low;
 
-    if (left < nright)
-    {
-       
+	if (low < high) 
+	{ 
+		int pi = partition_device(arr, low, high, pivot_index); 
+
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_device<<<1, 1, 0, s1>>>(data, left, nright);
-        cudaDeviceSynchronize();
-    }
-
-    if (nleft < right)
-    {
+        quicksort_device<<<1, 64, 0, s1>>>(arr, low, pi - 1);
+        
         cudaStreamCreateWithFlags(&s2, cudaStreamNonBlocking);
-        quicksort_device<<<1, 1, 0, s2>>>(data, nleft, right);
-        cudaDeviceSynchronize();
-    }
-
-    cudaDeviceSynchronize();
+        quicksort_device<<<1, 64, 0, s2>>>(arr, pi + 1, high);
+	} 
 }
 
 duration<double> quicksort_gpu_streams(int size)
