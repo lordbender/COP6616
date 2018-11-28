@@ -149,7 +149,7 @@ void check_results(int n, unsigned int *results_d)
     gpuErrchk(cudaMemcpy(results_h, results_d, n*sizeof(unsigned), cudaMemcpyDeviceToHost));
 
     for (int i = 1 ; i < n ; ++i)
-        printf("\t%d", results_h)
+        printf("\t%d", results_h);
 
     std::cout << "OK" << std::endl;
     delete[] results_h;
