@@ -5,7 +5,7 @@ popd
 
 
 pushd cuda
-nvcc -arch=compute_35 -rdc=true -maxrregcount=50  --machine 64 -cudart static --default-stream per-thread *.cu -o gpu.out
+ nvcc -arch=compute_35 -rdc=true -maxrregcount=50  --machine 64 -cudart static --default-stream legacy *.cu -o gpu.out
 ./gpu.out 100000
 popd
 
