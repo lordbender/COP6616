@@ -28,7 +28,7 @@ Video BIOS:    84.00.45.00.90
 
 ### Measured Run
 ```text
-        Note: All runs posted in Outcomes Section Below.
+Note: All runs posted in Outcomes Section Below.
 
 [n00599835@cis-gpu1 cpp]$ ./cpu.out 1000000
         CPU O(n*log(n)) Sequential Radix: Completed 1000000 numbers in 0.327945 seconds!!!
@@ -80,6 +80,10 @@ Video BIOS:    84.00.45.00.90
         [n00599835@cis-gpu1 cuda]$ ./gpu.out 10000000
                 GPU O(n*log(n)) GPU Quicksort: Completed 10000000 numbers in 21.390000 seconds!!!
                 GPU Processing Time, Minus Date Copies: 20.480000 seconds!!!
+                
+        [n00599835@cis-gpu1 cuda]$ ./gpu.out 100000000
+                GPU O(n*log(n)) GPU Quicksort: Completed 100000000 numbers in 228.890000 seconds!!!
+                GPU Processing Time, Minus Date Copies: 227.850000 seconds!!!
 ```
 
 ## CPU Runs
