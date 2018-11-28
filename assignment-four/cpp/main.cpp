@@ -4,7 +4,7 @@
 #include <ratio>
 #include <chrono>
 
-#include "main_cuda.h"
+#include "main.h"
 
 using namespace std::chrono;
  
@@ -22,7 +22,4 @@ int main(int argc, char *argv[])
 
 	duration<double> cpu_threads_runtime = quicksort_cpu_threads(size);
 	printf("\tCPU O(n*log(n)) Threaded Quicksort: Completed %d numbers in %f seconds!!!\n", size, cpu_threads_runtime.count());
-	
-	// duration<double> gpu_streams_runtime = quicksort_gpu_streams(size);
-	// printf("\tGPU O(n*log(n)) Streamed: Completed %d numbers in %f seconds!!!\n\n", size, gpu_streams_runtime.count());
 }

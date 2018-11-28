@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <pthread.h>
 
-#include "main_cuda.h"
+#include "main.h"
 
 struct qsort_starter
 {

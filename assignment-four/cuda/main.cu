@@ -130,10 +130,10 @@ int main(int argc, char **argv)
     unsigned int *results = new unsigned[size];
     gpuErrchk(cudaMemcpy(results, da, size*sizeof(unsigned), cudaMemcpyDeviceToHost));
 
-    printf("\n");
-    for (int i = 1 ; i < size ; ++i)
-        printf("\t%d", results[i]);
-    printf("\n");
+    // printf("\n");
+    // for (int i = 1 ; i < size ; ++i)
+    //     printf("\t%d", results[i]);
+    // printf("\n");
 
     gpuErrchk(cudaFree(da));
     free(ha);
