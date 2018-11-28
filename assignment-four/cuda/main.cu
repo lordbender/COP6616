@@ -85,7 +85,7 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
     {
         cudaStream_t s;
         cudaStreamCreateWithFlags(&s, cudaStreamNonBlocking);
-        quicksort_gpu<<< 1, 1, 0, s >>>(data, left, nright, depth+1);
+        quicksort_gpu<<< 1, 8, 0, s >>>(data, left, nright, depth+1);
         cudaStreamDestroy(s);
     }
 
@@ -93,7 +93,7 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
     {
         cudaStream_t s1;
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_gpu<<< 1, 1, 0, s1 >>>(data, nleft, right, depth+1);
+        quicksort_gpu<<< 1, 8, 0, s1 >>>(data, nleft, right, depth+1);
         cudaStreamDestroy(s1);
     }
 }
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     int right = size-1;
     // int grid = ceil(size * 1.0 / 256);
 
-    quicksort_gpu<<< 1, 1 >>>(da, left, right, 0);
+    quicksort_gpu<<< 1, 16 >>>(da, left, right, 0);
     cudaDeviceSynchronize();
 
     unsigned int *results = new unsigned[size];
