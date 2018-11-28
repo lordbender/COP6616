@@ -43,11 +43,11 @@ __device__ void selection_sort(unsigned int *data, int left, int right)
 
 __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth)
 {
-    if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
-    {
-        selection_sort(data, left, right);
-        return;
-    }
+    // if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
+    // {
+    //     selection_sort(data, left, right);
+    //     return;
+    // }
 
     unsigned int *lptr = data+left;
     unsigned int *rptr = data+right;
@@ -100,8 +100,6 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
 
 int main(int argc, char **argv)
 {
-    
-
     srand(time(0));
 
     int size = atoi(argv[1]);

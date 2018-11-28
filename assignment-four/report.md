@@ -18,13 +18,12 @@ Video BIOS:    84.00.45.00.90
 ```text
 Note: All runs posted in Outcomes Section Below.
 
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 100000000
+CPU O(n*log(n)) Sequential Radix: Completed 1000000 numbers in 0.303327 seconds!!!
+CPU O(n*log(n)) Sequential Quicksort: Completed 1000000 numbers in 0.201159 seconds!!!
+CPU O(n*log(n)) Threaded Quicksort: Completed 1000000 numbers in 0.125402 seconds!!!
 
+GPU O(n*log(n)) GPU Quicksort: Completed 1000000 numbers in 80.430000 seconds!!!
 
-        CPU O(n*log(n)) Sequential Radix: Completed 100000000 numbers in 25.906587 seconds!!!
-        CPU O(n*log(n)) Sequential Quicksort: Completed 100000000 numbers in 25.195350 seconds!!!
-        CPU O(n*log(n)) Threaded Quicksort: Completed 100000000 numbers in 6.308422 seconds!!!
-        GPU O(n*log(n)) Streamed: Completed 100000000 numbers in 0.320615 seconds!!!
 ```
 
 ### CPU vs GPU Sequential
@@ -47,94 +46,36 @@ n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 100000000
 
 # Outcomes - All Test Runs
 
+## GPU Runs
 ```text
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ nvcc -arch=compute_53 -rdc=true --default-stream per-thread -std=c++11 *.cu
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 1000
-
-
-        CPU O(n*log(n)) Sequential Radix: Completed 1000 numbers in 0.000750 seconds!!!
-        CPU O(n*log(n)) Sequential Quicksort: Completed 1000 numbers in 0.000316 seconds!!!
-        CPU O(n*log(n)) Threaded Quicksort: Completed 1000 numbers in 0.001797 seconds!!!
-        GPU O(n*log(n)) Streamed: Completed 1000 numbers in 0.191406 seconds!!!
-
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 10000
-
-
-        CPU O(n*log(n)) Sequential Radix: Completed 10000 numbers in 0.011103 seconds!!!
-        CPU O(n*log(n)) Sequential Quicksort: Completed 10000 numbers in 0.001936 seconds!!!
-        CPU O(n*log(n)) Threaded Quicksort: Completed 10000 numbers in 0.003024 seconds!!!
-        GPU O(n*log(n)) Streamed: Completed 10000 numbers in 0.155209 seconds!!!
-
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 100000
-
-
-        CPU O(n*log(n)) Sequential Radix: Completed 100000 numbers in 0.033775 seconds!!!
-        CPU O(n*log(n)) Sequential Quicksort: Completed 100000 numbers in 0.017509 seconds!!!
-        CPU O(n*log(n)) Threaded Quicksort: Completed 100000 numbers in 0.010942 seconds!!!
-        GPU O(n*log(n)) Streamed: Completed 100000 numbers in 0.185900 seconds!!!
-
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 1000000
-
-
-        CPU O(n*log(n)) Sequential Radix: Completed 1000000 numbers in 0.271512 seconds!!!
-        CPU O(n*log(n)) Sequential Quicksort: Completed 1000000 numbers in 0.187281 seconds!!!
-        CPU O(n*log(n)) Threaded Quicksort: Completed 1000000 numbers in 0.076339 seconds!!!
-        GPU O(n*log(n)) Streamed: Completed 1000000 numbers in 0.152570 seconds!!!
-
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 10000000
-
-
-        CPU O(n*log(n)) Sequential Radix: Completed 10000000 numbers in 2.617365 seconds!!!
-        CPU O(n*log(n)) Sequential Quicksort: Completed 10000000 numbers in 2.166389 seconds!!!
-        CPU O(n*log(n)) Threaded Quicksort: Completed 10000000 numbers in 0.525630 seconds!!!
-        GPU O(n*log(n)) Streamed: Completed 10000000 numbers in 0.163671 seconds!!!
-
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 100000000
-
-
-        CPU O(n*log(n)) Sequential Radix: Completed 100000000 numbers in 25.906587 seconds!!!
-        CPU O(n*log(n)) Sequential Quicksort: Completed 100000000 numbers in 25.195350 seconds!!!
-        CPU O(n*log(n)) Threaded Quicksort: Completed 100000000 numbers in 6.308422 seconds!!!
-        GPU O(n*log(n)) Streamed: Completed 100000000 numbers in 0.320615 seconds!!!
-
-n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 200000000
-
-
-        CPU O(n*log(n)) Sequential Radix: Completed 200000000 numbers in 51.674903 seconds!!!
-        CPU O(n*log(n)) Sequential Quicksort: Completed 200000000 numbers in 52.997838 seconds!!!
-        CPU O(n*log(n)) Threaded Quicksort: Completed 200000000 numbers in 11.551333 seconds!!!
-        GPU O(n*log(n)) Streamed: Completed 200000000 numbers in 0.521155 seconds!!!
+[n00599835@cis-gpu1 cuda]$ ./gpu.out 10000
+        GPU O(n*log(n)) GPU Quicksort: Completed 10000 numbers in 0.840000 seconds!!!
+[n00599835@cis-gpu1 cuda]$ ./gpu.out 100000
+        GPU O(n*log(n)) GPU Quicksort: Completed 100000 numbers in 7.740000 seconds!!!
+[n00599835@cis-gpu1 cuda]$ ./gpu.out 1000000
+        GPU O(n*log(n)) GPU Quicksort: Completed 1000000 numbers in 81.270000 seconds!!!
 ```
 
-# TOP at time of Testing
+## CPU Runs
 ```text
-    top - 09:59:21 up 26 days, 19:52,  3 users,  load average: 0.47, 0.43, 0.30
-    Tasks: 805 total,   1 running, 711 sleeping,   3 stopped,   0 zombie
-    %Cpu(s):  1.2 us,  0.6 sy,  0.0 ni, 98.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
-    KiB Mem : 32775588 total,  6586644 free, 14722612 used, 11466332 buff/cache
-    KiB Swap:  2097148 total,  2096380 free,      768 used. 16887580 avail Mem
-
-    %Cpu(s):  4.3 us,  4.3 sy,  0.0 ni, 91.3 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
-    19723 n009768+  20   0 2096772   8328   6752 S   5.6  0.0   2365:12 pulseaudio
-    19212 n014231+  20   0 2807020 793372 126432 S   4.3  2.4 426:45.20 Web Content
-    20222 n014231+  20   0 2069132 387320 122208 S   3.3  1.2 479:08.67 Web Content
-
-
-    25555 n014231+  20   0   17336   4768   1992 S   1.7  0.0 335:04.61 nvidia-smi
-    21162 n014231+  20   0   17336   4840   2064 S   1.3  0.0 464:13.09 nvidia-smi
-    21131 n011702+  20   0 2256696 402244 165972 S   1.0  1.2 241:55.38 firefox
-    21386 n011702+  20   0 1734416 235416 138404 S   1.0  0.7 241:05.89 Web Content
-    25878 n005998+  20   0   51976   5016   3572 R   1.0  0.0   0:00.18 top
+[n00599835@cis-gpu1 cpp]$ ./cpu.out 10000
+        CPU O(n*log(n)) Sequential Radix: Completed 10000 numbers in 0.007596 seconds!!!
+        CPU O(n*log(n)) Sequential Quicksort: Completed 10000 numbers in 0.003559 seconds!!!
+        CPU O(n*log(n)) Threaded Quicksort: Completed 10000 numbers in 0.006769 seconds!!!
+[n00599835@cis-gpu1 cpp]$ ./cpu.out 100000
+        CPU O(n*log(n)) Sequential Radix: Completed 100000 numbers in 0.046407 seconds!!!
+        CPU O(n*log(n)) Sequential Quicksort: Completed 100000 numbers in 0.022111 seconds!!!
+        CPU O(n*log(n)) Threaded Quicksort: Completed 100000 numbers in 0.011876 seconds!!!
+[n00599835@cis-gpu1 cpp]$ ./cpu.out 1000000
+        CPU O(n*log(n)) Sequential Radix: Completed 1000000 numbers in 0.268029 seconds!!!
+        CPU O(n*log(n)) Sequential Quicksort: Completed 1000000 numbers in 0.200867 seconds!!!
+        CPU O(n*log(n)) Threaded Quicksort: Completed 1000000 numbers in 0.122772 seconds!!!
 ```
 
 # Compiler Flags
 ```text
-        [n00599835@cis-gpu1 cuda]$ nvcc -arch=compute_35 -rdc=true *.cu -o gpu.out
-        [n00599835@cis-gpu1 cuda]$ ./gpu.out 100000
-                CPU O(n*log(n)) GPU Quicksort: Completed 100000 numbers in 0.129142 seconds!!!
-        [n00599835@cis-gpu1 cuda]$ ./gpu.out 1000000
-                CPU O(n*log(n)) GPU Quicksort: Completed 1000000 numbers in 28.940148 seconds!!!
-        [n00599835@cis-gpu1 cuda]$ nvcc -arch=compute_35 -rdc=true --default-stream per-thread *.cu -o gpu.out
-        [n00599835@cis-gpu1 cuda]$ ./gpu.out 1000000
-                CPU O(n*log(n)) GPU Quicksort: Completed 1000000 numbers in 21.511633 seconds!!!
+        There are a lot of permutations of flags. These flags seem to have fantastic consequences on the outcomes.
+
+        My final Combination of Flags:
+        nvcc -arch=compute_35 -rdc=true -maxrregcount=0  --machine 64 -cudart static *.cu -o gpu.out
 ```
