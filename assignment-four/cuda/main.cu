@@ -10,8 +10,8 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
    }
 }
 
-#define MAX_DEPTH       32
-#define INSERTION_SORT  64
+#define MAX_DEPTH       16
+#define INSERTION_SORT  32
 
 __device__ void selection_sort(unsigned int *data, int left, int right)
 {
@@ -108,7 +108,6 @@ double run_sort(unsigned int *data, unsigned int size)
     int grid = ceil(size * 1.0 / 256);
     quicksort_gpu<<< grid, 256 >>>(data, left, right, 0);
     cudaEventRecord(stop);
-    // gpuErrchk(cudaGetLastError());
 
     cudaDeviceSynchronize();
     
