@@ -112,6 +112,10 @@ void run_sort(unsigned int *data, unsigned int size)
 
 int main(int argc, char **argv)
 {
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
     srand(time(0));
 
     int size = atoi(argv[1]);
@@ -121,7 +125,8 @@ int main(int argc, char **argv)
     unsigned int *ha =(unsigned int *)malloc(size*sizeof(unsigned int));
     for (unsigned i = 0 ; i < size ; i++)
         ha[i] = rand() % size;
-
+       
+    cudaEventRecord(start);
     gpuErrchk(cudaMalloc((void **)&da, size * sizeof(unsigned int)));
     gpuErrchk(cudaMemcpy(da, ha, size * sizeof(unsigned int), cudaMemcpyHostToDevice));
 
@@ -129,15 +134,21 @@ int main(int argc, char **argv)
 
     unsigned int *results = new unsigned[size];
     gpuErrchk(cudaMemcpy(results, da, size*sizeof(unsigned), cudaMemcpyDeviceToHost));
-
+    cudaEventRecord(stop);
+    
     // printf("\n");
     // for (int i = 1 ; i < size ; ++i)
     //     printf("\t%d", results[i]);
     // printf("\n");
-
+    
     gpuErrchk(cudaFree(da));
     free(ha);
     delete[] results;
+    
+    cudaEventSynchronize(stop);
+    float milliseconds = 0;
+    cudaEventElapsedTime(&milliseconds, start, stop);
+    printf("\tCPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, milliseconds);
 
     exit(EXIT_SUCCESS);
 }
