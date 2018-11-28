@@ -11,6 +11,7 @@
 
 # Build Instructions
 2. Requires a Cuda 8 or higher capable device, Device Side Recursion needs to be supported.
+    - "g++ -std=c++14 *.cpp -lpthread -o cpu.out"
     - "nvcc -arch=compute_72 -rdc=true -std=c++11 --default-stream per-thread --resource-usage  *.cu"
 
 # Running the program Instructions

@@ -5,7 +5,7 @@
 #include <chrono>
 #include <vector>
 
-#include "main_cuda.cuh"
+#include "main_cuda.h"
 
 using namespace std::chrono;
   

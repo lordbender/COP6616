@@ -4,7 +4,7 @@
 #include <ctime>
 #include <ratio>
 #include <chrono>
-#include "main_cuda.cuh"
+#include "main_cuda.h"
 
 using namespace std::chrono;
 
