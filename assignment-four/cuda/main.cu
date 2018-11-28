@@ -137,7 +137,7 @@ int main(int argc, char **argv)
     free(ha);
     delete[] results;
     
-    printf("\tCPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, duration);
+    printf("\tGPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, duration);
 
     exit(EXIT_SUCCESS);
 }
