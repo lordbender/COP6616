@@ -148,7 +148,7 @@ int main(int argc, char **argv)
     cudaEventSynchronize(stop);
     float milliseconds = 0;
     cudaEventElapsedTime(&milliseconds, start, stop);
-    printf("\tCPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, milliseconds);
+    printf("\tCPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, (milliseconds / 1000.0));
 
     exit(EXIT_SUCCESS);
 }
