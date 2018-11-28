@@ -93,7 +93,7 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
     {
         cudaStream_t s1;
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_gpu<<< 1, 8, 0, s1 >>>(data, nleft, right, depth+1);
+        quicksort_gpu<<< 1, 1, 0, s1 >>>(data, nleft, right, depth+1);
         cudaStreamDestroy(s1);
     }
 }
