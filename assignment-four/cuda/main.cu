@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     int right = size-1;
 
     std::clock_t start_gpu_only = std::clock(); 
-    quicksort_gpu<<< 1, 32 >>>(da, left, right);
+    quicksort_gpu<<< 1, 1 >>>(da, left, right);
     cudaDeviceSynchronize();
     double duration_gpu_only = ( std::clock() - start_gpu_only ) / (double) CLOCKS_PER_SEC;
     gpuErrchk(cudaGetLastError());
