@@ -10,42 +10,42 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
    }
 }
 
-#define MAX_DEPTH       16
-// #define INSERTION_SORT  32
+#define MAX_DEPTH       32
+#define INSERTION_SORT  64
 
-// __device__ void selection_sort(unsigned int *data, int left, int right)
-// {
-//     for (int i = left ; i <= right ; ++i)
-//     {
-//         unsigned min_val = data[i];
-//         int min_idx = i;
+__device__ void selection_sort(unsigned int *data, int left, int right)
+{
+    for (int i = left ; i <= right ; ++i)
+    {
+        unsigned min_val = data[i];
+        int min_idx = i;
 
-//         for (int j = i+1 ; j <= right ; ++j)
-//         {
-//             unsigned val_j = data[j];
+        for (int j = i+1 ; j <= right ; ++j)
+        {
+            unsigned val_j = data[j];
 
-//             if (val_j < min_val)
-//             {
-//                 min_idx = j;
-//                 min_val = val_j;
-//             }
-//         }
+            if (val_j < min_val)
+            {
+                min_idx = j;
+                min_val = val_j;
+            }
+        }
 
-//         if (i != min_idx)
-//         {
-//             data[min_idx] = data[i];
-//             data[i] = min_val;
-//         }
-//     }
-// }
+        if (i != min_idx)
+        {
+            data[min_idx] = data[i];
+            data[i] = min_val;
+        }
+    }
+}
 
 __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth)
 {
-    // if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
-    // {
-    //     selection_sort(data, left, right);
-    //     return;
-    // }
+    if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
+    {
+        selection_sort(data, left, right);
+        return;
+    }
 
     unsigned int *lptr = data+left;
     unsigned int *rptr = data+right;
