@@ -7,7 +7,7 @@ popd
 
 pushd cuda
 echo nvcc -arch=compute_35 --default-stream per-thread -rdc=true *.cu -o gpu.out
-nvcc -arch=compute_35 --default-stream per-thread -rdc=true *.cu -o gpu.out
+nvcc -arch=compute_35 -rdc=true --default-stream per-thread --resource-usage  *.cu
 ./gpu.out 1000000
 popd
 
