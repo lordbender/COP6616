@@ -1,9 +1,14 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <ctime>
-#include <ratio>
-#include <chrono>
-#include "main_cuda.cuh"
+
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
+{
+   if (code != cudaSuccess) 
+   {
+      fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+      if (abort) exit(code);
+   }
+}
 
 static const int BLOCK_SIZE = 256;
 
@@ -77,6 +82,10 @@ void quicksort_host(int *da, int *hc, int size)
 
 int main(int argc, char *argv[])
 {
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
   	srand(time(0));
 
  	int size = atoi(argv[1]);
@@ -90,8 +99,6 @@ int main(int argc, char *argv[])
         hc[i] = 0;
     }
 
-    high_resolution_clock::time_point start = high_resolution_clock::now();
-
     int *da;
     gpuErrchk(cudaMalloc((void **)&da, sizeof(int) * size));
     gpuErrchk(cudaMemcpy(da, ha, sizeof(int) * size, cudaMemcpyHostToDevice));
@@ -104,9 +111,9 @@ int main(int argc, char *argv[])
     free(ha);
     free(hc);
     
-    high_resolution_clock::time_point end = high_resolution_clock::now();
-    return time_calc(start, end);
+    cudaEventSynchronize(stop);
+    float milliseconds = 0;
+    cudaEventElapsedTime(&milliseconds, start, stop);
 
-    high_resolution_clock::time_point gpu_streams_runtime = duration_cast<duration<double>>(end - start);;
-	printf("\tGPU O(n*log(n)) Streamed: Completed %d numbers in %f seconds!!!\n\n", size, gpu_streams_runtime.count());
+	printf("\tGPU O(n*log(n)) Streamed: Completed %d numbers in %f seconds!!!\n\n", size, milliseconds);
 }
