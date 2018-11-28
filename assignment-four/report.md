@@ -26,14 +26,14 @@ Video BIOS:    84.00.45.00.90
 
 ### Measured Run
 ```text
-Note: All runs posted in Outcomes Section Below.
+        Note: All runs posted in Outcomes Section Below.
 
-CPU O(n*log(n)) Sequential Radix: Completed 1000000 numbers in 0.303327 seconds!!!
-CPU O(n*log(n)) Sequential Quicksort: Completed 1000000 numbers in 0.201159 seconds!!!
-CPU O(n*log(n)) Threaded Quicksort: Completed 1000000 numbers in 0.125402 seconds!!!
+        CPU O(n*log(n)) Sequential Radix: Completed 100000 numbers in 0.026498 seconds!!!
+        CPU O(n*log(n)) Sequential Quicksort: Completed 100000 numbers in 0.016211 seconds!!!
+        CPU O(n*log(n)) Threaded Quicksort: Completed 100000 numbers in 0.013831 seconds!!!     
 
-GPU O(n*log(n)) GPU Quicksort: Completed 1000000 numbers in 80.430000 seconds!!!
-
+        GPU O(n*log(n)) GPU Quicksort: Completed 100000 numbers in 1.160000 seconds!!!
+        GPU Processing Time, Minus Date Copies: 0.230000 seconds!!!
 ```
 
 ### CPU vs GPU Sequential
