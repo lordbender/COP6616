@@ -80,7 +80,7 @@ Note: All runs posted in Outcomes Section Below.
         [n00599835@cis-gpu1 cuda]$ ./gpu.out 10000000
                 GPU O(n*log(n)) GPU Quicksort: Completed 10000000 numbers in 21.390000 seconds!!!
                 GPU Processing Time, Minus Date Copies: 20.480000 seconds!!!
-                
+
         [n00599835@cis-gpu1 cuda]$ ./gpu.out 100000000
                 GPU O(n*log(n)) GPU Quicksort: Completed 100000000 numbers in 228.890000 seconds!!!
                 GPU Processing Time, Minus Date Copies: 227.850000 seconds!!!
@@ -119,7 +119,7 @@ Note: All runs posted in Outcomes Section Below.
         There are a lot of permutations of flags. These flags seem to have fantastic consequences on the outcomes.
 
         My final Combination of Flags:
-        nvcc -arch=compute_35 -rdc=true -maxrregcount=0  --machine 64 -cudart static *.cu -o gpu.out
+                nvcc -arch=compute_35 -rdc=true -maxrregcount=40  --machine 64 -cudart static *.cu -o gpu.out
 ```
 
 # Top
