@@ -82,7 +82,9 @@ int main(int argc, char **argv)
     int left = 0;
     int right = size-1;
 
+    std::clock_t start_gpu_only = std::clock(); 
     quicksort_gpu<<< 1, 32 >>>(da, left, right);
+    double duration_gpu_only = ( std::clock() - start_gpu_only ) / (double) CLOCKS_PER_SEC
     gpuErrchk(cudaGetLastError());
     cudaDeviceSynchronize();
 
@@ -102,6 +104,7 @@ int main(int argc, char **argv)
     delete[] results;
     
     printf("\tGPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, duration);
+    printf("\tGPU Processing Time, Minus Date Copies: %f seconds!!!\n", duration_gpu_only);
 
     exit(EXIT_SUCCESS);
 }
