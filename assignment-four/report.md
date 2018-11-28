@@ -4,23 +4,25 @@ Model: GeForce GTX TITAN X
 Video BIOS:    84.00.45.00.90
 ```
 [Specs for GPU: GTX TITAN X](https://www.geforce.com/hardware/desktop-gpus/geforce-gtx-titan-x/specifications)
+
 [Concurrency Model Based On](https://devblogs.nvidia.com/gpu-pro-tip-cuda-7-streams-simplify-concurrency/)
+
 [Dynamic Parallelizm](https://devblogs.nvidia.com/cuda-dynamic-parallelism-api-principles/)
+
+[Related Work](http://www.cse.chalmers.se/~tsigas/papers/GPU-Quicksort-jea.pdf)
 
 ## Speedup and Efficiency
 ```text
     Note 1: Speedup will be measured against Sequential and Shared Memory Threaded. 
-    Note 2: Speedup Measured at 100,000 Signed Integers.
+    Note 2: Speedup Measured at 1,000,000 Integers.
 
-    Issue: Once again, we are trying to beat an algorithm that has fantastic efficiency, and loosing to latency and bandwidth.
-           The portion of the program that cannot be parallized is the issue. Single threaded, and multi-threaded shared memory 
-           are way out in front here. I suspect, that given an algorithm that has more operation per data item, we can see marked 
-           improvement from GPU.
+    Issue: Once again, we are trying to beat an algorithm that has fantastic linear efficiency, and loosing to latency and bandwidth.
+           The portion of the program that cannot be parallized is most likely the issue. Single threaded, and multi-threaded shared memory 
+           are way out in front here. I suspect, that given an algorithm that has more operations per data item, we can see marked 
+           improvement from GPU. Something like square matrix or a vector transform for example.
 
     Related Work: 
-        http://www.cse.chalmers.se/~tsigas/papers/GPU-Quicksort-jea.pdf
-
-        There are means to potentially beat shared memory sorting times, especially in the case of non-numerical sets. But I am
+        There are published means to potentially beat shared memory sorting times, especially in the case of non-numerical sets. But I am
         not able to re-produce the results given my current knowledge level, nor within the time alloted.
 ```
 
