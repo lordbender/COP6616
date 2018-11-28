@@ -39,7 +39,7 @@ __device__ void selection_sort(unsigned int *data, int left, int right)
     }
 }
 
-__global__ void cdp_simple_quicksort(unsigned int *data, int left, int right, int depth)
+__global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth)
 {
     if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
     {
@@ -83,7 +83,7 @@ __global__ void cdp_simple_quicksort(unsigned int *data, int left, int right, in
     {
         cudaStream_t s;
         cudaStreamCreateWithFlags(&s, cudaStreamNonBlocking);
-        cdp_simple_quicksort<<< 1, 1, 0, s >>>(data, left, nright, depth+1);
+        quicksort_gpu<<< 1, 1, 0, s >>>(data, left, nright, depth+1);
         cudaStreamDestroy(s);
     }
 
@@ -91,7 +91,7 @@ __global__ void cdp_simple_quicksort(unsigned int *data, int left, int right, in
     {
         cudaStream_t s1;
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        cdp_simple_quicksort<<< 1, 1, 0, s1 >>>(data, nleft, right, depth+1);
+        quicksort_gpu<<< 1, 1, 0, s1 >>>(data, nleft, right, depth+1);
         cudaStreamDestroy(s1);
     }
 }
@@ -103,7 +103,7 @@ void run_sort(unsigned int *data, unsigned int size)
     int left = 0;
     int right = size-1;
 
-    cdp_simple_quicksort<<< 1, 1 >>>(data, left, right, 0);
+    quicksort_gpu<<< 1, 1 >>>(data, left, right, 0);
     gpuErrchk(cudaGetLastError());
 
     gpuErrchk(cudaDeviceSynchronize());
@@ -130,8 +130,10 @@ int main(int argc, char **argv)
     unsigned int *results = new unsigned[size];
     gpuErrchk(cudaMemcpy(results, da, size*sizeof(unsigned), cudaMemcpyDeviceToHost));
 
+    printf("\n");
     for (int i = 1 ; i < size ; ++i)
         printf("\t%d", results[i]);
+    printf("\n");
 
     gpuErrchk(cudaFree(da));
     free(ha);
