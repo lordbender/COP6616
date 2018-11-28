@@ -102,8 +102,6 @@ double run_sort(unsigned int *data, unsigned int size)
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
 
-    // gpuErrchk(cudaDeviceSetLimit(cudaLimitDevRuntimeSyncDepth, MAX_DEPTH));
-
     int left = 0;
     int right = size-1;
     cudaEventRecord(start);
@@ -111,7 +109,7 @@ double run_sort(unsigned int *data, unsigned int size)
     cudaEventRecord(stop);
     // gpuErrchk(cudaGetLastError());
 
-    gpuErrchk(cudaDeviceSynchronize());
+    cudaDeviceSynchronize();
     
     cudaEventSynchronize(stop);
     float milliseconds = 0;
@@ -132,20 +130,21 @@ int main(int argc, char **argv)
     for (unsigned i = 0 ; i < size ; i++)
         ha[i] = rand() % size;
        
-    gpuErrchk(cudaMalloc((void **)&da, size * sizeof(unsigned int)));
-    gpuErrchk(cudaMemcpy(da, ha, size * sizeof(unsigned int), cudaMemcpyHostToDevice));
+    cudaMalloc((void **)&da, size * sizeof(unsigned int));
+    cudaMemcpy(da, ha, size * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
     double time = run_sort(da, size);
 
     unsigned int *results = new unsigned[size];
-    gpuErrchk(cudaMemcpy(results, da, size*sizeof(unsigned), cudaMemcpyDeviceToHost));
+    cudaMemcpy(results, da, size*sizeof(unsigned), cudaMemcpyDeviceToHost);
         
     // printf("\n");
     // for (int i = 1 ; i < size ; ++i)
     //     printf("\t%d", results[i]);
     // printf("\n");
     
-    gpuErrchk(cudaFree(da));
+    cudaFree(da);
+    cudaDeviceReset();
     free(ha);
     delete[] results;
     
