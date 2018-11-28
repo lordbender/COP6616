@@ -96,22 +96,15 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
     }
 }
 
-double run_sort(unsigned int *data, unsigned int size)
-{
-
-
-    return 1.0;
-}
-
 int main(int argc, char **argv)
 {
     srand(time(0));
 
     int size = atoi(argv[1]);
 
+    unsigned int *ha =(unsigned int *)malloc(size*sizeof(unsigned int));
     unsigned int *da = 0;
 
-    unsigned int *ha =(unsigned int *)malloc(size*sizeof(unsigned int));
     for (unsigned i = 0 ; i < size ; i++)
         ha[i] = rand() % size;
        
