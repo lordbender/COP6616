@@ -105,7 +105,8 @@ double run_sort(unsigned int *data, unsigned int size)
     int left = 0;
     int right = size-1;
     cudaEventRecord(start);
-    quicksort_gpu<<< (size+511)/512, 512 >>>(data, left, right, 0);
+    int grid = ceil(size * 1.0 / 256);
+    quicksort_gpu<<< grid, 256 >>>(data, left, right, 0);
     cudaEventRecord(stop);
     // gpuErrchk(cudaGetLastError());
 
