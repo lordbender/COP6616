@@ -98,12 +98,7 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
 
 double run_sort(unsigned int *data, unsigned int size)
 {
-    int left = 0;
-    int right = size-1;
-    int grid = ceil(size * 1.0 / 256);
 
-    quicksort_gpu<<< grid, 256 >>>(data, left, right, 0);
-    cudaDeviceSynchronize();
 
     return 1.0;
 }
@@ -123,7 +118,12 @@ int main(int argc, char **argv)
     cudaMalloc((void **)&da, size * sizeof(unsigned int));
     cudaMemcpy(da, ha, size * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
-    double time = run_sort(da, size);
+    int left = 0;
+    int right = size-1;
+    int grid = ceil(size * 1.0 / 256);
+
+    quicksort_gpu<<< grid, 256 >>>(da, left, right, 0);
+    cudaDeviceSynchronize();
 
     unsigned int *results = new unsigned[size];
     cudaMemcpy(results, da, size*sizeof(unsigned), cudaMemcpyDeviceToHost);
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
     free(ha);
     delete[] results;
     
-    printf("\tCPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, (time / 1000.0));
+    printf("\tCPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, (1.0 / 1000.0));
 
     exit(EXIT_SUCCESS);
 }
