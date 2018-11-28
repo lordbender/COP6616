@@ -100,7 +100,7 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
 
 int main(int argc, char **argv)
 {
-    std::clock_t start = std::clock();
+    
 
     srand(time(0));
 
@@ -111,15 +111,17 @@ int main(int argc, char **argv)
 
     for (unsigned i = 0 ; i < size ; i++)
         ha[i] = rand() % size;
-       
+
+    std::clock_t start = std::clock();  
+
     cudaMalloc((void **)&da, size * sizeof(unsigned int));
     cudaMemcpy(da, ha, size * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
     int left = 0;
     int right = size-1;
-    int grid = ceil(size * 1.0 / 256);
+    // int grid = ceil(size * 1.0 / 256);
 
-    quicksort_gpu<<< grid, 256 >>>(da, left, right, 0);
+    quicksort_gpu<<< 1, 1 >>>(da, left, right, 0);
     cudaDeviceSynchronize();
 
     unsigned int *results = new unsigned[size];
