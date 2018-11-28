@@ -12,43 +12,8 @@ inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=t
    }
 }
 
-#define MAX_DEPTH       16
-#define INSERTION_SORT  32
-
-__device__ void selection_sort(unsigned int *data, int left, int right)
+__global__ void quicksort_gpu(unsigned int *data, int left, int right)
 {
-    for (int i = left ; i <= right ; ++i)
-    {
-        unsigned min_val = data[i];
-        int min_idx = i;
-
-        for (int j = i+1 ; j <= right ; ++j)
-        {
-            unsigned val_j = data[j];
-
-            if (val_j < min_val)
-            {
-                min_idx = j;
-                min_val = val_j;
-            }
-        }
-
-        if (i != min_idx)
-        {
-            data[min_idx] = data[i];
-            data[i] = min_val;
-        }
-    }
-}
-
-__global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth)
-{
-    // if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
-    // {
-    //     selection_sort(data, left, right);
-    //     return;
-    // }
-
     unsigned int *lptr = data+left;
     unsigned int *rptr = data+right;
     unsigned int  pivot = data[(left+right)/2];
@@ -85,7 +50,7 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
     {
         cudaStream_t s;
         cudaStreamCreateWithFlags(&s, cudaStreamNonBlocking);
-        quicksort_gpu<<< 1, 8, 0, s >>>(data, left, nright, depth+1);
+        quicksort_gpu<<< 1, 1, 0, s >>>(data, left, nright);
         cudaStreamDestroy(s);
     }
 
@@ -93,7 +58,7 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
     {
         cudaStream_t s1;
         cudaStreamCreateWithFlags(&s1, cudaStreamNonBlocking);
-        quicksort_gpu<<< 1, 1, 0, s1 >>>(data, nleft, right, depth+1);
+        quicksort_gpu<<< 1, 1, 0, s1 >>>(data, nleft, right);
         cudaStreamDestroy(s1);
     }
 }
@@ -101,7 +66,6 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
 int main(int argc, char **argv)
 {
     srand(time(0));
-
     int size = atoi(argv[1]);
 
     unsigned int *ha =(unsigned int *)malloc(size*sizeof(unsigned int));
@@ -117,9 +81,9 @@ int main(int argc, char **argv)
 
     int left = 0;
     int right = size-1;
-    // int grid = ceil(size * 1.0 / 256);
 
-    quicksort_gpu<<< 1, 16 >>>(da, left, right, 0);
+    quicksort_gpu<<< 1, 32 >>>(da, left, right);
+    gpuErrchk(cudaGetLastError());
     cudaDeviceSynchronize();
 
     unsigned int *results = new unsigned[size];
