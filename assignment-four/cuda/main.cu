@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstdio>
+#include <ctime>
+
 #define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)
 {
@@ -98,6 +100,8 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
 
 int main(int argc, char **argv)
 {
+    std::clock_t start = std::clock();
+
     srand(time(0));
 
     int size = atoi(argv[1]);
@@ -121,6 +125,8 @@ int main(int argc, char **argv)
     unsigned int *results = new unsigned[size];
     cudaMemcpy(results, da, size*sizeof(unsigned), cudaMemcpyDeviceToHost);
         
+    double duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+
     // printf("\n");
     // for (int i = 1 ; i < size ; ++i)
     //     printf("\t%d", results[i]);
@@ -131,7 +137,7 @@ int main(int argc, char **argv)
     free(ha);
     delete[] results;
     
-    printf("\tCPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, (1.0 / 1000.0));
+    printf("\tCPU O(n*log(n)) GPU Quicksort: Completed %d numbers in %f seconds!!!\n", size, duration);
 
     exit(EXIT_SUCCESS);
 }
