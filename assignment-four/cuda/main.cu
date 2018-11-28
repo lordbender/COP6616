@@ -103,7 +103,7 @@ void run_sort(unsigned int *data, unsigned int size)
     int left = 0;
     int right = size-1;
 
-    quicksort_gpu<<< 1, 1 >>>(data, left, right, 0);
+    quicksort_gpu<<< (N+255)/256, 256 >>>(data, left, right, 0);
     gpuErrchk(cudaGetLastError());
 
     gpuErrchk(cudaDeviceSynchronize());

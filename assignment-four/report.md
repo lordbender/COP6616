@@ -126,3 +126,15 @@ n00599835@cislocal-GPU0:~/COP6616/assignment-four$ ./a.out 200000000
     21386 n011702+  20   0 1734416 235416 138404 S   1.0  0.7 241:05.89 Web Content
     25878 n005998+  20   0   51976   5016   3572 R   1.0  0.0   0:00.18 top
 ```
+
+# Compiler Flags
+```text
+        [n00599835@cis-gpu1 cuda]$ nvcc -arch=compute_35 -rdc=true *.cu -o gpu.out
+        [n00599835@cis-gpu1 cuda]$ ./gpu.out 100000
+                CPU O(n*log(n)) GPU Quicksort: Completed 100000 numbers in 0.129142 seconds!!!
+        [n00599835@cis-gpu1 cuda]$ ./gpu.out 1000000
+                CPU O(n*log(n)) GPU Quicksort: Completed 1000000 numbers in 28.940148 seconds!!!
+        [n00599835@cis-gpu1 cuda]$ nvcc -arch=compute_35 -rdc=true --default-stream per-thread *.cu -o gpu.out
+        [n00599835@cis-gpu1 cuda]$ ./gpu.out 1000000
+                CPU O(n*log(n)) GPU Quicksort: Completed 1000000 numbers in 21.511633 seconds!!!
+```
