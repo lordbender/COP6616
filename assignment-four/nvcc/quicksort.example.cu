@@ -122,7 +122,9 @@ void run_qsort(unsigned int *data, unsigned int nitems)
     int right = nitems-1;
     std::cout << "Launching kernel on the GPU" << std::endl;
     cdp_simple_quicksort<<< 1, 1 >>>(data, left, right, 0);
+    gpuErrchk(cudaGetLastError());
     gpuErrchk(cudaDeviceSynchronize());
+    gpuErrchk(cudaGetLastError());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
