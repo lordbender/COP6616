@@ -43,11 +43,11 @@ __device__ void selection_sort(unsigned int *data, int left, int right)
 
 __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth)
 {
-    if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
-    {
-        selection_sort(data, left, right);
-        return;
-    }
+    //if (depth >= MAX_DEPTH || right-left <= INSERTION_SORT)
+    //{
+    //    selection_sort(data, left, right);
+    //    return;
+    //}
 
     unsigned int *lptr = data+left;
     unsigned int *rptr = data+right;
@@ -85,7 +85,7 @@ __global__ void quicksort_gpu(unsigned int *data, int left, int right, int depth
     {
         cudaStream_t s;
         cudaStreamCreateWithFlags(&s, cudaStreamNonBlocking);
-        quicksort_gpu<<< 1, 8, 0, s >>>(data, left, nright, depth+1);
+        quicksort_gpu<<< 1, 1, 0, s >>>(data, left, nright, depth+1);
         cudaStreamDestroy(s);
     }
 
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     int right = size-1;
     // int grid = ceil(size * 1.0 / 256);
 
-    quicksort_gpu<<< 1, 16 >>>(da, left, right, 0);
+    quicksort_gpu<<< 1, 32 >>>(da, left, right, 0);
     cudaDeviceSynchronize();
 
     unsigned int *results = new unsigned[size];
